@@ -22,4 +22,4 @@ Durch die feste Rundenanzahl ist der Zeitrahmen eines Turniers sehr gut planbar.
 
 ## Hints
 
-* spieler.tts nach TTR sortieren: `sort -n --field-separator=, --key=2 spieler.tts`
+* spieler.tts nach TTR sortieren: `sort -nr --field-separator=, --key=2 spieler.tts`
