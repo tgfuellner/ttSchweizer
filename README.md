@@ -19,3 +19,7 @@ Durch die feste Rundenanzahl ist der Zeitrahmen eines Turniers sehr gut planbar.
 * *spieler.tts* enthält Spieler mit ihren TTR Werten
 * *runde1.tts* wird durch Losen aus *spieler.tts* erzeugt
 * *ergebnis.html* wird nach jedem Aufruf aktualisiert
+
+## Hints
+
+* spieler.tts nach TTR sortieren: `sort -n --field-separator=, --key=2 spieler.tts`
