@@ -2,10 +2,10 @@
 
 numberOdTests=0
 
-for t in test*
+for t in testCases/test*
 do
- cd $t
- ./doTest.sh
+ echo "******** $t"
+ (cd $t; ./doTest.sh)
  numberOdTests=$[numberOdTests + 1]
 done
 
