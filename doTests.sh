@@ -9,4 +9,5 @@ do
  numberOdTests=$[numberOdTests + 1]
 done
 
+echo "==================================="
 echo "$numberOdTests Tests executed"

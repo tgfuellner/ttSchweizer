@@ -1,5 +1,6 @@
 #!/bin/bash
 
-../../ttSchweizer.py
+../../ttSchweizer.py >out.txt
 diff spieler.tts-expected spieler.tts
+diff out.txt-expected out.txt
 rm spieler.tts
