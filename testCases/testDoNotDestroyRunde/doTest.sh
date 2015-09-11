@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo foo >runde-1.tts
+echo "foo <> bar ! " >runde-1.tts
 ../../ttSchweizer.py
 
 if ! cmp -s runde-1.tts-expected runde-1.tts; then

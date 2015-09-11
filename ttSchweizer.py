@@ -6,6 +6,7 @@ import random
 
 SPIELER_FileName = "spieler.tts"
 MIN_NumberOfPlayer = 9
+NUMBER_OfRounds = 6
 
 
 class Spieler:
@@ -33,7 +34,8 @@ class Round:
 
     def __init__(self, num):
         self._isComplete = False
-        self._num = num
+        self._numberOfRound = num
+        self._readResultsOfThisRound(getFileNameOfRound(num))
 
     def setComplete(self):
         self._isComplete = True
@@ -50,6 +52,30 @@ class Round:
         else:
             return False
         
+    def _readResultsOfThisRound(self, fileName):
+        with open(fileName, "r") as roundFile:
+            for line in roundFile:
+                if (self.isComment(line)):
+                    continue
+                # Example line:
+                # Thomas Alsters <> David Ly ! 3:0 2 3 4
+                x = line.split('<>')
+                if (len(x) != 2):
+                    print("%s: <> muss genau einmal vorkommen in Zeile: %s" % (fileName, line))
+                    return
+                spielerA = x[0].strip()
+
+                y = x[1].split('!')
+                if (len(y) != 2):
+                    print("%s: ! muss genau einmal vorkommen in Zeile: %s" % (fileName, line))
+                    return
+                spielerB = y[0].strip()
+
+                z = y[1].strip().split(' ')
+                if (len(z) == 1):
+                    # Nur Satzverhaeltnis keine genaueren Ergebnisse
+                    pass
+
 
 
 class RoundInit(Round):
@@ -59,9 +85,9 @@ class RoundInit(Round):
         self._isComplete = False
 
         if os.path.isfile(SPIELER_FileName):
-            self._ranking = self._getRanking(SPIELER_FileName)
-            if len(self._ranking) < MIN_NumberOfPlayer:
-                print("%d Spieler sind zu wenig, brauche mindestens 9" % len(self._ranking))
+            self._rankedPlayerList = self._calcRankOfPlayers(SPIELER_FileName)
+            if len(self._rankedPlayerList) < MIN_NumberOfPlayer:
+                print("%d Spieler sind zu wenig, brauche mindestens 9" % len(self._rankedPlayerList))
             else:
                 self.setComplete()
 
@@ -70,7 +96,7 @@ class RoundInit(Round):
             print("Erzeuge eine Beispieldatei.")
             self._createExampleSpielerFile(SPIELER_FileName)
 
-    def _getRanking(self, fileName):
+    def _calcRankOfPlayers(self, fileName):
         with open(fileName, "r") as spielerFile:
             spielerList = []
             for line in spielerFile:
@@ -87,16 +113,13 @@ class RoundInit(Round):
 
         return spielerList
 
-    def getFileNameOfNextRound(self):
-        return "runde-1.tts"
-
     def createStartOfNextRound(self):
-        numberOfGesetzte = int(round(len(self._ranking)/2.0))
-        gesetzt = self._ranking[:numberOfGesetzte]
-        zuLosen = self._ranking[numberOfGesetzte:]
+        numberOfGesetzte = int(round(len(self._rankedPlayerList)/2.0))
+        gesetzt = self._rankedPlayerList[:numberOfGesetzte]
+        zuLosen = self._rankedPlayerList[numberOfGesetzte:]
         geLost  = random.sample(zuLosen, len(zuLosen))
 
-        with open(self.getFileNameOfNextRound(), 'w') as the_file:
+        with open(getFileNameOfRound(1), 'w') as the_file:
             the_file.write('# Ergebnisse bitte wie folgt eingeben (Spiel  Satz1, Satz2, Satz3 ...):\n')
             the_file.write('# Heinz Musterspieler <> Klara Platzhalter ! 3:1 8 -4 12 3\n')
 
@@ -111,13 +134,17 @@ class RoundInit(Round):
             
 
 
+def getFileNameOfRound(numberOfRound):
+    return "runde-%d.tts" % numberOfRound
+
 def getRounds():
     """ Schaut nach welche Files vorhanden sind.
         Erzeugt entsprechende Round Instanzen
     """
     roundList = [RoundInit()]
-    if os.path.isfile("runde-1.tts"):
-        roundList.append(Round(1))
+    for i in range(1, 1+NUMBER_OfRounds):
+        if os.path.isfile(getFileNameOfRound(i)):
+            roundList.append(Round(i))
 
     return roundList
 
