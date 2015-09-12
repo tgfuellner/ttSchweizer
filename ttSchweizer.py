@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: UTF-8 -*-
 
 import os.path
 import random
@@ -19,6 +20,7 @@ class Spieler:
 
     def __str__(self):
         return self.name
+
 
 class FreiLos(Spieler):
     """ Freilos ist auch ein Spieler, der gelost wird """
@@ -57,24 +59,52 @@ class Round:
             for line in roundFile:
                 if (self.isComment(line)):
                     continue
+
+                line = line.strip()  # Strip especially last newline
+
                 # Example line:
                 # Thomas Alsters <> David Ly ! 3:0 2 3 4
                 x = line.split('<>')
-                if (len(x) != 2):
-                    print("%s: <> muss genau einmal vorkommen in Zeile: %s" % (fileName, line))
-                    return
+                if len(x) != 2:
+                    print("%s: Die Zeichefolge <> muss genau einmal vorkommen in Zeile: %s" % (fileName, line))
+                    continue
                 spielerA = x[0].strip()
 
                 y = x[1].split('!')
-                if (len(y) != 2):
-                    print("%s: ! muss genau einmal vorkommen in Zeile: %s" % (fileName, line))
-                    return
+                if len(y) != 2:
+                    print("%s: Das Zeichen ! muss genau einmal vorkommen in Zeile: %s" % (fileName, line))
+                    continue
                 spielerB = y[0].strip()
 
                 z = y[1].strip().split(' ')
-                if (len(z) == 1):
+                if z == ['']:
+                    print("%s: Noch kein Ergebnis für: %s" % (fileName, line))
+                    continue
+
+                satzVerhaeltnis = z[0].split(':')
+                if len(satzVerhaeltnis) != 2:
+                    print("%s: Das Satzverhältnis ist nicht korrekt in Zeile: %s" % (fileName, line))
+                    continue
+
+                saetzeSpielerA, saetzeSpielerB = [int(i) for i in satzVerhaeltnis]
+
+                if len(z) == 1:
                     # Nur Satzverhaeltnis keine genaueren Ergebnisse
-                    pass
+                    # TODO Ergenis eintragen
+                    print("%s: Vorsicht, Satzergebnisse fehlen in Zeile: %s" % (fileName, line))
+                    continue
+
+                satzErgebnisse = z[1:]  # Vorsicht nicht nach int wandeln! -0 muss bleiben
+                if len(satzErgebnisse) != saetzeSpielerA + saetzeSpielerB:
+                    print("%s: Sätze sind nicht komplett in Zeile: %s" % (fileName, line))
+                    continue
+
+                if saetzeSpielerB != len([s for s in satzErgebnisse if '-' in s]):
+                    print("%s: Satzverhältnis und Sätze passen nicht zusammen in Zeile: %s" % (fileName, line))
+                    continue
+
+                # TODO Ergenis eintragen
+
 
 
 

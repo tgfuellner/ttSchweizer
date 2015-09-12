@@ -1,3 +1,4 @@
 #!/bin/bash
 
-../../ttSchweizer.py
+../../ttSchweizer.py >out
+diff out-expected out
