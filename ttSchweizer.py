@@ -25,7 +25,7 @@ class FreiLos(Spieler):
     """ Freilos ist auch ein Spieler, der gelost wird """
 
     def __init__(self):
-        pass
+        self.ttr = 0
     def __str__(self):
         return "Freilos"
 
@@ -41,6 +41,12 @@ class Spieler_Collection( dict ):
         s = FreiLos( *arg, **kw )
         self[str(s)] = s
         return s
+    def getTtrSortedList(self):
+        players = self.values()
+        players.sort(key=lambda x: x.ttr, reverse=True)
+        return players
+
+
     
 
 class Round:
@@ -139,20 +145,17 @@ class RoundInit(Round):
 
     def _calcRankOfPlayers(self, fileName, allPlayers):
         with open(fileName, "r") as spielerFile:
-            spielerList = []
             for line in spielerFile:
                 if (self.isComment(line)):
                     continue
                 name, ttr = line.split(',')
-                spielerList.append(allPlayers.spieler(name.strip(), ttr.strip()))
+                allPlayers.spieler(name.strip(), ttr.strip())
 
-        spielerList.sort(key=lambda x: x.ttr, reverse=True)
-
-        if (len(spielerList) & 0x1):
+        if (len(allPlayers) & 0x1):
             # odd
-            spielerList.append(allPlayers.freilos())
+            allPlayers.freilos()
 
-        return spielerList
+        return allPlayers.getTtrSortedList()
 
     def createStartOfNextRound(self):
         numberOfGesetzte = int(round(len(self._rankedPlayerList)/2.0))
