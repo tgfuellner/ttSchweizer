@@ -17,7 +17,6 @@ class Spieler:
         self.name = name
         self.ttr = ttr
         self.ergebnisse = []
-
     def __str__(self):
         return self.name
 
@@ -27,9 +26,21 @@ class FreiLos(Spieler):
 
     def __init__(self):
         pass
-
     def __str__(self):
         return "Freilos"
+
+
+class Spieler_Collection( dict ):
+    def __init__( self, *arg, **kw ):
+        super( Spieler_Collection, self ).__init__( *arg, **kw )
+    def spieler( self, *arg, **kw ):
+        s = Spieler( *arg, **kw )
+        self[str(s)] = s
+        return s
+    def freilos( self, *arg, **kw ):
+        s = FreiLos( *arg, **kw )
+        self[str(s)] = s
+        return s
     
 
 class Round:
@@ -111,11 +122,11 @@ class Round:
 class RoundInit(Round):
     """ Zustand vor der ersten Runde """
 
-    def __init__(self):
+    def __init__(self, aCollectionOfAllPlayers):
         self._isComplete = False
 
         if os.path.isfile(SPIELER_FileName):
-            self._rankedPlayerList = self._calcRankOfPlayers(SPIELER_FileName)
+            self._rankedPlayerList = self._calcRankOfPlayers(SPIELER_FileName, aCollectionOfAllPlayers)
             if len(self._rankedPlayerList) < MIN_NumberOfPlayer:
                 print("%d Spieler sind zu wenig, brauche mindestens 9" % len(self._rankedPlayerList))
             else:
@@ -126,20 +137,20 @@ class RoundInit(Round):
             print("Erzeuge eine Beispieldatei.")
             self._createExampleSpielerFile(SPIELER_FileName)
 
-    def _calcRankOfPlayers(self, fileName):
+    def _calcRankOfPlayers(self, fileName, allPlayers):
         with open(fileName, "r") as spielerFile:
             spielerList = []
             for line in spielerFile:
                 if (self.isComment(line)):
                     continue
                 name, ttr = line.split(',')
-                spielerList.append(Spieler(name.strip(), ttr.strip()))
+                spielerList.append(allPlayers.spieler(name.strip(), ttr.strip()))
 
         spielerList.sort(key=lambda x: x.ttr, reverse=True)
 
         if (len(spielerList) & 0x1):
             # odd
-            spielerList.append(FreiLos())
+            spielerList.append(allPlayers.freilos())
 
         return spielerList
 
@@ -167,19 +178,22 @@ class RoundInit(Round):
 def getFileNameOfRound(numberOfRound):
     return "runde-%d.tts" % numberOfRound
 
-def getRounds():
+def getRounds(allPlayers):
     """ Schaut nach welche Files vorhanden sind.
         Erzeugt entsprechende Round Instanzen
     """
-    roundList = [RoundInit()]
+    roundList = [RoundInit(allPlayers)]
     for i in range(1, 1+NUMBER_OfRounds):
         if os.path.isfile(getFileNameOfRound(i)):
             roundList.append(Round(i))
 
     return roundList
 
+############################################################
 
-rounds = getRounds()
+alleSpieler = Spieler_Collection()
+
+rounds = getRounds(alleSpieler)
 
 if rounds[-1].isComplete():
     rounds[-1].createStartOfNextRound()
