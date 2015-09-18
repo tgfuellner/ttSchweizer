@@ -105,8 +105,8 @@ class Round:
                     # TODO Ergebnis eintragen
                     continue
 
-                z = y[1].strip().split(' ')
-                if z == ['']:
+                z = y[1].strip().split()
+                if z == []:
                     print("%s: Noch kein Ergebnis für: %s" % (fileName, line))
                     continue
 
