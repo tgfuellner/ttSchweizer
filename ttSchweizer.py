@@ -33,6 +33,13 @@ class FreiLos(Spieler):
 class Spieler_Collection( dict ):
     def __init__( self, *arg, **kw ):
         super( Spieler_Collection, self ).__init__( *arg, **kw )
+    def __getitem__(self, key):
+        if not key in self:
+            print("Der Spieler '%s' ist nicht bekannt!" % key)
+            return None
+        val = dict.__getitem__(self, key)
+        return val
+
     def spieler( self, *arg, **kw ):
         s = Spieler( *arg, **kw )
         self[str(s)] = s
@@ -51,9 +58,10 @@ class Spieler_Collection( dict ):
 
 class Round:
 
-    def __init__(self, num):
+    def __init__(self, num, allPlayers):
         self._isComplete = False
         self._numberOfRound = num
+        self._collectionOfAllPlayers = allPlayers
         self._readResultsOfThisRound(getFileNameOfRound(num))
 
     def setComplete(self):
@@ -85,13 +93,17 @@ class Round:
                 if len(x) != 2:
                     print("%s: Die Zeichefolge <> muss genau einmal vorkommen in Zeile: %s" % (fileName, line))
                     continue
-                spielerA = x[0].strip()
+                spielerA = self._collectionOfAllPlayers[x[0].strip()]
 
                 y = x[1].split('!')
                 if len(y) != 2:
                     print("%s: Das Zeichen ! muss genau einmal vorkommen in Zeile: %s" % (fileName, line))
                     continue
-                spielerB = y[0].strip()
+                spielerB = self._collectionOfAllPlayers[y[0].strip()]
+
+                if isinstance(spielerB, FreiLos):
+                    # TODO Ergebnis eintragen
+                    continue
 
                 z = y[1].strip().split(' ')
                 if z == ['']:
@@ -188,7 +200,7 @@ def getRounds(allPlayers):
     roundList = [RoundInit(allPlayers)]
     for i in range(1, 1+NUMBER_OfRounds):
         if os.path.isfile(getFileNameOfRound(i)):
-            roundList.append(Round(i))
+            roundList.append(Round(i, allPlayers))
 
     return roundList
 
