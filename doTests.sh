@@ -10,4 +10,8 @@ do
 done
 
 echo "==================================="
-echo "$numberOdTests Tests executed"
+echo "$numberOdTests integration Tests executed"
+
+
+
+./unittests.py

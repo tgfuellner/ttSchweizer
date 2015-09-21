@@ -53,6 +53,15 @@ class Spieler_Collection( dict ):
         players.sort(key=lambda x: x.ttr, reverse=True)
         return players
 
+class MatchResult:
+    def __init__( self, a, b):
+        self.gamesWonByPlayerA = a
+        self.gamesWonByPlayerB = b
+    def turned(self):
+        return MatchResult(self.gamesWonByPlayerB, self.gamesWonByPlayerA)
+    def __eq__(self, other): 
+        return (   self.gamesWonByPlayerA == other.gamesWonByPlayerA
+               and self.gamesWonByPlayerB == other.gamesWonByPlayerB)
 
     
 
@@ -206,10 +215,11 @@ def getRounds(allPlayers):
 
 ############################################################
 
-alleSpieler = Spieler_Collection()
+if __name__ == '__main__':
+    alleSpieler = Spieler_Collection()
 
-rounds = getRounds(alleSpieler)
+    rounds = getRounds(alleSpieler)
 
-if rounds[-1].isComplete():
-    rounds[-1].createStartOfNextRound()
+    if rounds[-1].isComplete():
+        rounds[-1].createStartOfNextRound()
     
