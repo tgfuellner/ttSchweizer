@@ -3,6 +3,7 @@
 
 import os.path
 import random
+import collections
 
 
 SPIELER_FileName = "spieler.tts"
@@ -16,15 +17,29 @@ class Spieler:
     def __init__(self, name, ttr):
         self.name = name
         self.ttr = ttr
-        self.ergebnisse = []
+        self.ergebnisse = collections.OrderedDict()
+
     def __str__(self):
         return self.name
+        
+    def addMatch(self, otherSpieler, theMatchResult):
+        self.ergebnisse[str(otherSpieler)] = theMatchResult
+
+    def addFreilos(self, freilos):
+        self.addMatch(freilos, MatchResult(3,0))
+        freilos.addMatch(self, MatchResult(0,3))
+        self.hatteFreilos = True
+
+    def getNumberOfMatches(self):
+        return len(self.ergebnisse)
+
 
 
 class FreiLos(Spieler):
     """ Freilos ist auch ein Spieler, der gelost wird """
 
     def __init__(self):
+        self.ergebnisse = collections.OrderedDict()
         self.ttr = 0
     def __str__(self):
         return "Freilos"
@@ -53,15 +68,39 @@ class Spieler_Collection( dict ):
         players.sort(key=lambda x: x.ttr, reverse=True)
         return players
 
+    def allHavePlayed(self, times):
+        """ True, if all Players have played the same number (parameter times) of matches """
+        for player in self.values():
+            print("Spieler %s hat %d mal gespielt" % (player, player.getNumberOfMatches()))
+            if player.getNumberOfMatches() != times:
+                return False
+
+        return True
+
 class MatchResult:
-    def __init__( self, a, b):
+    def __init__( self, a, b, gamePoints=()):
         self.gamesWonByPlayerA = a
         self.gamesWonByPlayerB = b
-    def turned(self):
-        return MatchResult(self.gamesWonByPlayerB, self.gamesWonByPlayerA)
+        self.gamePoints = [str(i) for i in gamePoints]
+
     def __eq__(self, other): 
         return (   self.gamesWonByPlayerA == other.gamesWonByPlayerA
-               and self.gamesWonByPlayerB == other.gamesWonByPlayerB)
+               and self.gamesWonByPlayerB == other.gamesWonByPlayerB
+               and self.gamePoints        == other.gamePoints)
+
+    def turned(self):
+        turnedGamePoints = []
+        for p in self.gamePoints:
+            if p == '0':
+                turnedGamePoints.append('-0')
+            else:
+                turnedGamePoints.append(str(-int(p)))
+
+        return MatchResult(self.gamesWonByPlayerB, self.gamesWonByPlayerA, turnedGamePoints)
+
+    def isWon(self):
+        return self.gamesWonByPlayerA > self.gamesWonByPlayerB
+
 
     
 
@@ -80,7 +119,7 @@ class Round:
         return self._isComplete
 
     def createStartOfNextRound(self):
-        pass
+        print("Nächste Runde %d" % self._numberOfRound)
 
     def isComment(self, line):
         if line[0] == '#':
@@ -111,7 +150,7 @@ class Round:
                 spielerB = self._collectionOfAllPlayers[y[0].strip()]
 
                 if isinstance(spielerB, FreiLos):
-                    # TODO Ergebnis eintragen
+                    spielerA.addFreilos(spielerB)
                     continue
 
                 z = y[1].strip().split()
@@ -128,7 +167,9 @@ class Round:
 
                 if len(z) == 1:
                     # Nur Satzverhaeltnis keine genaueren Ergebnisse
-                    # TODO Ergenis eintragen
+                    theMatchResult = MatchResult(saetzeSpielerA, saetzeSpielerB)
+                    spielerA.addMatch(spielerB, theMatchResult)
+                    spielerB.addMatch(spielerA, theMatchResult.turned())
                     print("%s: Vorsicht, Satzergebnisse fehlen in Zeile: %s" % (fileName, line))
                     continue
 
@@ -141,7 +182,12 @@ class Round:
                     print("%s: Satzverhältnis und Sätze passen nicht zusammen in Zeile: %s" % (fileName, line))
                     continue
 
-                # TODO Ergenis eintragen
+                theMatchResult = MatchResult(saetzeSpielerA, saetzeSpielerB, satzErgebnisse)
+                spielerA.addMatch(spielerB, theMatchResult)
+                spielerB.addMatch(spielerA, theMatchResult.turned())
+
+        if self._collectionOfAllPlayers.allHavePlayed(self._numberOfRound):
+            self.setComplete()
 
 
 

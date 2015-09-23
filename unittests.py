@@ -8,18 +8,24 @@ import unittest
 
 class TestMatchResult(unittest.TestCase):
 
-  def test_onlyGamesMatchResult(self):
-    res = MatchResult(3, 1)  
+  def test_onlyGamesMatchResult_doubleTurned_areEqual(self):
+    res = MatchResult(3,1)  
+    self.assertEqual(res, res.turned().turned())
+    self.assertEqual(MatchResult(1,3), res.turned())
+    self.assertNotEqual(MatchResult(1,3), res)
+
+  def test_gamesMatchResultIncludingPoints_doubleTurned_areEqual(self):
+    res = MatchResult(2,3, ('10',11,'-3','-5','-8'))  
     self.assertEqual(res, res.turned().turned())
 
+  def test_gamesMatchResultIncludingPoints_zeroSpecialHandling(self):
+    res = MatchResult(3,2, (10,11,-3,'-0',8))  
+    self.assertEqual(MatchResult(2,3, (-10,-11,3,0,-8)), res.turned())
 
-
-  def test_upper(self):
-      self.assertEqual('foo'.upper(), 'FOO')
-
-  def test_isupper(self):
-      self.assertTrue('FOO'.isupper())
-      self.assertFalse('Foo'.isupper())
+  def test_isWon(self):
+    res = MatchResult(3,1)  
+    self.assertTrue(res.isWon())
+    self.assertFalse(res.turned().isWon())
 
   def test_split(self):
       s = 'hello world'
