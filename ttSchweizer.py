@@ -197,6 +197,9 @@ class Round:
         fd.write('# Ergebnisse bitte wie folgt eingeben (Spiel  Satz1, Satz2, Satz3 ...):\n')
         fd.write('# Heinz Musterspieler <> Klara Platzhalter ! 3:1 8 -4 12 3\n')
 
+    def writeBegegnung(self, fd, spielerA, spielerB):
+        fd.write("%s <> %s ! \n" % (str(spielerA), str(spielerB)))
+
 
 
 class RoundInit(Round):
@@ -244,7 +247,7 @@ class RoundInit(Round):
             self.writeHeader(the_file)
 
             for gesetztSpieler, geLostSpieler in zip(gesetzt, geLost):
-                the_file.write("%s <> %s ! \n" % (str(gesetztSpieler), str(geLostSpieler)))
+                self.writeBegegnung(the_file, gesetztSpieler, geLostSpieler)
             
 
     def _createExampleSpielerFile(self, fileName):
