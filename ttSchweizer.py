@@ -112,6 +112,9 @@ class Round:
         self._collectionOfAllPlayers = allPlayers
         self._readResultsOfThisRound(getFileNameOfRound(num))
 
+    def getNumberOfNextRound(self):
+        return self._numberOfRound + 1
+
     def setComplete(self):
         self._isComplete = True
 
@@ -189,6 +192,9 @@ class Round:
         if self._collectionOfAllPlayers.allHavePlayed(self._numberOfRound):
             self.setComplete()
 
+    def writeHeader(self, fd):
+        fd.write('# Ergebnisse bitte wie folgt eingeben (Spiel  Satz1, Satz2, Satz3 ...):\n')
+        fd.write('# Heinz Musterspieler <> Klara Platzhalter ! 3:1 8 -4 12 3\n')
 
 
 
@@ -224,15 +230,17 @@ class RoundInit(Round):
 
         return allPlayers.getTtrSortedList()
 
+    def getNumberOfNextRound(self):
+        return 1
+
     def createStartOfNextRound(self):
         numberOfGesetzte = int(round(len(self._rankedPlayerList)/2.0))
         gesetzt = self._rankedPlayerList[:numberOfGesetzte]
         zuLosen = self._rankedPlayerList[numberOfGesetzte:]
         geLost  = random.sample(zuLosen, len(zuLosen))
 
-        with open(getFileNameOfRound(1), 'w') as the_file:
-            the_file.write('# Ergebnisse bitte wie folgt eingeben (Spiel  Satz1, Satz2, Satz3 ...):\n')
-            the_file.write('# Heinz Musterspieler <> Klara Platzhalter ! 3:1 8 -4 12 3\n')
+        with open(getFileNameOfRound(self.getNumberOfNextRound()), 'w') as the_file:
+            self.writeHeader(the_file)
 
             for gesetztSpieler, geLostSpieler in zip(gesetzt, geLost):
                 the_file.write("%s <> %s ! \n" % (str(gesetztSpieler), str(geLostSpieler)))
