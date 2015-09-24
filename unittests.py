@@ -6,6 +6,23 @@ from ttSchweizer import *
 
 import unittest
 
+class TestBegegnungen(unittest.TestCase):
+
+  def test_groupBySiege(self):
+    allPlayers = Spieler_Collection()
+    for name,ttr in (('A',6), ('B',5), ('C',0), ('D',4), ('E',0), ('F',3), ('G',0), ('H',2), ('I',1), ('K',0), ('L',0)):
+        allPlayers.spieler(name,ttr)
+
+    allPlayers.freilos()
+
+    allPlayers['H'].addFreilos(allPlayers['Freilos'])
+    for p1, p2, s1, s2 in (('A','K',3,0), ('B','G',3,1), ('D','L',3,0), ('F','C',2,3), ('I','E',3,2)):
+        theMatchResult = MatchResult(s1, s2)
+        allPlayers[p1].addMatch(allPlayers[p2], theMatchResult)
+        allPlayers[p2].addMatch(allPlayers[p1], theMatchResult.turned())
+
+
+
 class TestMatchResult(unittest.TestCase):
 
   def test_onlyGamesMatchResult_doubleTurned_areEqual(self):
@@ -27,12 +44,6 @@ class TestMatchResult(unittest.TestCase):
     self.assertTrue(res.isWon())
     self.assertFalse(res.turned().isWon())
 
-  def test_split(self):
-      s = 'hello world'
-      self.assertEqual(s.split(), ['hello', 'world'])
-      # check that s.split fails when the separator is not a string
-      with self.assertRaises(TypeError):
-          s.split(2)
 
 if __name__ == '__main__':
     unittest.main()
