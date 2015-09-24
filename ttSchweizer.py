@@ -193,6 +193,7 @@ class Round:
             self.setComplete()
 
     def writeHeader(self, fd):
+        fd.write('# Runde %d\n#\n' % self.getNumberOfNextRound())
         fd.write('# Ergebnisse bitte wie folgt eingeben (Spiel  Satz1, Satz2, Satz3 ...):\n')
         fd.write('# Heinz Musterspieler <> Klara Platzhalter ! 3:1 8 -4 12 3\n')
 
