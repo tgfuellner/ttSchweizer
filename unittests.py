@@ -6,21 +6,47 @@ from ttSchweizer import *
 
 import unittest
 
+class TestSpieler(unittest.TestCase):
+
+  def test_numberOfSiege(self):
+    A = Spieler('A',1)
+    B = Spieler('B',2)
+    C = Spieler('C',3)
+
+    A.addMatch(B, MatchResult(3,0))
+    A.addMatch(C, MatchResult(0,3))
+
+    siege = A.getNumberOfSiege()
+
+    self.assertEquals(1, siege)
+
+
 class TestBegegnungen(unittest.TestCase):
 
   def test_groupBySiege(self):
+    allPlayersList = []
     allPlayers = Spieler_Collection()
-    for name,ttr in (('A',6), ('B',5), ('C',0), ('D',4), ('E',0), ('F',3), ('G',0), ('H',2), ('I',1), ('K',0), ('L',0)):
-        allPlayers.spieler(name,ttr)
+    for name,ttr in (('A',11), ('B',10), ('C',1), ('D',9), ('E',2), ('F',8), ('G',3), ('H',7), ('I',6), ('K',4), ('L',5)):
+        allPlayersList.append(allPlayers.spieler(name,ttr))
 
-    allPlayers.freilos()
+    allPlayersList.append(allPlayers.freilos())
 
-    allPlayers['H'].addFreilos(allPlayers['Freilos'])
-    for p1, p2, s1, s2 in (('A','K',3,0), ('B','G',3,1), ('D','L',3,0), ('F','C',2,3), ('I','E',3,2)):
+    (A,B,C,D,E,F,G,H,I,K,L,Freilos) = allPlayersList
+
+
+    H.addFreilos(Freilos)
+    for p1, p2, s1, s2 in ((A,K,3,0), (B,G,3,1), (D,L,3,0), (F,C,2,3), (I,E,3,2)):
         theMatchResult = MatchResult(s1, s2)
-        allPlayers[p1].addMatch(allPlayers[p2], theMatchResult)
-        allPlayers[p2].addMatch(allPlayers[p1], theMatchResult.turned())
+        p1.addMatch(p2, theMatchResult)
+        p2.addMatch(p1, theMatchResult.turned())
 
+    groups = allPlayers.getGroupBySiege()
+
+    self.assertEquals(2, len(groups))
+    self.assertEquals([A,B,D,H,I,C], groups[0])
+    self.assertEquals([F,L,K,G,E,Freilos], groups[1])
+
+    
 
 
 class TestMatchResult(unittest.TestCase):

@@ -21,6 +21,10 @@ class Spieler:
 
     def __str__(self):
         return self.name
+
+    def __repr__(self):
+        return self.name
+        
         
     def addMatch(self, otherSpieler, theMatchResult):
         self.ergebnisse[str(otherSpieler)] = theMatchResult
@@ -32,6 +36,9 @@ class Spieler:
 
     def getNumberOfMatches(self):
         return len(self.ergebnisse)
+
+    def getNumberOfSiege(self):
+        return len([v for v in self.ergebnisse.values() if v.isWon()])
 
 
 
@@ -46,8 +53,10 @@ class FreiLos(Spieler):
 
 
 class Spieler_Collection( dict ):
+    
     def __init__( self, *arg, **kw ):
         super( Spieler_Collection, self ).__init__( *arg, **kw )
+    
     def __getitem__(self, key):
         if not key in self:
             print("Der Spieler '%s' ist nicht bekannt!" % key)
@@ -59,19 +68,31 @@ class Spieler_Collection( dict ):
         s = Spieler( *arg, **kw )
         self[str(s)] = s
         return s
+    
     def freilos( self, *arg, **kw ):
         s = FreiLos( *arg, **kw )
         self[str(s)] = s
         return s
+
     def getTtrSortedList(self):
         players = self.values()
         players.sort(key=lambda x: x.ttr, reverse=True)
         return players
 
+    def getGroupBySiege(self):
+        listOfSiegAnzahl = sorted(set([p.getNumberOfSiege() for p in self.values()]), reverse=True)
+        groups = []
+
+        for siege in listOfSiegAnzahl:
+            g = [player for player in self.values() if player.getNumberOfSiege() == siege]
+            g.sort(key=lambda x: x.ttr, reverse=True)
+            groups.append(g)
+
+        return groups
+
     def allHavePlayed(self, times):
         """ True, if all Players have played the same number (parameter times) of matches """
         for player in self.values():
-            print("Spieler %s hat %d mal gespielt" % (player, player.getNumberOfMatches()))
             if player.getNumberOfMatches() != times:
                 return False
 
@@ -87,6 +108,9 @@ class MatchResult:
         return (   self.gamesWonByPlayerA == other.gamesWonByPlayerA
                and self.gamesWonByPlayerB == other.gamesWonByPlayerB
                and self.gamePoints        == other.gamePoints)
+
+    def __repr__(self):
+        return "%d:%d %s" % (self.gamesWonByPlayerA, self.gamesWonByPlayerB, self.gamePoints)
 
     def turned(self):
         turnedGamePoints = []

@@ -8,3 +8,4 @@ if ! cmp -s runde-1.tts-expected runde-1.tts; then
 fi
 
 diff out out-expected
+rm out
