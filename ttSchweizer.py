@@ -51,8 +51,35 @@ class FreiLos(Spieler):
     def __init__(self):
         self.ergebnisse = collections.OrderedDict()
         self.ttr = 0
-    def __str__(self):
-        return "Freilos"
+        self.name = "Freilos"
+
+class GroupeOfPlayersWithSameSieganzahl( list ):
+    """ Gruppen von Spielern mit gleicher Sieganzahl """
+
+    def __init__( self, *arg, **kw ):
+        super( GroupeOfPlayersWithSameSieganzahl, self ).__init__( *arg, **kw )
+    
+    def getAllPlayers(self):
+        return [player for group in self for player in group]
+
+    def top(self):
+        """ returns and removes first element """
+        if len(self) == 0:
+            return None
+
+        first = self[0][0]
+        self[0].remove(first)
+        if len(self[0]) == 0:
+            del(self[0])
+
+        return first
+
+    def rm(self, element):
+        for g in self:
+            if element in g:
+                g.remove(element)
+            if len(g) == 0:
+                self.remove(g)
 
 
 class Spieler_Collection( dict ):
@@ -83,8 +110,9 @@ class Spieler_Collection( dict ):
         return players
 
     def getGroupBySiege(self):
+        """ Gruppen von Spielern mit gleicher Sieganzahl """
         listOfSiegAnzahl = sorted(set([p.getNumberOfSiege() for p in self.values()]), reverse=True)
-        groups = []
+        groups = GroupeOfPlayersWithSameSieganzahl()
 
         for siege in listOfSiegAnzahl:
             g = [player for player in self.values() if player.getNumberOfSiege() == siege]
@@ -100,6 +128,21 @@ class Spieler_Collection( dict ):
                 return False
 
         return True
+
+    def getBegegnungen(self):
+        """ return [(A,B), (C,D), ..] """
+        begegnungen = []
+        groups = self.getGroupBySiege()
+        playerA = groups.top()
+        while playerA:
+            playerB = playerA.findOponent(groups)
+            groups.remove(playerB)
+            begegnungen.append((playerA,playerB))
+            playerA = groups.top()
+
+        return begegnungen
+
+
 
 class MatchResult:
     def __init__( self, a, b, gamePoints=()):

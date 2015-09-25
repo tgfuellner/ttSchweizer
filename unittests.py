@@ -34,9 +34,8 @@ class TestSpieler(unittest.TestCase):
 
 class TestBegegnungen(unittest.TestCase):
 
-  def test_groupBySiege(self):
+  def setupRound1(self, allPlayers):
     allPlayersList = []
-    allPlayers = Spieler_Collection()
     for name,ttr in (('A',11), ('B',10), ('C',1), ('D',9), ('E',2), ('F',8), ('G',3), ('H',7), ('I',6), ('K',4), ('L',5)):
         allPlayersList.append(allPlayers.spieler(name,ttr))
 
@@ -51,12 +50,62 @@ class TestBegegnungen(unittest.TestCase):
         p1.addMatch(p2, theMatchResult)
         p2.addMatch(p1, theMatchResult.turned())
 
+    return allPlayersList
+
+  def test_groupContainsAllPlayer(self):
+    allPlayers = Spieler_Collection()
+    (A,B,C,D,E,F,G,H,I,K,L,Freilos) = self.setupRound1(allPlayers)
+
+    groups = allPlayers.getGroupBySiege()
+
+    self.assertEquals(set(allPlayers.values()), set(groups.getAllPlayers()))
+
+  def test_groupTop_returnsAndRemovesTop(self):
+    allPlayers = Spieler_Collection()
+    (A,B,C,D,E,F,G,H,I,K,L,Freilos) = self.setupRound1(allPlayers)
+
+    groups = allPlayers.getGroupBySiege()
+
+    for player in (A,B,D,H,I,C,F,L,K,G,E,Freilos,None):
+        self.assertEquals(player, groups.top())
+
+  def test_removeElementFromGroup(self):
+    groups = GroupeOfPlayersWithSameSieganzahl()
+    groups.append([1,2,3])
+    groups.append([10,20])
+    groups.rm(10)
+
+    self.assertEquals([1,2,3], groups[0])
+    self.assertEquals([20], groups[1])
+
+    groups.rm(20)
+    self.assertEquals(1, len(groups))
+    self.assertEquals([1,2,3], groups[0])
+
+
+  def test_groupBySiege(self):
+    allPlayers = Spieler_Collection()
+    (A,B,C,D,E,F,G,H,I,K,L,Freilos) = self.setupRound1(allPlayers)
+
     groups = allPlayers.getGroupBySiege()
 
     self.assertEquals(2, len(groups))
     self.assertEquals([A,B,D,H,I,C], groups[0])
     self.assertEquals([F,L,K,G,E,Freilos], groups[1])
 
+  def test_getBegegnungenAllCanBeInSameGroup(self):
+
+    allPlayers = Spieler_Collection()
+    (A,B,C,D,E,F,G,H,I,K,L,Freilos) = self.setupRound1(allPlayers)
+
+    begegnungen = allPlayers.getBegegnungen()
+    print begegnungen
+
+    self.assertEquals(6, len(begegnungen))
+    winner = [player for begegnung in begegnungen[:3] for player in begegnung]
+    self.assertEquals(set([A,B,D,H,I,C]), set(winner))
+    looser = [player for begegnung in begegnungen[3:] for player in begegnung]
+    self.assertEquals(set([F,L,K,G,E,Freilos]), set(looser))
     
 
 
