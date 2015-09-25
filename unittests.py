@@ -20,6 +20,17 @@ class TestSpieler(unittest.TestCase):
 
     self.assertEquals(1, siege)
 
+  def test_getOponents(self):
+    A = Spieler('A',1)
+    B = Spieler('B',2)
+    C = Spieler('C',3)
+
+    A.addMatch(C, MatchResult(0,3))
+    A.addMatch(B, MatchResult(3,0))
+
+    self.assertEquals([C,B], A.getOponents())
+    
+
 
 class TestBegegnungen(unittest.TestCase):
 

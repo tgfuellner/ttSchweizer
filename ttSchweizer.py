@@ -27,7 +27,7 @@ class Spieler:
         
         
     def addMatch(self, otherSpieler, theMatchResult):
-        self.ergebnisse[str(otherSpieler)] = theMatchResult
+        self.ergebnisse[otherSpieler] = theMatchResult
 
     def addFreilos(self, freilos):
         self.addMatch(freilos, MatchResult(3,0))
@@ -39,6 +39,9 @@ class Spieler:
 
     def getNumberOfSiege(self):
         return len([v for v in self.ergebnisse.values() if v.isWon()])
+
+    def getOponents(self):
+        return self.ergebnisse.keys()
 
 
 
