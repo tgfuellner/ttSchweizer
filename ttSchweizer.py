@@ -43,6 +43,18 @@ class Spieler:
     def getOponents(self):
         return self.ergebnisse.keys()
 
+    def findOponent(self, groupsWithSameSiegzahl):
+        """ Sucht sich den nächsten möglichen Spieler, möglichst einen aus der selben Gruppe """
+        groups = GroupeOfPlayersWithSameSieganzahl()
+        for subGroup in groupsWithSameSiegzahl:
+            groups.append(list(subGroup))
+
+        # Spiele nie 2 mal mit selbem Gegner
+        for oponent in self.getOponents():
+            groups.rm(oponent)
+
+        return random.choice(groups[0])
+
 
 
 class FreiLos(Spieler):
@@ -136,7 +148,7 @@ class Spieler_Collection( dict ):
         playerA = groups.top()
         while playerA:
             playerB = playerA.findOponent(groups)
-            groups.remove(playerB)
+            groups.rm(playerB)
             begegnungen.append((playerA,playerB))
             playerA = groups.top()
 
