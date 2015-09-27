@@ -55,6 +55,9 @@ class Spieler:
 
         return random.choice(groups[0])
 
+    def getDefaultResult(self):
+        return ""
+
 
 
 class FreiLos(Spieler):
@@ -64,6 +67,9 @@ class FreiLos(Spieler):
         self.ergebnisse = collections.OrderedDict()
         self.ttr = 0
         self.name = "Freilos"
+
+    def getDefaultResult(self):
+        return "3:0"
 
 class GroupeOfPlayersWithSameSieganzahl( list ):
     """ Gruppen von Spielern mit gleicher Sieganzahl """
@@ -204,7 +210,12 @@ class Round:
         return self._isComplete
 
     def createStartOfNextRound(self):
-        print("Nächste Runde %d" % self._numberOfRound)
+        with open(getFileNameOfRound(self.getNumberOfNextRound()), 'w') as the_file:
+            self.writeHeader(the_file)
+
+            begegnungen = self._collectionOfAllPlayers.getBegegnungen()
+            for spielerA, spielerB in begegnungen:
+                self.writeBegegnung(the_file, spielerA, spielerB)
 
     def isComment(self, line):
         if line[0] == '#':
@@ -280,7 +291,10 @@ class Round:
         fd.write('# Heinz Musterspieler <> Klara Platzhalter ! 3:1 8 -4 12 3\n')
 
     def writeBegegnung(self, fd, spielerA, spielerB):
-        fd.write("%s <> %s ! \n" % (str(spielerA), str(spielerB)))
+        fd.write("%s <> %s ! " % (str(spielerA), str(spielerB)))
+        fd.write(spielerB.getDefaultResult())
+
+        fd.write("\n")
 
 
 
