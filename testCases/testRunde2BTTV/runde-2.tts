@@ -1,0 +1,9 @@
+# Ergebnisse bitte wie folgt eingeben (Spiel  Satz1, Satz2, Satz3 ...):
+# Heinz Musterspieler <> Klara Platzhalter ! 3:1 8 -4 12 3
+# A-C*, B*-I, D*-H, E*-L, G*-K und F hat Freilos
+A <> C ! 2:3 2 9 -9 -8 -7
+B <> I ! 3:0 7 8 9
+D <> H ! 3:1 9 3 -5 10
+E <> L ! 3:2 8 9 -3 -6 12
+G <> K ! 3:0 9 9 9
+F <> Freilos ! 3:0
