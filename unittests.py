@@ -89,9 +89,10 @@ class TestBegegnungen(unittest.TestCase):
 
     groups = allPlayers.getGroupBySiege()
 
-    self.assertEquals(2, len(groups))
+    self.assertEquals(3, len(groups))
     self.assertEquals([A,B,D,H,I,C], groups[0])
-    self.assertEquals([F,L,K,G,E,Freilos], groups[1])
+    self.assertEquals([F,L,K,G,E], groups[1])
+    self.assertEquals([Freilos], groups[2])
 
   def test_getBegegnungenAllCanBeInSameGroup(self):
 

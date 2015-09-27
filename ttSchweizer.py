@@ -71,6 +71,9 @@ class FreiLos(Spieler):
     def getDefaultResult(self):
         return "3:0"
 
+    def getNumberOfSiege(self):
+        return -1  # Damit kommt Freilos nicht zu den Spielern mit 0 Siegen in die Gruppe
+
 class GroupeOfPlayersWithSameSieganzahl( list ):
     """ Gruppen von Spielern mit gleicher Sieganzahl """
 
