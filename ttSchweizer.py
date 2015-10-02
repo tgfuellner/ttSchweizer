@@ -49,9 +49,15 @@ class Spieler:
         for subGroup in groupsWithSameSiegzahl:
             groups.append(list(subGroup))
 
+        print "Suche Gegner für",self
+        print " Gruppen mit selber Siegzahl", groups
+
         # Spiele nie 2 mal mit selbem Gegner
         for oponent in self.getOponents():
             groups.rm(oponent)
+
+        print " Gruppen mit selber Siegzahl, minus alten Gegnern", groups
+
 
         return random.choice(groups[0])
 
@@ -221,7 +227,7 @@ class Round:
                 self.writeBegegnung(the_file, spielerA, spielerB)
 
     def isComment(self, line):
-        if line[0] == '#':
+        if line[0] == '#' or not line.strip():
             return True
         else:
             return False
