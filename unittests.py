@@ -38,7 +38,11 @@ class TestSpieler(unittest.TestCase):
 
     self.assertEquals(B, A.findOponent(groups))
 
+    C = Spieler('C',3)
+    groups = [[B],[C]]
+    A.addMatch(B, MatchResult(3,0))
     
+    self.assertEquals(C, A.findOponent(groups))
 
 
 class TestBegegnungen(unittest.TestCase):
