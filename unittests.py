@@ -29,6 +29,15 @@ class TestSpieler(unittest.TestCase):
     A.addMatch(B, MatchResult(3,0))
 
     self.assertEquals([C,B], A.getOponents())
+
+  def test_findOponentOnlyOneIsPossible(self):
+    allPlayers = Spieler_Collection()
+    A = Spieler('A',1)
+    B = Spieler('B',2)
+    groups = [[B]]
+
+    self.assertEquals(B, A.findOponent(groups))
+
     
 
 
