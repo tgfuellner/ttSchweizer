@@ -31,18 +31,43 @@ class TestSpieler(unittest.TestCase):
     self.assertEquals([C,B], A.getOponents())
 
   def test_findOponentOnlyOneIsPossible(self):
-    allPlayers = Spieler_Collection()
     A = Spieler('A',1)
     B = Spieler('B',2)
-    groups = [[B]]
+    groups = GroupeOfPlayersWithSameSieganzahl([[B]])
 
     self.assertEquals(B, A.findOponent(groups))
 
     C = Spieler('C',3)
-    groups = [[B],[C]]
+    groups = GroupeOfPlayersWithSameSieganzahl([[B],[C]])
     A.addMatch(B, MatchResult(3,0))
     
     self.assertEquals(C, A.findOponent(groups))
+
+  def test_findOponentNoOneIsPossible(self):
+    A = Spieler('A',1)
+    B = Spieler('B',2)
+    A.addMatch(B, MatchResult(3,0))
+    groups = GroupeOfPlayersWithSameSieganzahl([[B]])
+
+    self.assertEquals(None, A.findOponent(groups))
+
+  def test_findOponentOneIsNotPossibleRegardingLaterDrawings(self):
+    A = Spieler('A',1)
+    B = Spieler('B',2)
+    C = Spieler('C',2)
+    # The next players all played against B
+    U = Spieler('U',2)
+    V = Spieler('V',2)
+    W = Spieler('W',2)
+    X = Spieler('X',2)
+    B.addMatch(U, MatchResult(3,0))
+    B.addMatch(V, MatchResult(3,0))
+    B.addMatch(W, MatchResult(3,0))
+    B.addMatch(X, MatchResult(3,0))
+    groups = GroupeOfPlayersWithSameSieganzahl([[C], [B,U,V,W,X]])
+
+    self.assertNotEquals(None, A.findOponent(groups))
+    self.assertNotEquals(C, A.findOponent(groups))
 
 
 class TestBegegnungen(unittest.TestCase):

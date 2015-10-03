@@ -43,23 +43,43 @@ class Spieler:
     def getOponents(self):
         return self.ergebnisse.keys()
 
-    def findOponent(self, groupsWithSameSiegzahl):
+    def findOponent(self, groupsWithSameSiegzahl, blanksForPrints=""):
         """ Sucht sich den nächsten möglichen Spieler, möglichst einen aus der selben Gruppe """
-        groups = GroupeOfPlayersWithSameSieganzahl()
-        for subGroup in groupsWithSameSiegzahl:
-            groups.append(list(subGroup))
+        groups = groupsWithSameSiegzahl.clone()
 
-        print "Suche Gegner für",self
-        print " Gruppen mit selber Siegzahl", groups
+        print blanksForPrints, "Suche Gegner für", self
+        print blanksForPrints, "Gruppen mit selber Siegzahl", groups
 
         # Spiele nie 2 mal mit selbem Gegner
         for oponent in self.getOponents():
             groups.rm(oponent)
 
-        print " Gruppen mit selber Siegzahl, minus alten Gegnern", groups
+        print blanksForPrints, "Gruppen mit selber Siegzahl, minus alten Gegnern", groups
 
+        if groups == []:
+            return None
 
-        return random.choice(groups[0])
+        player = random.choice(groups[0])
+
+        # print "  kann", player, "genommen werden?"
+        while not player.theGroupsCanFindMatchesWithoutMe(groups, blanksForPrints):
+            groups.rm(player)
+            print blanksForPrints, player, "kann nicht genommen werden. Suche in", groups
+            if groups == []:
+                return None
+            player = random.choice(groups[0])
+
+        print blanksForPrints, "**", player, "ist neuer Gegner von", self
+        return player
+
+    def theGroupsCanFindMatchesWithoutMe(self, groupsWithSameSiegzahl, blanksForPrints=""):
+        # print "in", self, "theGroupsCanFindMatchesWithoutMe", groupsWithSameSiegzahl
+        groups = groupsWithSameSiegzahl.clone()
+        groups.rm(self)
+        if groups == []:
+            return True
+        player = groups.top()
+        return player.findOponent(groups, blanksForPrints+"  ") != None
 
     def getDefaultResult(self):
         return ""
@@ -86,6 +106,12 @@ class GroupeOfPlayersWithSameSieganzahl( list ):
     def __init__( self, *arg, **kw ):
         super( GroupeOfPlayersWithSameSieganzahl, self ).__init__( *arg, **kw )
     
+    def clone(self):
+        groups = GroupeOfPlayersWithSameSieganzahl()
+        for subGroup in self:
+            groups.append(list(subGroup))
+        return groups
+
     def getAllPlayers(self):
         return [player for group in self for player in group]
 
