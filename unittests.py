@@ -137,7 +137,8 @@ class TestBegegnungen(unittest.TestCase):
     allPlayers = Spieler_Collection()
     (A,B,C,D,E,F,G,H,I,K,L,Freilos) = self.setupRound1(allPlayers)
 
-    begegnungen = allPlayers.getBegegnungen()
+    groups = allPlayers.getGroupBySiege()
+    begegnungen = allPlayers.getBegegnungen(groups)
 
     self.assertEquals(6, len(begegnungen))
     winner = [player for begegnung in begegnungen[:3] for player in begegnung]

@@ -164,6 +164,13 @@ class Spieler_Collection( dict ):
         players.sort(key=lambda x: x.ttr, reverse=True)
         return players
 
+    def getOneBigGroup(self):
+        """ Eine grosse Gruppe um Probleme bei Paarungsfindung zu umgehen """
+        allPlayers = self.values()
+        allPlayers.remove(self["Freilos"])
+        allPlayers.append(self["Freilos"])
+        return GroupeOfPlayersWithSameSieganzahl([allPlayers])
+
     def getGroupBySiege(self):
         """ Gruppen von Spielern mit gleicher Sieganzahl """
         listOfSiegAnzahl = sorted(set([p.getNumberOfSiege() for p in self.values()]), reverse=True)
@@ -184,10 +191,9 @@ class Spieler_Collection( dict ):
 
         return True
 
-    def getBegegnungen(self):
+    def getBegegnungen(self, groups):
         """ return [(A,B), (C,D), ..] """
         begegnungen = []
-        groups = self.getGroupBySiege()
         playerA = groups.top()
         while playerA:
             playerB = playerA.findOponent(groups)
@@ -252,10 +258,19 @@ class Round:
 
         numberOfMaxRetries = 20
         for _ in xrange(numberOfMaxRetries):
-            begegnungen = self._collectionOfAllPlayers.getBegegnungen()
+            groups = self._collectionOfAllPlayers.getGroupBySiege()
+            begegnungen = self._collectionOfAllPlayers.getBegegnungen(groups)
             if begegnungen:
                 break
             print "Retry getBegegnungen"
+
+        if not begegnungen:
+            for _ in xrange(numberOfMaxRetries):
+                groups = self._collectionOfAllPlayers.getOneBigGroup()
+                begegnungen = self._collectionOfAllPlayers.getBegegnungen(groups)
+                if begegnungen:
+                    break
+                print "Panic Retry getBegegnungen"
 
         with open(getFileNameOfRound(self.getNumberOfNextRound()), 'w') as the_file:
             self.writeHeader(the_file)
