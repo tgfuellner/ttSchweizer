@@ -47,33 +47,35 @@ class Spieler:
         """ Sucht sich den nächsten möglichen Spieler, möglichst einen aus der selben Gruppe """
         groups = groupsWithSameSiegzahl.clone()
 
-        print blanksForPrints, "Suche Gegner für", self
-        print blanksForPrints, "Gruppen mit selber Siegzahl", groups
+        self.printOponent(blanksForPrints, "Suche Gegner für", self)
+        self.printOponent(blanksForPrints, "Gruppen mit selber Siegzahl", groups)
 
         # Spiele nie 2 mal mit selbem Gegner
         for oponent in self.getOponents():
             groups.rm(oponent)
 
-        print blanksForPrints, "Gruppen mit selber Siegzahl, minus alten Gegnern", groups
+        self.printOponent(blanksForPrints, "Gruppen mit selber Siegzahl, minus alten Gegnern", groups)
 
         if groups == []:
             return None
 
         player = random.choice(groups[0])
 
-        # print "  kann", player, "genommen werden?"
         while not player.theGroupsCanFindMatchesWithoutMe(groups, blanksForPrints):
             groups.rm(player)
-            print blanksForPrints, player, "kann nicht genommen werden. Suche in", groups
+            self.printOponent(blanksForPrints, player, "kann nicht genommen werden. Suche in", groups)
             if groups == []:
                 return None
             player = random.choice(groups[0])
 
-        print blanksForPrints, "**", player, "ist neuer Gegner von", self
+        self.printOponent(blanksForPrints, "**", player, "ist neuer Gegner von", self)
         return player
 
+    def printOponent(self, *args):
+        return
+        print " ".join([str(p) for p in args])
+
     def theGroupsCanFindMatchesWithoutMe(self, groupsWithSameSiegzahl, blanksForPrints=""):
-        # print "in", self, "theGroupsCanFindMatchesWithoutMe", groupsWithSameSiegzahl
         groups = groupsWithSameSiegzahl.clone()
         groups.rm(self)
         if groups == []:
