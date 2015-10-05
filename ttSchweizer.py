@@ -191,6 +191,8 @@ class Spieler_Collection( dict ):
         playerA = groups.top()
         while playerA:
             playerB = playerA.findOponent(groups)
+            if playerB == None:
+                return None
             groups.rm(playerB)
             begegnungen.append((playerA,playerB))
             playerA = groups.top()
@@ -247,10 +249,16 @@ class Round:
         return self._isComplete
 
     def createStartOfNextRound(self):
+
+        numberOfMaxRetries = 20
+        for _ in xrange(numberOfMaxRetries):
+            begegnungen = self._collectionOfAllPlayers.getBegegnungen()
+            if begegnungen:
+                break
+            print "Retry getBegegnungen"
+
         with open(getFileNameOfRound(self.getNumberOfNextRound()), 'w') as the_file:
             self.writeHeader(the_file)
-
-            begegnungen = self._collectionOfAllPlayers.getBegegnungen()
             for spielerA, spielerB in begegnungen:
                 self.writeBegegnung(the_file, spielerA, spielerB)
 
