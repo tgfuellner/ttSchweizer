@@ -344,7 +344,7 @@ class RoundInit(Round):
         if os.path.isfile(SPIELER_FileName):
             self._rankedPlayerList = self._calcRankOfPlayers(SPIELER_FileName, aCollectionOfAllPlayers)
             if len(self._rankedPlayerList) < MIN_NumberOfPlayer:
-                print("%d Spieler sind zu wenig, brauche mindestens 9" % len(self._rankedPlayerList))
+                print("%d Spieler sind zu wenig, brauche mindestens %d" % (len(self._rankedPlayerList), MIN_NumberOfPlayer))
             else:
                 self.setComplete()
 
