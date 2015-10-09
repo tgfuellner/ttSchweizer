@@ -255,6 +255,8 @@ class Round:
         return self._isComplete
 
     def createStartOfNextRound(self):
+        if self._numberOfRound == NUMBER_OfRounds:
+            return
 
         numberOfMaxRetries = 20
         for _ in xrange(numberOfMaxRetries):
