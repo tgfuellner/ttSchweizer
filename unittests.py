@@ -90,6 +90,25 @@ class TestBegegnungen(unittest.TestCase):
 
     return allPlayersList
 
+  def test_getRanking(self):
+    allPlayers = Spieler_Collection()
+    (A,B,C,D,E,F,G,H,I,K,L,Freilos) = self.setupRound1(allPlayers)
+
+    # Spieler: A, B, C, D, E, F, G, H, I, K, L
+    # Siege:   1  1  1  1  0  0  0  1  1  0  0
+    # Buchh.:  0  0  0  0  0  0  0  0  0  0  0
+    # Platz:   6  5  1  4  7 11  8  3  2  9 10
+
+    ranking = allPlayers.getRanking()
+
+    self.assertEquals(11, len(ranking))  # 11 Spieler
+
+    spieler, siege, buchholzzahl = ranking[0]
+    self.assertEquals(C, spieler); self.assertEquals(1, siege); self.assertEquals(0, buchholzzahl)
+
+    expected = [(C,1,0),(I,1,0),(H,1,0),(D,1,0),(B,1,0),(A,1,0),(E,0,0),(G,0,0),(K,0,0),(L,0,0),(F,0,0)]
+    self.assertEquals(expected, ranking)
+
   def test_groupContainsAllPlayer(self):
     allPlayers = Spieler_Collection()
     (A,B,C,D,E,F,G,H,I,K,L,Freilos) = self.setupRound1(allPlayers)

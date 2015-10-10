@@ -159,6 +159,21 @@ class Spieler_Collection( dict ):
         self[str(s)] = s
         return s
 
+    def getRanking(self):
+        """ [[spieler, siege, buchholzzahl], [...]] """
+        ranking = []
+
+        for group in self.getGroupBySiege():
+            group.sort(key=lambda x: x.ttr)
+            siege = group[0].getNumberOfSiege()
+            buchholzzahl = 0
+            for spieler in group:
+                if spieler != self["Freilos"]:
+                    ranking.append((spieler, siege, buchholzzahl))
+
+        return ranking
+        
+
     def getTtrSortedList(self):
         players = self.values()
         players.sort(key=lambda x: x.ttr, reverse=True)
