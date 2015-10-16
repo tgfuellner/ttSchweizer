@@ -120,6 +120,34 @@ class TestBegegnungen(unittest.TestCase):
 
     self.assertEquals(set(expected), set(ranking))
 
+  def test_getRankingDirekterVergleich(self):
+    allPlayersList = []
+    allPlayers = Spieler_Collection()
+    for name,ttr in (('A',11), ('B',10), ('C',1), ('D',2)):
+        allPlayersList.append(allPlayers.spieler(name,ttr))
+
+    (A,B,C,D) = allPlayersList
+
+    self.createBegegnungen((A,B,3,0), (B,C,3,0), (C,A,3,0), (A,D,3,0))
+
+    # Spieler: A, B, C, D
+    # Gegner:  B  A  B, A
+    #          C  C  A
+    #          D
+    # ttr:    11 10  1  2
+
+    # Siege:   2  1  1  0
+    # Buchh.:  2  3  3  2
+    # Platz:   1  2  3  4
+
+    # B ist zweiter obwohl er höheren TTR Wert hat!
+
+    ranking = allPlayers.getRanking()
+
+    spieler, siege, buchholzzahl, platz = ranking[1]
+    self.assertEquals(B, spieler)
+    self.assertEquals(2, platz)
+
   def test_getRankingDifferentBuchholzzahl(self):
     allPlayersList = []
     allPlayers = Spieler_Collection()
