@@ -95,6 +95,7 @@ class TestBegegnungen(unittest.TestCase):
     (A,B,C,D,E,F,G,H,I,K,L,Freilos) = self.setupRound1(allPlayers)
 
     # Spieler: A, B, C, D, E, F, G, H, I, K, L
+    # ttr:    11 10  1  9  2  8  3  7  6  4  5 
     # Siege:   1  1  1  1  0  0  0  1  1  0  0
     # Buchh.:  0  0  0  0  0  0  0  0  0  0  0
     # Platz:   6  5  1  4  7 11  8  3  2  9 10
@@ -103,10 +104,11 @@ class TestBegegnungen(unittest.TestCase):
 
     self.assertEquals(11, len(ranking))  # 11 Spieler
 
-    spieler, siege, buchholzzahl = ranking[0]
+    spieler, siege, buchholzzahl, platz = ranking[0]
     self.assertEquals(C, spieler); self.assertEquals(1, siege); self.assertEquals(0, buchholzzahl)
+    self.assertEquals(1, platz)
 
-    expected = [(C,1,0),(I,1,0),(H,1,0),(D,1,0),(B,1,0),(A,1,0),(E,0,0),(G,0,0),(K,0,0),(L,0,0),(F,0,0)]
+    expected = [(C,1,0,1),(I,1,0,2),(H,1,0,3),(D,1,0,4),(B,1,0,5),(A,1,0,6),(E,0,0,7),(G,0,0,8),(K,0,0,9),(L,0,0,10),(F,0,0,11)]
     self.assertEquals(expected, ranking)
 
   def test_groupContainsAllPlayer(self):

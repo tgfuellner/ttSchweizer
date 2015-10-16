@@ -160,8 +160,9 @@ class Spieler_Collection( dict ):
         return s
 
     def getRanking(self):
-        """ [[spieler, siege, buchholzzahl], [...]] """
+        """ [[spieler, siege, buchholzzahl, platz], [...]] """
         ranking = []
+        platz = 1
 
         for group in self.getGroupBySiege():
             group.sort(key=lambda x: x.ttr)
@@ -169,7 +170,8 @@ class Spieler_Collection( dict ):
             buchholzzahl = 0
             for spieler in group:
                 if spieler != self["Freilos"]:
-                    ranking.append((spieler, siege, buchholzzahl))
+                    ranking.append((spieler, siege, buchholzzahl, platz))
+                    platz = platz + 1
 
         return ranking
         
