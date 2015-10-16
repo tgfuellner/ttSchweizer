@@ -37,16 +37,16 @@ class Spieler:
     def getNumberOfMatches(self):
         return len(self.ergebnisse)
 
-    def getNumberOfSiege(self):
+    def getNumberOfSiege(self, minSiegeOfAllPlayers=0):
         return len([v for v in self.ergebnisse.values() if v.isWon()])
 
     def getOponents(self):
         return self.ergebnisse.keys()
 
-    def getBuchHolzZahl(self):
+    def getBuchHolzZahl(self, minSiegeOfAllPlayers):
         zahl = 0
         for spieler in self.getOponents():
-            zahl = zahl + spieler.getNumberOfSiege()
+            zahl = zahl + spieler.getNumberOfSiege(minSiegeOfAllPlayers)
 
         return zahl
 
@@ -106,8 +106,8 @@ class FreiLos(Spieler):
     def getDefaultResult(self):
         return "3:0"
 
-    def getNumberOfSiege(self):
-        return 0
+    def getNumberOfSiege(self, minSiegeOfAllPlayers=0):
+        return minSiegeOfAllPlayers
 
 class GroupeOfPlayersWithSameSieganzahl( list ):
     """ Gruppen von Spielern mit gleicher Sieganzahl """
@@ -174,7 +174,7 @@ class Spieler_Collection( dict ):
         incr = 0
 
         for group in self.getGroupBySiege():
-            group.sort(key=lambda x: x.ttr)
+            group.sort(key=lambda x: (x.getBuchHolzZahl(self.getMinSiege())*-1, x.ttr))
             siege = group[0].getNumberOfSiege()
 
             freilos = "Freilos"
@@ -182,7 +182,7 @@ class Spieler_Collection( dict ):
                 group.remove(self[freilos])
 
             for spieler in group:
-                buchholzzahl = spieler.getBuchHolzZahl()
+                buchholzzahl = spieler.getBuchHolzZahl(self.getMinSiege())
                 rankingAttributes = (siege, buchholzzahl, spieler.ttr)
                 if rankingAttributesPredecesor and rankingAttributes != rankingAttributesPredecesor:
                     platz = platz + incr
@@ -195,6 +195,8 @@ class Spieler_Collection( dict ):
 
         return ranking
         
+    def getMinSiege(self):
+        return min([p.getNumberOfSiege() for p in self.valuesOhneFreilos()])
 
     def getTtrSortedList(self):
         players = self.values()
@@ -204,8 +206,9 @@ class Spieler_Collection( dict ):
     def getOneBigGroup(self):
         """ Eine grosse Gruppe um Probleme bei Paarungsfindung zu umgehen """
         allPlayers = self.values()
-        allPlayers.remove(self["Freilos"])
-        allPlayers.append(self["Freilos"])
+        if "Freilos" in self:
+            allPlayers.remove(self["Freilos"])
+            allPlayers.append(self["Freilos"])
         return GroupeOfPlayersWithSameSieganzahl([allPlayers])
 
     def valuesOhneFreilos(self):
