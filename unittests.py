@@ -72,6 +72,12 @@ class TestSpieler(unittest.TestCase):
 
 class TestBegegnungen(unittest.TestCase):
 
+  def createBegegnungen(self, *matches):
+    for p1, p2, s1, s2 in matches:
+        theMatchResult = MatchResult(s1, s2)
+        p1.addMatch(p2, theMatchResult)
+        p2.addMatch(p1, theMatchResult.turned())
+
   def setupRound1(self, allPlayers):
     allPlayersList = []
     for name,ttr in (('A',11), ('B',10), ('C',1), ('D',9), ('E',2), ('F',8), ('G',3), ('H',7), ('I',6), ('K',4), ('L',5)):
@@ -83,14 +89,12 @@ class TestBegegnungen(unittest.TestCase):
 
 
     H.addFreilos(Freilos)
-    for p1, p2, s1, s2 in ((A,K,3,0), (B,G,3,1), (D,L,3,0), (F,C,2,3), (I,E,3,2)):
-        theMatchResult = MatchResult(s1, s2)
-        p1.addMatch(p2, theMatchResult)
-        p2.addMatch(p1, theMatchResult.turned())
+    self.createBegegnungen((A,K,3,0), (B,G,3,1), (D,L,3,0), (F,C,2,3), (I,E,3,2))
 
     return allPlayersList
 
-  def test_getRanking(self):
+
+  def test_getRankingSameBuchholzzahl(self):
     allPlayers = Spieler_Collection()
     (A,B,C,D,E,F,G,H,I,K,L,Freilos) = self.setupRound1(allPlayers)
 
@@ -101,8 +105,8 @@ class TestBegegnungen(unittest.TestCase):
     # Spieler: A, B, C, D, E, F, G, H, I, K, L
     # ttr:    11 10  1  6  2  8  3  6  6  3  5 
     # Siege:   1  1  1  1  0  0  0  1  1  0  0
-    # Buchh.:  0  0  0  0  0  0  0  0  0  0  0
-    # Platz:   6  5  1  4  7 11  8  2  2  9 10
+    # Buchh.:  0  0  0  0  1  1  1  0  0  1  1
+    # Platz:   6  5  1  2  7 11  8  2  2  8 10
 
     ranking = allPlayers.getRanking()
 
@@ -112,8 +116,42 @@ class TestBegegnungen(unittest.TestCase):
     self.assertEquals(C, spieler); self.assertEquals(1, siege); self.assertEquals(0, buchholzzahl)
     self.assertEquals(1, platz)
 
-    expected = [(C,1,0,1),(I,1,0,2),(H,1,0,2),(D,1,0,2),(B,1,0,5),(A,1,0,6),(E,0,0,7),(G,0,0,8),(K,0,0,8),(L,0,0,10),(F,0,0,11)]
+    expected = [(C,1,0,1),(I,1,0,2),(H,1,0,2),(D,1,0,2),(B,1,0,5),(A,1,0,6),(E,0,1,7),(G,0,1,8),(K,0,1,8),(L,0,1,10),(F,0,1,11)]
     self.assertEquals(set(expected), set(ranking))
+
+  def test_getRankingDifferentBuchholzzahl(self):
+    allPlayersList = []
+    allPlayers = Spieler_Collection()
+    for name,ttr in (('A',11), ('B',10), ('C',1), ('D',9), ('E',2), ('F',8), ('G',3), ('H',7), ('I',6), ('K',4)):
+        allPlayersList.append(allPlayers.spieler(name,ttr))
+
+    (A,B,C,D,E,F,G,H,I,K) = allPlayersList
+
+    self.createBegegnungen((A,K,3,0), (B,G,3,1), (D,H,3,0), (F,C,2,3), (I,E,3,2))
+    self.createBegegnungen((A,B,3,0), (C,D,3,0), (E,F,3,0), (G,H,3,0), (I,K,3,0))
+    self.createBegegnungen((A,C,3,0), (B,D,3,0), (E,G,3,0), (F,I,3,0), (H,K,3,0))
+
+    # Spieler: A, B, C, D, E, F, G, H, I, K
+    # Gegner:  K  G  F  H  I  C  B  D  E  A
+    #          B  A  D  C  F  E  H  G  K  I
+    #          C  D  A  B  G  I  E  K  F  H
+    # ttr:    11 10  1  9  2  8  3  7  6  4 
+
+    # Siege:   3  2  2  1  2  1  1  1  2  0
+    # Buchh.:  4  5  5  5  4  6  5  2  3  6
+    # Platz:   1  5  2  9  3  8  6  7  4 10
+
+    ranking = allPlayers.getRanking()
+
+    self.assertTrue(allPlayers.allHavePlayed(3))
+    self.assertEquals(10, len(ranking))  # 10 Spieler
+
+    spieler, siege, buchholzzahl, platz = ranking[1]
+    self.assertEquals(C, spieler); self.assertEquals(2, siege); self.assertEquals(5, buchholzzahl)
+    self.assertEquals(2, platz)
+
+    expected = [(A,3,4,1),(C,2,5,2),(E,2,4,3),(I,2,3,4),(B,2,5,5),(G,1,5,6),(H,1,2,7),(F,1,6,8),(D,1,5,9),(K,0,6,10)]
+    self.assertEquals(expected, ranking)
 
   def test_groupContainsAllPlayer(self):
     allPlayers = Spieler_Collection()

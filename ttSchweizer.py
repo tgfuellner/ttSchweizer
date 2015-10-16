@@ -43,6 +43,13 @@ class Spieler:
     def getOponents(self):
         return self.ergebnisse.keys()
 
+    def getBuchHolzZahl(self):
+        zahl = 0
+        for spieler in self.getOponents():
+            zahl = zahl + spieler.getNumberOfSiege()
+
+        return zahl
+
     def findOponent(self, groupsWithSameSiegzahl, blanksForPrints=""):
         """ Sucht sich den nächsten möglichen Spieler, möglichst einen aus der selben Gruppe """
         groups = groupsWithSameSiegzahl.clone()
@@ -100,7 +107,7 @@ class FreiLos(Spieler):
         return "3:0"
 
     def getNumberOfSiege(self):
-        return -1  # Damit kommt Freilos nicht zu den Spielern mit 0 Siegen in die Gruppe
+        return 0
 
 class GroupeOfPlayersWithSameSieganzahl( list ):
     """ Gruppen von Spielern mit gleicher Sieganzahl """
@@ -169,12 +176,13 @@ class Spieler_Collection( dict ):
         for group in self.getGroupBySiege():
             group.sort(key=lambda x: x.ttr)
             siege = group[0].getNumberOfSiege()
-            buchholzzahl = 0
 
-            if self["Freilos"] in group:
-                group.remove(self["Freilos"])
+            freilos = "Freilos"
+            if freilos in self and self[freilos] in group:
+                group.remove(self[freilos])
 
             for spieler in group:
+                buchholzzahl = spieler.getBuchHolzZahl()
                 rankingAttributes = (siege, buchholzzahl, spieler.ttr)
                 if rankingAttributesPredecesor and rankingAttributes != rankingAttributesPredecesor:
                     platz = platz + incr
@@ -200,15 +208,24 @@ class Spieler_Collection( dict ):
         allPlayers.append(self["Freilos"])
         return GroupeOfPlayersWithSameSieganzahl([allPlayers])
 
+    def valuesOhneFreilos(self):
+        allPlayers = self.values()
+        if "Freilos" in self:
+            allPlayers.remove(self["Freilos"])
+        return allPlayers
+
     def getGroupBySiege(self):
         """ Gruppen von Spielern mit gleicher Sieganzahl """
-        listOfSiegAnzahl = sorted(set([p.getNumberOfSiege() for p in self.values()]), reverse=True)
+        listOfSiegAnzahl = sorted(set([p.getNumberOfSiege() for p in self.valuesOhneFreilos()]), reverse=True)
         groups = GroupeOfPlayersWithSameSieganzahl()
 
         for siege in listOfSiegAnzahl:
-            g = [player for player in self.values() if player.getNumberOfSiege() == siege]
+            g = [player for player in self.valuesOhneFreilos() if player.getNumberOfSiege() == siege]
             g.sort(key=lambda x: x.ttr, reverse=True)
             groups.append(g)
+
+        if "Freilos" in self:
+            groups.append([self["Freilos"]])
 
         return groups
 
