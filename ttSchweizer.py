@@ -162,16 +162,28 @@ class Spieler_Collection( dict ):
     def getRanking(self):
         """ [[spieler, siege, buchholzzahl, platz], [...]] """
         ranking = []
+        rankingAttributesPredecesor = None
         platz = 1
+        incr = 0
 
         for group in self.getGroupBySiege():
             group.sort(key=lambda x: x.ttr)
             siege = group[0].getNumberOfSiege()
             buchholzzahl = 0
+
+            if self["Freilos"] in group:
+                group.remove(self["Freilos"])
+
             for spieler in group:
-                if spieler != self["Freilos"]:
-                    ranking.append((spieler, siege, buchholzzahl, platz))
-                    platz = platz + 1
+                rankingAttributes = (siege, buchholzzahl, spieler.ttr)
+                if rankingAttributesPredecesor and rankingAttributes != rankingAttributesPredecesor:
+                    platz = platz + incr
+                    incr = 1
+                else:
+                    incr = incr + 1
+
+                ranking.append((spieler, siege, buchholzzahl, platz))
+                rankingAttributesPredecesor = rankingAttributes
 
         return ranking
         
