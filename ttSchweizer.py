@@ -24,6 +24,47 @@ class Spieler:
 
     def __repr__(self):
         return self.name
+
+    def __lt__(self, other):
+        if self.getNumberOfSiege() > other.getNumberOfSiege():
+            return True
+        if self.getNumberOfSiege() < other.getNumberOfSiege():
+            return False
+        if self.getBuchHolzZahl() > other.getBuchHolzZahl():
+            return True
+        if self.getBuchHolzZahl() < other.getBuchHolzZahl():
+            return False
+        if self.ttr < other.ttr:
+            return True
+        if self.ttr > other.ttr:
+            return False
+        if self.__eq__(other):
+            return False
+        return False
+
+    def __le__(self, other):
+        if self.__eq__(other):
+            return True
+        return self.__lt__(other)
+
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__) and self.name == other.name)
+
+    def __ge__(self, other):
+        if self.__eq__(other):
+            return True
+        return self.__gt__(other)
+
+    def __gt__(self, other):
+        if self.__eq__(other):
+            return False
+        return not self.__lt__(other)
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __hash__(self):
+        return hash(self.name)
         
         
     def addMatch(self, otherSpieler, theMatchResult):
@@ -37,16 +78,16 @@ class Spieler:
     def getNumberOfMatches(self):
         return len(self.ergebnisse)
 
-    def getNumberOfSiege(self, minSiegeOfAllPlayers=0):
+    def getNumberOfSiege(self):
         return len([v for v in self.ergebnisse.values() if v.isWon()])
 
     def getOponents(self):
         return self.ergebnisse.keys()
 
-    def getBuchHolzZahl(self, minSiegeOfAllPlayers):
+    def getBuchHolzZahl(self):
         zahl = 0
         for spieler in self.getOponents():
-            zahl = zahl + spieler.getNumberOfSiege(minSiegeOfAllPlayers)
+            zahl = zahl + spieler.getNumberOfSiege()
 
         return zahl
 
@@ -102,12 +143,17 @@ class FreiLos(Spieler):
         self.ergebnisse = collections.OrderedDict()
         self.ttr = 0
         self.name = "Freilos"
+        self.minSiegeOfAllPlayers = 0
 
     def getDefaultResult(self):
         return "3:0"
 
-    def getNumberOfSiege(self, minSiegeOfAllPlayers=0):
-        return minSiegeOfAllPlayers
+    def getNumberOfSiege(self):
+        return self.minSiegeOfAllPlayers
+
+    def setBuchHolzZahl(self, bhz):
+        self.minSiegeOfAllPlayers = bhz
+        
 
 class GroupeOfPlayersWithSameSieganzahl( list ):
     """ Gruppen von Spielern mit gleicher Sieganzahl """
@@ -172,17 +218,19 @@ class Spieler_Collection( dict ):
         rankingAttributesPredecesor = None
         platz = 1
         incr = 0
+        freilos = "Freilos"
+        if freilos in self:
+            self[freilos].setBuchHolzZahl(self.getMinSiege())
 
         for group in self.getGroupBySiege():
-            group.sort(key=lambda x: (x.getBuchHolzZahl(self.getMinSiege())*-1, x.ttr))
+            group.sort()
             siege = group[0].getNumberOfSiege()
 
-            freilos = "Freilos"
             if freilos in self and self[freilos] in group:
                 group.remove(self[freilos])
 
             for spieler in group:
-                buchholzzahl = spieler.getBuchHolzZahl(self.getMinSiege())
+                buchholzzahl = spieler.getBuchHolzZahl()
                 rankingAttributes = (siege, buchholzzahl, spieler.ttr)
                 if rankingAttributesPredecesor and rankingAttributes != rankingAttributesPredecesor:
                     platz = platz + incr
