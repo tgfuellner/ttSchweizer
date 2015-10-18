@@ -148,6 +148,33 @@ class TestBegegnungen(unittest.TestCase):
     self.assertEquals(B, spieler)
     self.assertEquals(2, platz)
 
+  def test_getRankingDirekterVergleichNichtMoeglich(self):
+    allPlayersList = []
+    allPlayers = Spieler_Collection()
+    for name,ttr in (('A',11), ('B',10), ('C',1), ('D',2), ('E',3)):
+        allPlayersList.append(allPlayers.spieler(name,ttr))
+
+    (A,B,C,D,E) = allPlayersList
+
+    self.createBegegnungen((A,B,3,0), (B,C,3,0), (C,A,3,0), (A,D,3,0), (D,E,3,0), (E,A,3,0))
+
+    # Spieler: A, B, C, D, E
+    # Gegner:  B  A  B  A  D
+    #          C  C  A  E  A
+    #          D
+    #          E
+    # ttr:    11 10  1  2  3
+
+    # Siege:   2  1  1  1  1
+    # Buchh.:  4  3  3  3  3
+    # Platz:   1  5  2  3  4
+
+    ranking = allPlayers.getRanking()
+
+    # Streng nach ttr direkter Vergleicht nich praktikabel
+    expected = [(A, 2, 4, 1), (C, 1, 3, 2), (D, 1, 3, 3), (E, 1, 3, 4), (B, 1, 3, 5)]
+    self.assertEquals(expected, ranking)
+
   def test_getRankingDifferentBuchholzzahl(self):
     allPlayersList = []
     allPlayers = Spieler_Collection()
