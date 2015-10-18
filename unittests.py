@@ -217,7 +217,7 @@ class TestBegegnungen(unittest.TestCase):
     self.assertEquals(C, spieler); self.assertEquals(2, siege); self.assertEquals(5, buchholzzahl)
     self.assertEquals(2, platz)
 
-    expected = [(A,3,5,1),(C,2,5,2),(B,2,5,3),(E,2,4,4),(I,2,4,5),(F,1,6,6),(G,1,5,7),(D,1,5,8),(H,1,3,9)]
+    expected = [(A,3,5,1),(C,2,5,2),(B,2,5,3),(I,2,4,4),(E,2,4,5),(F,1,6,6),(G,1,5,7),(D,1,5,8),(H,1,3,9)]
     self.assertEquals(expected, ranking)
 
   def test_groupContainsAllPlayer(self):

@@ -34,6 +34,10 @@ class Spieler:
             return True
         if self.getBuchHolzZahl() < other.getBuchHolzZahl():
             return False
+        if self.hasPlayedAgainst(other):
+            if self.hasWonAgainst(other):
+                return True
+            return False
         if self.ttr < other.ttr:
             return True
         if self.ttr > other.ttr:
@@ -67,6 +71,15 @@ class Spieler:
         return hash(self.name)
         
         
+    def hasPlayedAgainst(self, other):
+        return (other in self.getOponents())
+
+    def hasWonAgainst(self, other):
+        if self.hasPlayedAgainst(other):
+            match = self.ergebnisse[other]
+            return match.isWon()
+        return False
+
     def addMatch(self, otherSpieler, theMatchResult):
         self.ergebnisse[otherSpieler] = theMatchResult
 
