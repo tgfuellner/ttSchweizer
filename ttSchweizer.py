@@ -528,10 +528,11 @@ class RoundInit(Round):
 def getFileNameOfRound(numberOfRound):
     return "runde-%d.tts" % numberOfRound
 
-def getRounds(allPlayers):
+def getRounds():
     """ Schaut nach welche Files vorhanden sind.
         Erzeugt entsprechende Round Instanzen
     """
+    allPlayers = Spieler_Collection()
     roundList = [RoundInit(allPlayers)]
     for i in range(1, 1+NUMBER_OfRounds):
         if os.path.isfile(getFileNameOfRound(i)):
@@ -541,10 +542,10 @@ def getRounds(allPlayers):
 
 ############################################################
 
-if __name__ == '__main__':
-    alleSpieler = Spieler_Collection()
 
-    rounds = getRounds(alleSpieler)
+if __name__ == '__main__':
+
+    rounds = getRounds()
 
     if rounds[-1].isComplete():
         rounds[-1].createStartOfNextRound()
