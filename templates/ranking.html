@@ -1,0 +1,8 @@
+<!doctype html>
+<title>ttSchweizer Ergebnisse</title>
+<table>
+<tr><th>Platz</th><th>Spieler</th><th>Siege</th><th>Buchholzzahl</th></tr>
+{% for (spieler, siege, buchz, platz) in ranking %}
+<tr><td>{{ platz }}</td><td>{{ spieler }} ({{ spieler.ttr }})</td><td>{{ siege }}</td><td>{{ buchz }}</td></tr>
+{% endfor %}
+</table>
