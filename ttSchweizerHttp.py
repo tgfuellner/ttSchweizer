@@ -10,7 +10,7 @@ app = Flask(__name__)
 def main():
     alleSpieler = Spieler_Collection()
     rounds = getRounds(alleSpieler)
-    return render_template('ranking.html', ranking=alleSpieler.getRanking())
+    return render_template('ranking.html', ranking=alleSpieler.getRanking(), runde=len(rounds)-1)
 
 if __name__ == "__main__":
     app.debug = True

@@ -1,8 +1,43 @@
 <!doctype html>
+<html>
+<head>
 <title>ttSchweizer Ergebnisse</title>
-<table>
+<style style="text/css">
+    .hoverTable{
+        {# width:100%; #}
+        border-collapse:collapse; 
+    }
+    .hoverTable td, .hoverTable th{ 
+        padding:7px; border:#4e95f4 1px solid;
+    }
+    .hoverTable th{ 
+        font-size: 1.1em;
+        text-align: left;
+        padding-top: 5px;
+        padding-bottom: 4px;
+        background-color: #A7C942;
+        color: #ffffff;
+    }
+    {# Define the default color for all the table rows #}
+    .hoverTable tr{
+        background: #b8d1f3;
+    }
+    .hoverTable tr.odd{
+        background: #EAF2D3;
+    }
+    {# Define the hover highlight color for the table row #}
+    .hoverTable tr:hover {
+          background-color: #ffff99;
+    }
+</style>
+</head>
+<body>
+<h1>Ergebnisse Runde {{ runde }}</h1>
+<table class="hoverTable">
 <tr><th>Platz</th><th>Spieler</th><th>Siege</th><th>Buchholzzahl</th></tr>
-{% for (spieler, siege, buchz, platz) in ranking %}
-<tr><td>{{ platz }}</td><td>{{ spieler }} ({{ spieler.ttr }})</td><td>{{ siege }}</td><td>{{ buchz }}</td></tr>
-{% endfor %}
+{%- for (spieler, siege, buchz, platz) in ranking %}
+<tr class="{{ loop.cycle('odd', 'even') }}"><td align="right">{{ platz }}</td><td>{{ spieler }} ({{ spieler.ttr }})</td><td align="right">{{ siege }}</td><td align="right">{{ buchz }}</td></tr>
+{%- endfor %}
 </table>
+</body>
+</html>
