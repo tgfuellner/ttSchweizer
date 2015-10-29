@@ -12,11 +12,13 @@
     }
     .hoverTable th{ 
         font-size: 1.1em;
-        text-align: left;
         padding-top: 5px;
         padding-bottom: 4px;
         background-color: #A7C942;
         color: #ffffff;
+        text-align: center;
+        vertical-align: bottom;
+        height: 150px;
     }
     {# Define the default color for all the table rows #}
     .hoverTable tr{
@@ -29,12 +31,25 @@
     .hoverTable tr:hover {
           background-color: #ffff99;
     }
+    .verticalText {
+          text-align: center;
+          vertical-align: middle;
+          width: 0.8em;
+          margin: 0px;
+          padding: 0px;
+          padding-left: 3px;
+          padding-right: 3px;
+          padding-top: 10px;
+          white-space: nowrap;
+          -webkit-transform: rotate(-90deg); 
+          -moz-transform: rotate(-90deg);                 
+    }
 </style>
 </head>
 <body>
 <h1>Ergebnisse Runde {{ runde }}</h1>
 <table class="hoverTable">
-<tr><th>Platz</th><th>Spieler</th><th>Siege</th><th>Buchholzzahl</th></tr>
+<tr><th><div class="verticalText">Platz</div></th><th><div class="verticalText">Spieler</div></th><th><div class="verticalText">Siege<div></th><th><div class="verticalText">Buchholzzahl</div></th></tr>
 {%- for (spieler, siege, buchz, platz) in ranking %}
 <tr class="{{ loop.cycle('odd', 'even') }}"><td align="right">{{ platz }}</td><td>{{ spieler }} ({{ spieler.ttr }})</td><td align="right">{{ siege }}</td><td align="right">{{ buchz }}</td></tr>
 {%- endfor %}
