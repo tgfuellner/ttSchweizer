@@ -49,9 +49,21 @@
 <body>
 <h1>Ergebnisse Runde {{ runde }}</h1>
 <table class="hoverTable">
-<tr><th><div class="verticalText">Platz</div></th><th><div class="verticalText">Spieler</div></th><th><div class="verticalText">Siege<div></th><th><div class="verticalText">Buchholzzahl</div></th></tr>
+<tr>
+ <th><div class="verticalText">Platz</div></th>
+ <th><div class="verticalText">Spieler</div></th>
+ <th><div class="verticalText">Siege<div></th>
+ <th><div class="verticalText">Buchholzzahl</div></th>
+ <th><div class="verticalText">TTR</div></th>
+</tr>
 {%- for (spieler, siege, buchz, platz) in ranking %}
-<tr class="{{ loop.cycle('odd', 'even') }}"><td align="right">{{ platz }}</td><td>{{ spieler }} ({{ spieler.ttr }})</td><td align="right">{{ siege }}</td><td align="right">{{ buchz }}</td></tr>
+<tr class="{{ loop.cycle('odd', 'even') }}">
+ <td align="right">{{ platz }}</td>
+ <td>{{ spieler }}</td>
+ <td align="right">{{ siege }}</td>
+ <td align="right">{{ buchz }}</td>
+ <td align="right">{{ spieler.ttr }}</td>
+</tr>
 {%- endfor %}
 </table>
 </body>
