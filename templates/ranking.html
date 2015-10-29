@@ -52,6 +52,10 @@
 <tr>
  <th><div class="verticalText">Platz</div></th>
  <th><div class="verticalText">Spieler</div></th>
+{%- for spieler in spielerList %}
+ <th><div class="verticalText">{{ spieler }}</div></th>
+{%- endfor %}
+ <th><div class="verticalText">Freilos<div></th>
  <th><div class="verticalText">Siege<div></th>
  <th><div class="verticalText">Buchholzzahl</div></th>
  <th><div class="verticalText">TTR</div></th>
@@ -60,6 +64,10 @@
 <tr class="{{ loop.cycle('odd', 'even') }}">
  <td align="right">{{ platz }}</td>
  <td>{{ spieler }}</td>
+{%- for player in spielerList %}
+ <td>{{ spieler.getMatrixElement(player) }}</td>
+{%- endfor %}
+ <td>{{ 'ja' if spieler.hatteFreilos }}</td>
  <td align="right">{{ siege }}</td>
  <td align="right">{{ buchz }}</td>
  <td align="right">{{ spieler.ttr }}</td>

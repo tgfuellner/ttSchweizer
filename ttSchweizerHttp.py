@@ -10,7 +10,9 @@ app = Flask(__name__)
 def main():
     alleSpieler = Spieler_Collection()
     rounds = getRounds(alleSpieler)
-    return render_template('ranking.html', ranking=alleSpieler.getRanking(), runde=len(rounds)-1)
+    ranking = alleSpieler.getRanking()
+    rankedSpieler = [sub[0] for sub in ranking]
+    return render_template('ranking.html', ranking=ranking, runde=len(rounds)-1, spielerList=rankedSpieler)
 
 if __name__ == "__main__":
     app.debug = True

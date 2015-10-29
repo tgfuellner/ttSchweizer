@@ -80,6 +80,15 @@ class Spieler:
             return match.isWon()
         return False
 
+    def getMatrixElement(self, other):
+        if self == other:
+            return 'X'
+        if self.hasWonAgainst(other):
+            return '+'
+        if other.hasWonAgainst(self):
+            return '-'
+        return ''
+
     def addMatch(self, otherSpieler, theMatchResult):
         self.ergebnisse[otherSpieler] = theMatchResult
 
