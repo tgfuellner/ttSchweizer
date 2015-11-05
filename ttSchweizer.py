@@ -2,8 +2,10 @@
 # -*- coding: UTF-8 -*-
 
 import os.path
+import glob
 import random
 import collections
+import xml.etree.ElementTree as ET
 
 
 SPIELER_FileName = "spieler.tts"
@@ -485,6 +487,9 @@ class RoundInit(Round):
     def __init__(self, aCollectionOfAllPlayers):
         self._isComplete = False
 
+        if not os.path.isfile(SPIELER_FileName):
+            self._tryToReadClickTTExport()
+
         if os.path.isfile(SPIELER_FileName):
             self._rankedPlayerList = self._calcRankOfPlayers(SPIELER_FileName, aCollectionOfAllPlayers)
             if len(self._rankedPlayerList) < MIN_NumberOfPlayer:
@@ -496,6 +501,33 @@ class RoundInit(Round):
             print("Die Datei '%s' fehlt." % SPIELER_FileName)
             print("Erzeuge eine Beispieldatei.")
             self._createExampleSpielerFile(SPIELER_FileName)
+
+    def _getClickTTExportFileName(self):
+        xmls = glob.glob('*.xml')
+        if len(xmls) == 0:
+            print("Keine clickTT Spieler Export xml Datei gefunden")
+            return ''
+        if len(xmls) > 1:
+            print("Mehr als eine clickTT Spieler Export xml Datei gefunden")
+            return ''
+        
+        print("Nutze clickTT Spieler Export Datei: %s" % xmls[0])
+        return xmls[0]
+
+    def _tryToReadClickTTExport(self):
+        xmlFileName = self._getClickTTExportFileName()
+        if not xmlFileName:
+            return
+        tree = ET.parse(xmlFileName)
+        root = tree.getroot()
+
+        with open(SPIELER_FileName, 'w') as fd:
+            fd.write('# Erzeugt aus %s\n' % xmlFileName)
+            for player in root[0][0]:
+                # print player.attrib['id']
+                person = player[0].attrib
+                line = '%s %s, %s\n' %(person['firstname'], person['lastname'], person['ttr'])
+                fd.write(line.encode('utf8'))
 
     def _calcRankOfPlayers(self, fileName, allPlayers):
         with open(fileName, "r") as spielerFile:

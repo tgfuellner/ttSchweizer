@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE tournament SYSTEM "http://liga.nu/dtd/TournamentPortal.dtd">
+<tournament end-date="2015-08-28" start-date="2015-08-28" name="Commerzbank Sports &amp; More Bavarian TT-Race" tournament-id="k8LHNkxkxRCOnRyE5bNntO2D7o9WopIo">
+	
+		<competition start-date="2015-08-28 20:00" age-group="Damen/Herren" type="Einzel">
+			<players>
+				
+					<player type="single" id="PLAYER1">
+						<person licence-nr="103028148" lastname="Broll" club-name="SV Weichs" sex="1" ttr-match-count="687" club-federation-nickname="ByTTV" ttr="1156" internal-nr="NU1005321" firstname="Joachim" club-nr="103028" birthyear="1954"/>
+						
+					</player>
+				
+					<player type="single" id="PLAYER2">
+						<person licence-nr="113017128" lastname="Djelassi" club-name="TSV 66 Polling" sex="1" ttr-match-count="431" club-federation-nickname="ByTTV" ttr="1491" internal-nr="NU1003762" firstname="Mourad" club-nr="113017" birthyear="1973"/>
+						
+					</player>
+				
+					<player type="single" id="PLAYER3">
+						<person licence-nr="102013235" lastname="Gabler" club-name="MTV 1862 Pfaffenhofen/Ilm" sex="1" ttr-match-count="605" club-federation-nickname="ByTTV" ttr="1580" internal-nr="NU1009295" firstname="Jochen" club-nr="102013" birthyear="1982"/>
+						
+					</player>
+				
+					<player type="single" id="PLAYER4">
+						<person licence-nr="112024074" lastname="Gonnsen" club-name="VfR Haag/Amper" sex="1" ttr-match-count="160" club-federation-nickname="ByTTV" ttr="1302" internal-nr="NU1337039" firstname="Christian" club-nr="112024" birthyear="1964"/>
+						
+					</player>
+				
+					<player type="single" id="PLAYER5">
+						<person licence-nr="202018205" lastname="Grichtmaier" club-name="TSV Kronwinkl" sex="1" ttr-match-count="127" club-federation-nickname="ByTTV" ttr="1249" internal-nr="NU1336467" firstname="Harald" club-nr="202018" birthyear="1972"/>
+						
+					</player>
+				
+					<player type="single" id="PLAYER6">
+						<person licence-nr="112011158" lastname="Hambach" club-name="SG Moosburg" sex="1" ttr-match-count="1131" club-federation-nickname="ByTTV" ttr="1365" internal-nr="NU1019633" firstname="Wolfgang" club-nr="112011" birthyear="1961"/>
+						
+					</player>
+				
+					<player type="single" id="PLAYER7">
+						<person licence-nr="113009233" lastname="Hammer" club-name="TSV Neumarkt/St. Veit" sex="1" ttr-match-count="409" club-federation-nickname="ByTTV" ttr="1576" internal-nr="NU1177338" firstname="Sebastian" club-nr="113009" birthyear="1986"/>
+						
+					</player>
+				
+					<player type="single" id="PLAYER8">
+						<person licence-nr="102013024" lastname="Hoffmann" club-name="MTV 1862 Pfaffenhofen/Ilm" sex="1" ttr-match-count="521" club-federation-nickname="ByTTV" ttr="1502" internal-nr="NU1022805" firstname="Rainer" club-nr="102013" birthyear="1971"/>
+						
+					</player>
+				
+					<player type="single" id="PLAYER9">
+						<person licence-nr="112011271" lastname="Höcht" club-name="SG Moosburg" sex="1" ttr-match-count="317" club-federation-nickname="ByTTV" ttr="1281" internal-nr="NU1255950" firstname="Sebastian" club-nr="112011" birthyear="1986"/>
+						
+					</player>
+				
+					<player type="single" id="PLAYER10">
+						<person licence-nr="112008175" lastname="Kummerow" club-name="TSV Ismaning" sex="1" ttr-match-count="163" club-federation-nickname="ByTTV" ttr="1233" internal-nr="NU1129329" firstname="Torge" club-nr="112008" birthyear="1982"/>
+						
+					</player>
+				
+					<player type="single" id="PLAYER11">
+						<person licence-nr="114007142" lastname="König" club-name="SV Haiming" sex="1" ttr-match-count="472" club-federation-nickname="ByTTV" ttr="1332" internal-nr="NU1029697" firstname="Norbert" club-nr="114007" birthyear="1968"/>
+						
+					</player>
+				
+					<player type="single" id="PLAYER12">
+						<person licence-nr="202004161" lastname="Ly" club-name="TV Dingolfing" sex="1" ttr-match-count="174" club-federation-nickname="ByTTV" ttr="1319" internal-nr="NU1136164" firstname="David" club-nr="202004" birthyear="1992"/>
+						
+					</player>
+				
+					<player type="single" id="PLAYER13">
+						<person licence-nr="110007257" lastname="Masera" club-name="SV-DJK Taufkirchen" sex="1" ttr-match-count="208" club-federation-nickname="ByTTV" ttr="1121" internal-nr="NU1194048" firstname="Arno" club-nr="110007" birthyear="1969"/>
+						
+					</player>
+				
+					<player type="single" id="PLAYER14">
+						<person licence-nr="103029212" lastname="Pietsch" club-name="SV Haimhausen" sex="0" ttr-match-count="872" club-federation-nickname="ByTTV" ttr="1639" internal-nr="NU1043274" firstname="Elena" club-nr="103029" birthyear="1993"/>
+						
+					</player>
+				
+					<player type="single" id="PLAYER15">
+						<person licence-nr="112004059" lastname="Roppelt" club-name="TSV Erding 1862" sex="1" ttr-match-count="975" club-federation-nickname="ByTTV" ttr="1553" internal-nr="NU1047745" firstname="Michael" club-nr="112004" birthyear="1951"/>
+						
+					</player>
+				
+					<player type="single" id="PLAYER16">
+						<person licence-nr="106017121" lastname="Strobelt" club-name="SC Wörthsee" sex="1" ttr-match-count="813" club-federation-nickname="ByTTV" ttr="1301" internal-nr="NU1056499" firstname="Günter" club-nr="106017" birthyear="1961"/>
+						
+					</player>
+				
+			</players>
+		</competition>
+	
+</tournament>

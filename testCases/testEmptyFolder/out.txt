@@ -1,2 +1,0 @@
-Die Datei 'spieler.tts' fehlt.
-Erzeuge eine Beispieldatei.
