@@ -6,6 +6,7 @@ import glob
 import random
 import collections
 import xml.etree.ElementTree as ET
+import codecs
 
 
 SPIELER_FileName = "spieler.tts"
@@ -228,12 +229,12 @@ class Spieler_Collection( dict ):
 
     def spieler( self, *arg, **kw ):
         s = Spieler( *arg, **kw )
-        self[str(s)] = s
+        self[s.name] = s
         return s
     
     def freilos( self, *arg, **kw ):
         s = FreiLos( *arg, **kw )
-        self[str(s)] = s
+        self[s.name] = s
         return s
 
     def getRanking(self):
@@ -409,24 +410,25 @@ class Round:
             return False
         
     def _readResultsOfThisRound(self, fileName):
-        with open(fileName, "r") as roundFile:
+        with codecs.open(fileName, "r", "utf-8") as roundFile:
             for line in roundFile:
                 if (self.isComment(line)):
                     continue
 
                 line = line.strip()  # Strip especially last newline
+                pline = line.encode('utf8')
 
                 # Example line:
                 # Thomas Alsters <> David Ly ! 3:0 2 3 4
                 x = line.split('<>')
                 if len(x) != 2:
-                    print("%s: Die Zeichefolge <> muss genau einmal vorkommen in Zeile: %s" % (fileName, line))
+                    print("%s: Die Zeichefolge <> muss genau einmal vorkommen in Zeile: %s" % (fileName, pline))
                     continue
                 spielerA = self._collectionOfAllPlayers[x[0].strip()]
 
                 y = x[1].split('!')
                 if len(y) != 2:
-                    print("%s: Das Zeichen ! muss genau einmal vorkommen in Zeile: %s" % (fileName, line))
+                    print("%s: Das Zeichen ! muss genau einmal vorkommen in Zeile: %s" % (fileName, pline))
                     continue
                 spielerB = self._collectionOfAllPlayers[y[0].strip()]
 
@@ -436,12 +438,12 @@ class Round:
 
                 z = y[1].strip().split()
                 if z == []:
-                    print("%s: Noch kein Ergebnis für: %s" % (fileName, line))
+                    print("%s: Noch kein Ergebnis für: %s" % (fileName, pline))
                     continue
 
                 satzVerhaeltnis = z[0].split(':')
                 if len(satzVerhaeltnis) != 2:
-                    print("%s: Das Satzverhältnis ist nicht korrekt in Zeile: %s" % (fileName, line))
+                    print("%s: Das Satzverhältnis ist nicht korrekt in Zeile: %s" % (fileName, pline))
                     continue
 
                 saetzeSpielerA, saetzeSpielerB = [int(i) for i in satzVerhaeltnis]
@@ -451,16 +453,16 @@ class Round:
                     theMatchResult = MatchResult(saetzeSpielerA, saetzeSpielerB)
                     spielerA.addMatch(spielerB, theMatchResult)
                     spielerB.addMatch(spielerA, theMatchResult.turned())
-                    print("%s: Vorsicht, Satzergebnisse fehlen in Zeile: %s" % (fileName, line))
+                    print("%s: Vorsicht, Satzergebnisse fehlen in Zeile: %s" % (fileName, pline))
                     continue
 
                 satzErgebnisse = z[1:]  # Vorsicht nicht nach int wandeln! -0 muss bleiben
                 if len(satzErgebnisse) != saetzeSpielerA + saetzeSpielerB:
-                    print("%s: Sätze sind nicht komplett in Zeile: %s" % (fileName, line))
+                    print("%s: Sätze sind nicht komplett in Zeile: %s" % (fileName, pline))
                     continue
 
                 if saetzeSpielerB != len([s for s in satzErgebnisse if '-' in s]):
-                    print("%s: Satzverhältnis und Sätze passen nicht zusammen in Zeile: %s" % (fileName, line))
+                    print("%s: Satzverhältnis und Sätze passen nicht zusammen in Zeile: %s" % (fileName, pline))
                     continue
 
                 theMatchResult = MatchResult(saetzeSpielerA, saetzeSpielerB, satzErgebnisse)
@@ -476,7 +478,7 @@ class Round:
         fd.write('# Heinz Musterspieler <> Klara Platzhalter ! 3:1 8 -4 12 3\n')
 
     def writeBegegnung(self, fd, spielerA, spielerB):
-        fd.write("%s <> %s ! " % (str(spielerA), str(spielerB)))
+        fd.write(("%s <> %s ! " % (spielerA.name, spielerB.name)).encode('utf8'))
         fd.write(spielerB.getDefaultResult())
 
         fd.write("\n")
@@ -532,7 +534,7 @@ class RoundInit(Round):
                 fd.write(line.encode('utf8'))
 
     def _calcRankOfPlayers(self, fileName, allPlayers):
-        with open(fileName, "r") as spielerFile:
+        with codecs.open(fileName, "r", "utf-8") as spielerFile:
             for line in spielerFile:
                 if (self.isComment(line)):
                     continue
