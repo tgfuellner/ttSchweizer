@@ -379,6 +379,8 @@ class Round:
         if self._numberOfRound == NUMBER_OfRounds:
             return
 
+        print "Auslosung von Runde %d" % self.getNumberOfNextRound()
+
         numberOfMaxRetries = 20
         for _ in xrange(numberOfMaxRetries):
             groups = self._collectionOfAllPlayers.getGroupBySiege()

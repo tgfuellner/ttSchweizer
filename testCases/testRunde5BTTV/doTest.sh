@@ -2,7 +2,7 @@
 
 F=runde-6.tts
 
-../../ttSchweizer.py
+../../ttSchweizer.py >/dev/null
 if [ ! -e "$F" ]
 then
     echo "$F existiert nicht, sollte aber erstellt werden."
