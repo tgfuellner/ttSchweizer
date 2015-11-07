@@ -387,7 +387,7 @@ class Round:
             begegnungen = self._collectionOfAllPlayers.getBegegnungen(groups)
             if begegnungen:
                 break
-            print "Retry getBegegnungen"
+            print "Wiederhole Auslosung"
 
         if not begegnungen:
             for _ in xrange(numberOfMaxRetries):
@@ -395,7 +395,7 @@ class Round:
                 begegnungen = self._collectionOfAllPlayers.getBegegnungen(groups)
                 if begegnungen:
                     break
-                print "Panic Retry getBegegnungen"
+                print "Wiederhole nochmal Auslosung"
 
         with open(getFileNameOfRound(self.getNumberOfNextRound()), 'w') as the_file:
             self.writeHeader(the_file)
