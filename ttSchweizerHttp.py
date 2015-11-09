@@ -12,7 +12,9 @@ def main():
     rounds = getRounds(alleSpieler)
     ranking = alleSpieler.getRanking()
     rankedSpieler = [sub[0] for sub in ranking]
-    return render_template('ranking.html', ranking=ranking, runde=len(rounds)-1, spielerList=rankedSpieler)
+    thereAreFreilose = (len([s for s in rankedSpieler if s.hatteFreilos]) > 0)
+    return render_template('ranking.html', ranking=ranking, runde=len(rounds)-1,
+        spielerList=rankedSpieler, thereAreFreilose=thereAreFreilose)
 
 if __name__ == "__main__":
     app.debug = True

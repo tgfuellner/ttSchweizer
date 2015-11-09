@@ -21,6 +21,7 @@ class Spieler:
         self.name = name
         self.ttr = ttr
         self.ergebnisse = collections.OrderedDict()
+        self.hatteFreilos = False
 
     def __str__(self):
         return self.name
