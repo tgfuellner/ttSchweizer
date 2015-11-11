@@ -56,7 +56,7 @@ class Spieler:
         return self.__lt__(other)
 
     def __eq__(self, other):
-        return (isinstance(other, self.__class__) and self.name == other.name)
+        return isinstance(other, self.__class__) and self.name == other.name
 
     def __ge__(self, other):
         if self.__eq__(other):
@@ -76,7 +76,7 @@ class Spieler:
         
         
     def hasPlayedAgainst(self, other):
-        return (other in self.getOponents())
+        return other in self.getOponents()
 
     def hasWonAgainst(self, other):
         if self.hasPlayedAgainst(other):
@@ -537,12 +537,12 @@ class RoundInit(Round):
     def _calcRankOfPlayers(self, fileName, allPlayers):
         with codecs.open(fileName, "r", "utf-8") as spielerFile:
             for line in spielerFile:
-                if (self.isComment(line)):
+                if self.isComment(line):
                     continue
                 name, ttr = line.split(',')
                 allPlayers.spieler(name.strip(), ttr.strip())
 
-        if (len(allPlayers) & 0x1):
+        if len(allPlayers) & 0x1:
             # odd
             allPlayers.freilos()
 
