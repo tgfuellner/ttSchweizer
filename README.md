@@ -17,6 +17,7 @@ Durch die feste Rundenanzahl ist der Zeitrahmen eines Turniers sehr gut planbar.
 * Für jede Runde gibt es ein Textfile: *runde1.tts*, *runde2.tts*, ...
 * Ist *rundeN.tts* vollständig erfasst, wird *rundeN+1.tts* erzeugt
 * *spieler.tts* enthält Spieler mit ihren TTR Werten
+* Fehlt *spieler.tts* und befindet sich im Verzeichnis ein Spieler Export aus click-tt, wird daraus *spieler.tts* erzeugt.
 * *runde1.tts* wird durch Losen aus *spieler.tts* erzeugt
 * *ergebnis.html* wird nach jedem Aufruf aktualisiert
 
