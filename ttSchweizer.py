@@ -5,7 +5,7 @@ import os.path
 import glob
 import random
 import collections
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as Et
 import codecs
 
 
@@ -74,7 +74,6 @@ class Spieler:
     def __hash__(self):
         return hash(self.name)
         
-        
     def hasPlayedAgainst(self, other):
         return other in self.getOponents()
 
@@ -97,8 +96,8 @@ class Spieler:
         self.ergebnisse[otherSpieler] = theMatchResult
 
     def addFreilos(self, freilos):
-        self.addMatch(freilos, MatchResult(3,0))
-        freilos.addMatch(self, MatchResult(0,3))
+        self.addMatch(freilos, MatchResult(3, 0))
+        freilos.addMatch(self, MatchResult(0, 3))
         self.hatteFreilos = True
 
     def getNumberOfMatches(self):
@@ -118,7 +117,10 @@ class Spieler:
         return zahl
 
     def findOponent(self, groupsWithSameSiegzahl, blanksForPrints=""):
-        """ Sucht sich den nächsten möglichen Spieler, möglichst einen aus der selben Gruppe """
+        """ Sucht sich den nächsten möglichen Spieler, möglichst einen aus der selben Gruppe
+        :param groupsWithSameSiegzahl: Spieler gruppiert nach Siegen
+        :param blanksForPrints: Nur zur Formatierung für Debug Ausgaben
+        """
         groups = groupsWithSameSiegzahl.clone()
 
         self.printOponent(blanksForPrints, "Suche Gegner für", self)
@@ -130,7 +132,7 @@ class Spieler:
 
         self.printOponent(blanksForPrints, "Gruppen mit selber Siegzahl, minus alten Gegnern", groups)
 
-        if groups == []:
+        if not groups:
             return None
 
         player = random.choice(groups[0])
@@ -138,24 +140,25 @@ class Spieler:
         while not player.theGroupsCanFindMatchesWithoutMe(groups, blanksForPrints):
             groups.rm(player)
             self.printOponent(blanksForPrints, player, "kann nicht genommen werden. Suche in", groups)
-            if groups == []:
+            if not groups:
                 return None
             player = random.choice(groups[0])
 
         self.printOponent(blanksForPrints, "**", player, "ist neuer Gegner von", self)
         return player
 
-    def printOponent(self, *args):
+    @staticmethod
+    def printOponent(*args):
         return
         print " ".join([str(p) for p in args])
 
     def theGroupsCanFindMatchesWithoutMe(self, groupsWithSameSiegzahl, blanksForPrints=""):
         groups = groupsWithSameSiegzahl.clone()
         groups.rm(self)
-        if groups == []:
+        if not groups:
             return True
         player = groups.top()
-        return player.findOponent(groups, blanksForPrints+"  ") != None
+        return player.findOponent(groups, blanksForPrints + "  ") is not None
 
     def getDefaultResult(self):
         return ""
@@ -523,7 +526,7 @@ class RoundInit(Round):
         xmlFileName = self._getClickTTExportFileName()
         if not xmlFileName:
             return
-        tree = ET.parse(xmlFileName)
+        tree = Et.parse(xmlFileName)
         root = tree.getroot()
 
         with open(SPIELER_FileName, 'w') as fd:
@@ -595,4 +598,3 @@ if __name__ == '__main__':
 
     if rounds[-1].isComplete():
         rounds[-1].createStartOfNextRound()
-    
