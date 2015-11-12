@@ -8,7 +8,6 @@ import collections
 import xml.etree.ElementTree as Et
 import codecs
 
-
 SPIELER_FileName = "spieler.tts"
 MIN_NumberOfPlayer = 9
 NUMBER_OfRounds = 6
@@ -73,7 +72,7 @@ class Spieler:
 
     def __hash__(self):
         return hash(self.name)
-        
+
     def hasPlayedAgainst(self, other):
         return other in self.getOponents()
 
@@ -164,7 +163,6 @@ class Spieler:
         return ""
 
 
-
 class FreiLos(Spieler):
     """ Freilos ist auch ein Spieler, der gelost wird """
 
@@ -182,14 +180,14 @@ class FreiLos(Spieler):
 
     def setBuchHolzZahl(self, bhz):
         self.minSiegeOfAllPlayers = bhz
-        
 
-class GroupeOfPlayersWithSameSieganzahl( list ):
+
+class GroupeOfPlayersWithSameSieganzahl(list):
     """ Gruppen von Spielern mit gleicher Sieganzahl """
 
-    def __init__( self, *arg, **kw ):
-        super( GroupeOfPlayersWithSameSieganzahl, self ).__init__( *arg, **kw )
-    
+    def __init__(self, *arg, **kw):
+        super(GroupeOfPlayersWithSameSieganzahl, self).__init__(*arg, **kw)
+
     def clone(self):
         groups = GroupeOfPlayersWithSameSieganzahl()
         for subGroup in self:
@@ -207,7 +205,7 @@ class GroupeOfPlayersWithSameSieganzahl( list ):
         first = self[0][0]
         self[0].remove(first)
         if len(self[0]) == 0:
-            del(self[0])
+            del (self[0])
 
         return first
 
@@ -219,25 +217,24 @@ class GroupeOfPlayersWithSameSieganzahl( list ):
                 self.remove(g)
 
 
-class Spieler_Collection( dict ):
-    
-    def __init__( self, *arg, **kw ):
-        super( Spieler_Collection, self ).__init__( *arg, **kw )
-    
+class Spieler_Collection(dict):
+    def __init__(self, *arg, **kw):
+        super(Spieler_Collection, self).__init__(*arg, **kw)
+
     def __getitem__(self, key):
-        if not key in self:
+        if key not in self:
             print("Der Spieler '%s' ist nicht bekannt!" % key)
             return None
         val = dict.__getitem__(self, key)
         return val
 
-    def spieler( self, *arg, **kw ):
-        s = Spieler( *arg, **kw )
+    def spieler(self, *arg, **kw):
+        s = Spieler(*arg, **kw)
         self[s.name] = s
         return s
-    
-    def freilos( self, *arg, **kw ):
-        s = FreiLos( *arg, **kw )
+
+    def freilos(self, *arg, **kw):
+        s = FreiLos()
         self[s.name] = s
         return s
 
@@ -271,7 +268,7 @@ class Spieler_Collection( dict ):
                 rankingAttributesPredecesor = rankingAttributes
 
         return ranking
-        
+
     def getMinSiege(self):
         return min([p.getNumberOfSiege() for p in self.valuesOhneFreilos()])
 
@@ -326,23 +323,22 @@ class Spieler_Collection( dict ):
             if playerB == None:
                 return None
             groups.rm(playerB)
-            begegnungen.append((playerA,playerB))
+            begegnungen.append((playerA, playerB))
             playerA = groups.top()
 
         return begegnungen
 
 
-
 class MatchResult:
-    def __init__( self, a, b, gamePoints=()):
+    def __init__(self, a, b, gamePoints=()):
         self.gamesWonByPlayerA = a
         self.gamesWonByPlayerB = b
         self.gamePoints = [str(i) for i in gamePoints]
 
-    def __eq__(self, other): 
-        return (   self.gamesWonByPlayerA == other.gamesWonByPlayerA
-               and self.gamesWonByPlayerB == other.gamesWonByPlayerB
-               and self.gamePoints        == other.gamePoints)
+    def __eq__(self, other):
+        return (self.gamesWonByPlayerA == other.gamesWonByPlayerA
+                and self.gamesWonByPlayerB == other.gamesWonByPlayerB
+                and self.gamePoints == other.gamePoints)
 
     def __repr__(self):
         return "%d:%d %s" % (self.gamesWonByPlayerA, self.gamesWonByPlayerB, self.gamePoints)
@@ -361,10 +357,7 @@ class MatchResult:
         return self.gamesWonByPlayerA > self.gamesWonByPlayerB
 
 
-    
-
 class Round:
-
     def __init__(self, num, allPlayers):
         self._isComplete = False
         self._numberOfRound = num
@@ -412,7 +405,7 @@ class Round:
             return True
         else:
             return False
-        
+
     def _readResultsOfThisRound(self, fileName):
         with codecs.open(fileName, "r", "utf-8") as roundFile:
             for line in roundFile:
@@ -488,7 +481,6 @@ class Round:
         fd.write("\n")
 
 
-
 class RoundInit(Round):
     """ Zustand vor der ersten Runde """
 
@@ -501,7 +493,8 @@ class RoundInit(Round):
         if os.path.isfile(SPIELER_FileName):
             self._rankedPlayerList = self._calcRankOfPlayers(SPIELER_FileName, aCollectionOfAllPlayers)
             if len(self._rankedPlayerList) < MIN_NumberOfPlayer:
-                print("%d Spieler sind zu wenig, brauche mindestens %d" % (len(self._rankedPlayerList), MIN_NumberOfPlayer))
+                print(
+                "%d Spieler sind zu wenig, brauche mindestens %d" % (len(self._rankedPlayerList), MIN_NumberOfPlayer))
             else:
                 self.setComplete()
 
@@ -518,7 +511,7 @@ class RoundInit(Round):
         if len(xmls) > 1:
             print("Mehr als eine clickTT Spieler Export xml Datei gefunden")
             return ''
-        
+
         print("Nutze clickTT Spieler Export Datei: %s" % xmls[0])
         return xmls[0]
 
@@ -534,7 +527,7 @@ class RoundInit(Round):
             for player in root[0][0]:
                 # print player.attrib['id']
                 person = player[0].attrib
-                line = '%s %s, %s\n' %(person['firstname'], person['lastname'], person['ttr'])
+                line = '%s %s, %s\n' % (person['firstname'], person['lastname'], person['ttr'])
                 fd.write(line.encode('utf8'))
 
     def _calcRankOfPlayers(self, fileName, allPlayers):
@@ -555,38 +548,38 @@ class RoundInit(Round):
         return 1
 
     def createStartOfNextRound(self):
-        numberOfGesetzte = int(round(len(self._rankedPlayerList)/2.0))
+        numberOfGesetzte = int(round(len(self._rankedPlayerList) / 2.0))
         gesetzt = self._rankedPlayerList[:numberOfGesetzte]
         zuLosen = self._rankedPlayerList[numberOfGesetzte:]
-        geLost  = random.sample(zuLosen, len(zuLosen))
+        geLost = random.sample(zuLosen, len(zuLosen))
 
         with open(getFileNameOfRound(self.getNumberOfNextRound()), 'w') as the_file:
             self.writeHeader(the_file)
 
             for gesetztSpieler, geLostSpieler in zip(gesetzt, geLost):
                 self.writeBegegnung(the_file, gesetztSpieler, geLostSpieler)
-            
 
     def _createExampleSpielerFile(self, fileName):
         with open(fileName, 'w') as the_file:
             the_file.write('# Folgende Zeile ist ein Beispiel:\n')
             the_file.write('Heinz Musterspieler, 1454\n')
-            
 
 
 def getFileNameOfRound(numberOfRound):
     return "runde-%d.tts" % numberOfRound
+
 
 def getRounds(allPlayers):
     """ Schaut nach welche Files vorhanden sind.
         Erzeugt entsprechende Round Instanzen
     """
     roundList = [RoundInit(allPlayers)]
-    for i in range(1, 1+NUMBER_OfRounds):
+    for i in range(1, 1 + NUMBER_OfRounds):
         if os.path.isfile(getFileNameOfRound(i)):
             roundList.append(Round(i, allPlayers))
 
     return roundList
+
 
 ############################################################
 
