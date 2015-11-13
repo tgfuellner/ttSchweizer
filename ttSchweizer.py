@@ -167,9 +167,7 @@ class FreiLos(Spieler):
     """ Freilos ist auch ein Spieler, der gelost wird """
 
     def __init__(self):
-        self.ergebnisse = collections.OrderedDict()
-        self.ttr = 0
-        self.name = "Freilos"
+        Spieler.__init__(self, "Freilos", 0)
         self.minSiegeOfAllPlayers = 0
 
     def getDefaultResult(self):
@@ -233,7 +231,7 @@ class Spieler_Collection(dict):
         self[s.name] = s
         return s
 
-    def freilos(self, *arg, **kw):
+    def freilos(self):
         s = FreiLos()
         self[s.name] = s
         return s
@@ -259,10 +257,10 @@ class Spieler_Collection(dict):
                 buchholzzahl = spieler.getBuchHolzZahl()
                 rankingAttributes = (siege, buchholzzahl, spieler.ttr)
                 if rankingAttributesPredecesor and rankingAttributes != rankingAttributesPredecesor:
-                    platz = platz + incr
+                    platz += incr
                     incr = 1
                 else:
-                    incr = incr + 1
+                    incr += 1
 
                 ranking.append((spieler, siege, buchholzzahl, platz))
                 rankingAttributesPredecesor = rankingAttributes
@@ -307,20 +305,26 @@ class Spieler_Collection(dict):
         return groups
 
     def allHavePlayed(self, times):
-        """ True, if all Players have played the same number (parameter times) of matches """
+        """ True, if all Players have played the same number of matches
+        :param times: do they all played this amount
+        """
         for player in self.values():
             if player.getNumberOfMatches() != times:
                 return False
 
         return True
 
-    def getBegegnungen(self, groups):
-        """ return [(A,B), (C,D), ..] """
+    @staticmethod
+    def getBegegnungen(groups):
+        """ return [(A,B), (C,D), ..]
+        :param groups: of players with same Siegzahl
+        :return:
+        """
         begegnungen = []
         playerA = groups.top()
         while playerA:
             playerB = playerA.findOponent(groups)
-            if playerB == None:
+            if playerB is None:
                 return None
             groups.rm(playerB)
             begegnungen.append((playerA, playerB))
@@ -336,9 +340,9 @@ class MatchResult:
         self.gamePoints = [str(i) for i in gamePoints]
 
     def __eq__(self, other):
-        return (self.gamesWonByPlayerA == other.gamesWonByPlayerA
-                and self.gamesWonByPlayerB == other.gamesWonByPlayerB
-                and self.gamePoints == other.gamePoints)
+        return (self.gamesWonByPlayerA == other.gamesWonByPlayerA and
+                self.gamesWonByPlayerB == other.gamesWonByPlayerB and
+                self.gamePoints == other.gamePoints)
 
     def __repr__(self):
         return "%d:%d %s" % (self.gamesWonByPlayerA, self.gamesWonByPlayerB, self.gamePoints)
@@ -379,6 +383,7 @@ class Round:
 
         print "Auslosung von Runde %d" % self.getNumberOfNextRound()
 
+        begegnungen = []
         numberOfMaxRetries = 20
         for _ in xrange(numberOfMaxRetries):
             groups = self._collectionOfAllPlayers.getGroupBySiege()
@@ -400,7 +405,8 @@ class Round:
             for spielerA, spielerB in begegnungen:
                 self.writeBegegnung(the_file, spielerA, spielerB)
 
-    def isComment(self, line):
+    @staticmethod
+    def isComment(line):
         if line[0] == '#' or not line.strip():
             return True
         else:
@@ -409,7 +415,7 @@ class Round:
     def _readResultsOfThisRound(self, fileName):
         with codecs.open(fileName, "r", "utf-8") as roundFile:
             for line in roundFile:
-                if (self.isComment(line)):
+                if self.isComment(line):
                     continue
 
                 line = line.strip()  # Strip especially last newline
@@ -434,7 +440,7 @@ class Round:
                     continue
 
                 z = y[1].strip().split()
-                if z == []:
+                if not z:
                     print("%s: Noch kein Ergebnis für: %s" % (fileName, pline))
                     continue
 
@@ -474,7 +480,8 @@ class Round:
         fd.write('# Ergebnisse bitte wie folgt eingeben (Spiel  Satz1, Satz2, Satz3 ...):\n')
         fd.write('# Heinz Musterspieler <> Klara Platzhalter ! 3:1 8 -4 12 3\n')
 
-    def writeBegegnung(self, fd, spielerA, spielerB):
+    @staticmethod
+    def writeBegegnung(fd, spielerA, spielerB):
         fd.write(("%s <> %s ! " % (spielerA.name, spielerB.name)).encode('utf8'))
         fd.write(spielerB.getDefaultResult())
 
@@ -493,8 +500,8 @@ class RoundInit(Round):
         if os.path.isfile(SPIELER_FileName):
             self._rankedPlayerList = self._calcRankOfPlayers(SPIELER_FileName, aCollectionOfAllPlayers)
             if len(self._rankedPlayerList) < MIN_NumberOfPlayer:
-                print(
-                "%d Spieler sind zu wenig, brauche mindestens %d" % (len(self._rankedPlayerList), MIN_NumberOfPlayer))
+                print("%d Spieler sind zu wenig, brauche mindestens %d"
+                      % (len(self._rankedPlayerList), MIN_NumberOfPlayer))
             else:
                 self.setComplete()
 
@@ -503,7 +510,8 @@ class RoundInit(Round):
             print("Erzeuge eine Beispieldatei.")
             self._createExampleSpielerFile(SPIELER_FileName)
 
-    def _getClickTTExportFileName(self):
+    @staticmethod
+    def _getClickTTExportFileName():
         xmls = glob.glob('*.xml')
         if len(xmls) == 0:
             print("Keine clickTT Spieler Export xml Datei gefunden")
@@ -559,7 +567,8 @@ class RoundInit(Round):
             for gesetztSpieler, geLostSpieler in zip(gesetzt, geLost):
                 self.writeBegegnung(the_file, gesetztSpieler, geLostSpieler)
 
-    def _createExampleSpielerFile(self, fileName):
+    @staticmethod
+    def _createExampleSpielerFile(fileName):
         with open(fileName, 'w') as the_file:
             the_file.write('# Folgende Zeile ist ein Beispiel:\n')
             the_file.write('Heinz Musterspieler, 1454\n')
@@ -572,6 +581,8 @@ def getFileNameOfRound(numberOfRound):
 def getRounds(allPlayers):
     """ Schaut nach welche Files vorhanden sind.
         Erzeugt entsprechende Round Instanzen
+        :param allPlayers: alle Spieler
+        :return: Liste aller Runden
     """
     roundList = [RoundInit(allPlayers)]
     for i in range(1, 1 + NUMBER_OfRounds):
