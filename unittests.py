@@ -16,7 +16,7 @@ class TestSpieler(unittest.TestCase):
 
         siege = A.getNumberOfSiege()
 
-        self.assertEquals(1, siege)
+        self.assertEqual(1, siege)
 
     def test_getOponents(self):
         A = Spieler('A', 1)
@@ -26,20 +26,20 @@ class TestSpieler(unittest.TestCase):
         A.addMatch(C, MatchResult(0, 3))
         A.addMatch(B, MatchResult(3, 0))
 
-        self.assertEquals([C, B], A.getOponents())
+        self.assertEqual([C, B], list(A.getOponents()))
 
     def test_findOponentOnlyOneIsPossible(self):
         A = Spieler('A', 1)
         B = Spieler('B', 2)
         groups = GroupeOfPlayersWithSameSieganzahl([[B]])
 
-        self.assertEquals(B, A.findOponent(groups))
+        self.assertEqual(B, A.findOponent(groups))
 
         C = Spieler('C', 3)
         groups = GroupeOfPlayersWithSameSieganzahl([[B], [C]])
         A.addMatch(B, MatchResult(3, 0))
 
-        self.assertEquals(C, A.findOponent(groups))
+        self.assertEqual(C, A.findOponent(groups))
 
     def test_findOponentNoOneIsPossible(self):
         A = Spieler('A', 1)
@@ -47,7 +47,7 @@ class TestSpieler(unittest.TestCase):
         A.addMatch(B, MatchResult(3, 0))
         groups = GroupeOfPlayersWithSameSieganzahl([[B]])
 
-        self.assertEquals(None, A.findOponent(groups))
+        self.assertEqual(None, A.findOponent(groups))
 
     def test_findOponentOneIsNotPossibleRegardingLaterDrawings(self):
         A = Spieler('A', 1)
@@ -64,8 +64,8 @@ class TestSpieler(unittest.TestCase):
         B.addMatch(X, MatchResult(3, 0))
         groups = GroupeOfPlayersWithSameSieganzahl([[C], [B, U, V, W, X]])
 
-        self.assertNotEquals(None, A.findOponent(groups))
-        self.assertNotEquals(C, A.findOponent(groups))
+        self.assertNotEqual(None, A.findOponent(groups))
+        self.assertNotEqual(C, A.findOponent(groups))
 
 
 class TestBegegnungen(unittest.TestCase):
@@ -107,18 +107,18 @@ class TestBegegnungen(unittest.TestCase):
 
         ranking = allPlayers.getRanking()
 
-        self.assertEquals(11, len(ranking))  # 11 Spieler
+        self.assertEqual(11, len(ranking))  # 11 Spieler
 
         spieler, siege, buchholzzahl, platz = ranking[0]
-        self.assertEquals(C, spieler)
-        self.assertEquals(1, siege)
-        self.assertEquals(0, buchholzzahl)
-        self.assertEquals(1, platz)
+        self.assertEqual(C, spieler)
+        self.assertEqual(1, siege)
+        self.assertEqual(0, buchholzzahl)
+        self.assertEqual(1, platz)
 
         expected = [(C, 1, 0, 1), (I, 1, 0, 2), (H, 1, 0, 2), (D, 1, 0, 2), (B, 1, 0, 5), (A, 1, 0, 6), (E, 0, 1, 7),
                     (G, 0, 1, 8), (K, 0, 1, 8), (L, 0, 1, 10), (F, 0, 1, 11)]
 
-        self.assertEquals(set(expected), set(ranking))
+        self.assertEqual(set(expected), set(ranking))
 
     def test_getRankingDirekterVergleich(self):
         allPlayersList = []
@@ -145,8 +145,8 @@ class TestBegegnungen(unittest.TestCase):
         ranking = allPlayers.getRanking()
 
         spieler, siege, buchholzzahl, platz = ranking[1]
-        self.assertEquals(B, spieler)
-        self.assertEquals(2, platz)
+        self.assertEqual(B, spieler)
+        self.assertEqual(2, platz)
 
     def test_getRankingDirekterVergleichNichtMoeglich(self):
         allPlayersList = []
@@ -173,7 +173,7 @@ class TestBegegnungen(unittest.TestCase):
 
         # Streng nach ttr direkter Vergleicht nich praktikabel
         expected = [(A, 2, 4, 1), (C, 1, 3, 2), (D, 1, 3, 3), (E, 1, 3, 4), (B, 1, 3, 5)]
-        self.assertEquals(expected, ranking)
+        self.assertEqual(expected, ranking)
 
     def test_getRankingDifferentBuchholzzahl(self):
         allPlayersList = []
@@ -201,17 +201,17 @@ class TestBegegnungen(unittest.TestCase):
         ranking = allPlayers.getRanking()
 
         self.assertTrue(allPlayers.allHavePlayed(3))
-        self.assertEquals(10, len(ranking))  # 10 Spieler
+        self.assertEqual(10, len(ranking))  # 10 Spieler
 
         spieler, siege, buchholzzahl, platz = ranking[1]
-        self.assertEquals(C, spieler)
-        self.assertEquals(2, siege)
-        self.assertEquals(5, buchholzzahl)
-        self.assertEquals(2, platz)
+        self.assertEqual(C, spieler)
+        self.assertEqual(2, siege)
+        self.assertEqual(5, buchholzzahl)
+        self.assertEqual(2, platz)
 
         expected = [(A, 3, 4, 1), (C, 2, 5, 2), (B, 2, 5, 3), (E, 2, 4, 4), (I, 2, 3, 5), (F, 1, 6, 6), (G, 1, 5, 7),
                     (D, 1, 5, 8), (H, 1, 2, 9), (K, 0, 6, 10)]
-        self.assertEquals(expected, ranking)
+        self.assertEqual(expected, ranking)
 
     def test_getRankingDifferentBuchholzzahlMitFreilos(self):
         allPlayersList = []
@@ -242,17 +242,17 @@ class TestBegegnungen(unittest.TestCase):
         ranking = allPlayers.getRanking()
 
         self.assertTrue(allPlayers.allHavePlayed(3))
-        self.assertEquals(9, len(ranking))  # 9 Spieler
+        self.assertEqual(9, len(ranking))  # 9 Spieler
 
         spieler, siege, buchholzzahl, platz = ranking[1]
-        self.assertEquals(C, spieler)
-        self.assertEquals(2, siege)
-        self.assertEquals(5, buchholzzahl)
-        self.assertEquals(2, platz)
+        self.assertEqual(C, spieler)
+        self.assertEqual(2, siege)
+        self.assertEqual(5, buchholzzahl)
+        self.assertEqual(2, platz)
 
         expected = [(A, 3, 5, 1), (C, 2, 5, 2), (B, 2, 5, 3), (I, 2, 4, 4), (E, 2, 4, 5), (F, 1, 6, 6), (G, 1, 5, 7),
                     (D, 1, 5, 8), (H, 1, 3, 9)]
-        self.assertEquals(expected, ranking)
+        self.assertEqual(expected, ranking)
 
     def test_groupContainsAllPlayer(self):
         allPlayers = Spieler_Collection()
@@ -260,7 +260,7 @@ class TestBegegnungen(unittest.TestCase):
 
         groups = allPlayers.getGroupBySiege()
 
-        self.assertEquals(set(allPlayers.values()), set(groups.getAllPlayers()))
+        self.assertEqual(set(allPlayers.values()), set(groups.getAllPlayers()))
 
     def test_groupTop_returnsAndRemovesTop(self):
         allPlayers = Spieler_Collection()
@@ -269,7 +269,7 @@ class TestBegegnungen(unittest.TestCase):
         groups = allPlayers.getGroupBySiege()
 
         for player in (A, B, D, H, I, C, F, L, K, G, E, Freilos, None):
-            self.assertEquals(player, groups.top())
+            self.assertEqual(player, groups.top())
 
     def test_removeElementFromGroup(self):
         groups = GroupeOfPlayersWithSameSieganzahl()
@@ -277,12 +277,12 @@ class TestBegegnungen(unittest.TestCase):
         groups.append([10, 20])
         groups.rm(10)
 
-        self.assertEquals([1, 2, 3], groups[0])
-        self.assertEquals([20], groups[1])
+        self.assertEqual([1, 2, 3], groups[0])
+        self.assertEqual([20], groups[1])
 
         groups.rm(20)
-        self.assertEquals(1, len(groups))
-        self.assertEquals([1, 2, 3], groups[0])
+        self.assertEqual(1, len(groups))
+        self.assertEqual([1, 2, 3], groups[0])
 
     def test_groupBySiege(self):
         allPlayers = Spieler_Collection()
@@ -290,10 +290,10 @@ class TestBegegnungen(unittest.TestCase):
 
         groups = allPlayers.getGroupBySiege()
 
-        self.assertEquals(3, len(groups))
-        self.assertEquals([A, B, D, H, I, C], groups[0])
-        self.assertEquals([F, L, K, G, E], groups[1])
-        self.assertEquals([Freilos], groups[2])
+        self.assertEqual(3, len(groups))
+        self.assertEqual([A, B, D, H, I, C], groups[0])
+        self.assertEqual([F, L, K, G, E], groups[1])
+        self.assertEqual([Freilos], groups[2])
 
     def test_getBegegnungenAllCanBeInSameGroup(self):
 
@@ -303,11 +303,11 @@ class TestBegegnungen(unittest.TestCase):
         groups = allPlayers.getGroupBySiege()
         begegnungen = allPlayers.getBegegnungen(groups)
 
-        self.assertEquals(6, len(begegnungen))
+        self.assertEqual(6, len(begegnungen))
         winner = [player for begegnung in begegnungen[:3] for player in begegnung]
-        self.assertEquals({A, B, D, H, I, C}, set(winner))
+        self.assertEqual({A, B, D, H, I, C}, set(winner))
         looser = [player for begegnung in begegnungen[3:] for player in begegnung]
-        self.assertEquals({F, L, K, G, E, Freilos}, set(looser))
+        self.assertEqual({F, L, K, G, E, Freilos}, set(looser))
 
 
 class TestMatchResult(unittest.TestCase):

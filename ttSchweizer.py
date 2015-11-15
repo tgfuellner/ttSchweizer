@@ -18,7 +18,7 @@ class Spieler:
 
     def __init__(self, name, ttr):
         self.name = name
-        self.ttr = ttr
+        self.ttr = int(ttr)
         self.ergebnisse = collections.OrderedDict()
         self.hatteFreilos = False
 
@@ -151,7 +151,7 @@ class Spieler:
     def printOponent(*args):
         return
         # noinspection PyUnreachableCode
-        print " ".join([str(p) for p in args])
+        print(" ".join([str(p) for p in args]))
 
     def theGroupsCanFindMatchesWithoutMe(self, groupsWithSameSiegzahl, blanksForPrints=""):
         groups = groupsWithSameSiegzahl.clone()
@@ -273,7 +273,7 @@ class Spieler_Collection(dict):
         return min([p.getNumberOfSiege() for p in self.valuesOhneFreilos()])
 
     def getTtrSortedList(self):
-        players = self.values()
+        players = list(self.values())
         players.sort(key=lambda x: x.ttr, reverse=True)
         return players
 
@@ -286,7 +286,7 @@ class Spieler_Collection(dict):
         return GroupeOfPlayersWithSameSieganzahl([allPlayers])
 
     def valuesOhneFreilos(self):
-        allPlayers = self.values()
+        allPlayers = list(self.values())
         if "Freilos" in self:
             allPlayers.remove(self["Freilos"])
         return allPlayers
@@ -383,24 +383,24 @@ class Round:
         if self._numberOfRound == NUMBER_OfRounds:
             return
 
-        print "Auslosung von Runde %d" % self.getNumberOfNextRound()
+        print("Auslosung von Runde %d" % self.getNumberOfNextRound())
 
         begegnungen = []
         numberOfMaxRetries = 20
-        for _ in xrange(numberOfMaxRetries):
+        for _ in range(numberOfMaxRetries):
             groups = self._collectionOfAllPlayers.getGroupBySiege()
             begegnungen = self._collectionOfAllPlayers.getBegegnungen(groups)
             if begegnungen:
                 break
-            print "Wiederhole Auslosung"
+            print("Wiederhole Auslosung")
 
         if not begegnungen:
-            for _ in xrange(numberOfMaxRetries):
+            for _ in range(numberOfMaxRetries):
                 groups = self._collectionOfAllPlayers.getOneBigGroup()
                 begegnungen = self._collectionOfAllPlayers.getBegegnungen(groups)
                 if begegnungen:
                     break
-                print "Wiederhole nochmal Auslosung"
+                print("Wiederhole nochmal Auslosung")
 
         with open(getFileNameOfRound(self.getNumberOfNextRound()), 'w') as the_file:
             self.writeHeader(the_file)
@@ -536,7 +536,7 @@ class RoundInit(Round):
         with open(SPIELER_FileName, 'w') as fd:
             fd.write('# Erzeugt aus %s\n' % xmlFileName)
             for player in root[0][0]:
-                # print player.attrib['id']
+                # print(player.attrib['id'])
                 person = player[0].attrib
                 line = '%s %s, %s\n' % (person['firstname'], person['lastname'], person['ttr'])
                 fd.write(line.encode('utf8'))
