@@ -146,9 +146,11 @@ class Spieler:
         self.printOponent(blanksForPrints, "**", player, "ist neuer Gegner von", self)
         return player
 
+    # noinspection PyUnusedLocal
     @staticmethod
     def printOponent(*args):
         return
+        # noinspection PyUnreachableCode
         print " ".join([str(p) for p in args])
 
     def theGroupsCanFindMatchesWithoutMe(self, groupsWithSameSiegzahl, blanksForPrints=""):
@@ -491,6 +493,7 @@ class Round:
 class RoundInit(Round):
     """ Zustand vor der ersten Runde """
 
+    # noinspection PyMissingConstructor
     def __init__(self, aCollectionOfAllPlayers):
         self._isComplete = False
 
@@ -587,6 +590,7 @@ def getRounds(allPlayers):
     roundList = [RoundInit(allPlayers)]
     for i in range(1, 1 + NUMBER_OfRounds):
         if os.path.isfile(getFileNameOfRound(i)):
+            # noinspection PyTypeChecker
             roundList.append(Round(i, allPlayers))
 
     return roundList
