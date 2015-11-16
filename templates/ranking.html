@@ -48,6 +48,15 @@
 </head>
 <body>
 <h1>Ergebnisse Runde {{ runde }}</h1>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
 <table class="hoverTable">
 <tr>
  <th><div class="verticalText">Platz</div></th>
