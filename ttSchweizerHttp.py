@@ -14,7 +14,13 @@ def main():
     ranking = alleSpieler.getRanking()
     rankedSpieler = [sub[0] for sub in ranking]
     thereAreFreilose = (len([s for s in rankedSpieler if s.hatteFreilos]) > 0)
-    return render_template('ranking.html', ranking=ranking, runde=len(rounds) - 1,
+
+    currentRound = len(rounds) - 2
+    if rounds[-1].isComplete():
+        rounds[-1].createStartOfNextRound()
+        currentRound += 1
+
+    return render_template('ranking.html', ranking=ranking, runde=currentRound,
                            spielerList=rankedSpieler, thereAreFreilose=thereAreFreilose)
 
 
