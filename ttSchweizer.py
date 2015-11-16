@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
 import os.path
@@ -6,7 +6,6 @@ import glob
 import random
 import collections
 import xml.etree.ElementTree as Et
-import codecs
 
 SPIELER_FileName = "spieler.tts"
 MIN_NumberOfPlayer = 9
@@ -402,7 +401,7 @@ class Round:
                     break
                 print("Wiederhole nochmal Auslosung")
 
-        with open(getFileNameOfRound(self.getNumberOfNextRound()), 'w') as the_file:
+        with open(getFileNameOfRound(self.getNumberOfNextRound()), 'w', encoding='utf-8') as the_file:
             self.writeHeader(the_file)
             for spielerA, spielerB in begegnungen:
                 self.writeBegegnung(the_file, spielerA, spielerB)
@@ -415,25 +414,24 @@ class Round:
             return False
 
     def _readResultsOfThisRound(self, fileName):
-        with codecs.open(fileName, "r", "utf-8") as roundFile:
+        with open(fileName, "r", encoding='utf-8') as roundFile:
             for line in roundFile:
                 if self.isComment(line):
                     continue
 
                 line = line.strip()  # Strip especially last newline
-                pline = line.encode('utf8')
 
                 # Example line:
                 # Thomas Alsters <> David Ly ! 3:0 2 3 4
                 x = line.split('<>')
                 if len(x) != 2:
-                    print("%s: Die Zeichefolge <> muss genau einmal vorkommen in Zeile: %s" % (fileName, pline))
+                    print("%s: Die Zeichefolge <> muss genau einmal vorkommen in Zeile: %s" % (fileName, line))
                     continue
                 spielerA = self._collectionOfAllPlayers[x[0].strip()]
 
                 y = x[1].split('!')
                 if len(y) != 2:
-                    print("%s: Das Zeichen ! muss genau einmal vorkommen in Zeile: %s" % (fileName, pline))
+                    print("%s: Das Zeichen ! muss genau einmal vorkommen in Zeile: %s" % (fileName, line))
                     continue
                 spielerB = self._collectionOfAllPlayers[y[0].strip()]
 
@@ -443,12 +441,12 @@ class Round:
 
                 z = y[1].strip().split()
                 if not z:
-                    print("%s: Noch kein Ergebnis für: %s" % (fileName, pline))
+                    print("%s: Noch kein Ergebnis für: %s" % (fileName, line))
                     continue
 
                 satzVerhaeltnis = z[0].split(':')
                 if len(satzVerhaeltnis) != 2:
-                    print("%s: Das Satzverhältnis ist nicht korrekt in Zeile: %s" % (fileName, pline))
+                    print("%s: Das Satzverhältnis ist nicht korrekt in Zeile: %s" % (fileName, line))
                     continue
 
                 saetzeSpielerA, saetzeSpielerB = [int(i) for i in satzVerhaeltnis]
@@ -458,16 +456,16 @@ class Round:
                     theMatchResult = MatchResult(saetzeSpielerA, saetzeSpielerB)
                     spielerA.addMatch(spielerB, theMatchResult)
                     spielerB.addMatch(spielerA, theMatchResult.turned())
-                    print("%s: Vorsicht, Satzergebnisse fehlen in Zeile: %s" % (fileName, pline))
+                    print("%s: Vorsicht, Satzergebnisse fehlen in Zeile: %s" % (fileName, line))
                     continue
 
                 satzErgebnisse = z[1:]  # Vorsicht nicht nach int wandeln! -0 muss bleiben
                 if len(satzErgebnisse) != saetzeSpielerA + saetzeSpielerB:
-                    print("%s: Sätze sind nicht komplett in Zeile: %s" % (fileName, pline))
+                    print("%s: Sätze sind nicht komplett in Zeile: %s" % (fileName, line))
                     continue
 
                 if saetzeSpielerB != len([s for s in satzErgebnisse if '-' in s]):
-                    print("%s: Satzverhältnis und Sätze passen nicht zusammen in Zeile: %s" % (fileName, pline))
+                    print("%s: Satzverhältnis und Sätze passen nicht zusammen in Zeile: %s" % (fileName, line))
                     continue
 
                 theMatchResult = MatchResult(saetzeSpielerA, saetzeSpielerB, satzErgebnisse)
@@ -484,7 +482,7 @@ class Round:
 
     @staticmethod
     def writeBegegnung(fd, spielerA, spielerB):
-        fd.write(("%s <> %s ! " % (spielerA.name, spielerB.name)).encode('utf8'))
+        fd.write("%s <> %s ! " % (spielerA.name, spielerB.name))
         fd.write(spielerB.getDefaultResult())
 
         fd.write("\n")
@@ -533,16 +531,16 @@ class RoundInit(Round):
         tree = Et.parse(xmlFileName)
         root = tree.getroot()
 
-        with open(SPIELER_FileName, 'w') as fd:
+        with open(SPIELER_FileName, 'w', encoding='utf-8') as fd:
             fd.write('# Erzeugt aus %s\n' % xmlFileName)
             for player in root[0][0]:
                 # print(player.attrib['id'])
                 person = player[0].attrib
                 line = '%s %s, %s\n' % (person['firstname'], person['lastname'], person['ttr'])
-                fd.write(line.encode('utf8'))
+                fd.write(line)
 
     def _calcRankOfPlayers(self, fileName, allPlayers):
-        with codecs.open(fileName, "r", "utf-8") as spielerFile:
+        with open(fileName, "r", encoding='utf-8') as spielerFile:
             for line in spielerFile:
                 if self.isComment(line):
                     continue
@@ -564,7 +562,7 @@ class RoundInit(Round):
         zuLosen = self._rankedPlayerList[numberOfGesetzte:]
         geLost = random.sample(zuLosen, len(zuLosen))
 
-        with open(getFileNameOfRound(self.getNumberOfNextRound()), 'w') as the_file:
+        with open(getFileNameOfRound(self.getNumberOfNextRound()), 'w', encoding='utf-8') as the_file:
             self.writeHeader(the_file)
 
             for gesetztSpieler, geLostSpieler in zip(gesetzt, geLost):
@@ -572,7 +570,7 @@ class RoundInit(Round):
 
     @staticmethod
     def _createExampleSpielerFile(fileName):
-        with open(fileName, 'w') as the_file:
+        with open(fileName, 'w', encoding='utf-8') as the_file:
             the_file.write('# Folgende Zeile ist ein Beispiel:\n')
             the_file.write('Heinz Musterspieler, 1454\n')
 
