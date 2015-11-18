@@ -21,6 +21,10 @@
         vertical-align: bottom;
         height: 10em;
     }
+     .th-spieler {
+        font-size: 1em;
+        color: #000000;
+     }
     {# Define the default color for all the table rows #}
     .hoverTable tr{
         background: #b8d1f3;
@@ -76,7 +80,7 @@
  <th><div class="verticalText">Platz</div></th>
  <th><div class="verticalText">Spieler</div></th>
 {%- for spieler in spielerList %}
- <th><div class="verticalText">{{ spieler }}</div></th>
+ <th><div class="verticalText th-spieler">{{ spieler }}</div></th>
 {%- endfor %}
  <th><div class="verticalText">Siege</div></th>
  <th><div class="verticalText">Buchholzzahl</div></th>
