@@ -3,9 +3,13 @@
 
 from ttSchweizer import getRounds, Spieler_Collection
 from flask import Flask, render_template, flash
+import ttSchweizer
+
+ttSchweizer.message = flash
 
 app = Flask(__name__)
-app.secret_key = 'FrodoMimiBaum'
+app.secret_key = 'FrodoMimi!/Baum'
+
 
 @app.route("/")
 def main():
@@ -19,8 +23,6 @@ def main():
     if rounds[-1].isComplete():
         rounds[-1].createStartOfNextRound()
         currentRound += 1
-
-    flash("Hallo")
 
     return render_template('ranking.html', ranking=ranking, runde=currentRound,
                            spielerList=rankedSpieler, thereAreFreilose=thereAreFreilose)

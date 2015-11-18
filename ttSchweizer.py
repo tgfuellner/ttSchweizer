@@ -150,7 +150,7 @@ class Spieler:
     def printOponent(*args):
         return
         # noinspection PyUnreachableCode
-        print(" ".join([str(p) for p in args]))
+        message(" ".join([str(p) for p in args]))
 
     def theGroupsCanFindMatchesWithoutMe(self, groupsWithSameSiegzahl, blanksForPrints=""):
         groups = groupsWithSameSiegzahl.clone()
@@ -222,7 +222,7 @@ class Spieler_Collection(dict):
 
     def __getitem__(self, key):
         if key not in self:
-            print("Der Spieler '%s' ist nicht bekannt!" % key)
+            message("Der Spieler '%s' ist nicht bekannt!" % key)
             return None
         val = dict.__getitem__(self, key)
         return val
@@ -278,7 +278,7 @@ class Spieler_Collection(dict):
 
     def getOneBigGroup(self):
         """ Eine grosse Gruppe um Probleme bei Paarungsfindung zu umgehen """
-        allPlayers = self.values()
+        allPlayers = list(self.values())
         if "Freilos" in self:
             allPlayers.remove(self["Freilos"])
             allPlayers.append(self["Freilos"])
@@ -382,7 +382,7 @@ class Round:
         if self._numberOfRound == NUMBER_OfRounds:
             return
 
-        print("Auslosung von Runde %d" % self.getNumberOfNextRound())
+        message("Auslosung von Runde %d" % self.getNumberOfNextRound())
 
         begegnungen = []
         numberOfMaxRetries = 20
@@ -391,7 +391,7 @@ class Round:
             begegnungen = self._collectionOfAllPlayers.getBegegnungen(groups)
             if begegnungen:
                 break
-            print("Wiederhole Auslosung")
+            message("Wiederhole Auslosung")
 
         if not begegnungen:
             for _ in range(numberOfMaxRetries):
@@ -399,7 +399,7 @@ class Round:
                 begegnungen = self._collectionOfAllPlayers.getBegegnungen(groups)
                 if begegnungen:
                     break
-                print("Wiederhole nochmal Auslosung")
+                message("Wiederhole nochmal Auslosung")
 
         with open(getFileNameOfRound(self.getNumberOfNextRound()), 'w', encoding='utf-8') as the_file:
             self.writeHeader(the_file)
@@ -425,13 +425,13 @@ class Round:
                 # Thomas Alsters <> David Ly ! 3:0 2 3 4
                 x = line.split('<>')
                 if len(x) != 2:
-                    print("%s: Die Zeichefolge <> muss genau einmal vorkommen in Zeile: %s" % (fileName, line))
+                    message("%s: Die Zeichefolge <> muss genau einmal vorkommen in Zeile: %s" % (fileName, line))
                     continue
                 spielerA = self._collectionOfAllPlayers[x[0].strip()]
 
                 y = x[1].split('!')
                 if len(y) != 2:
-                    print("%s: Das Zeichen ! muss genau einmal vorkommen in Zeile: %s" % (fileName, line))
+                    message("%s: Das Zeichen ! muss genau einmal vorkommen in Zeile: %s" % (fileName, line))
                     continue
                 spielerB = self._collectionOfAllPlayers[y[0].strip()]
 
@@ -441,12 +441,12 @@ class Round:
 
                 z = y[1].strip().split()
                 if not z:
-                    print("%s: Noch kein Ergebnis für: %s" % (fileName, line))
+                    message("%s: Noch kein Ergebnis für: %s" % (fileName, line))
                     continue
 
                 satzVerhaeltnis = z[0].split(':')
                 if len(satzVerhaeltnis) != 2:
-                    print("%s: Das Satzverhältnis ist nicht korrekt in Zeile: %s" % (fileName, line))
+                    message("%s: Das Satzverhältnis ist nicht korrekt in Zeile: %s" % (fileName, line))
                     continue
 
                 saetzeSpielerA, saetzeSpielerB = [int(i) for i in satzVerhaeltnis]
@@ -456,16 +456,16 @@ class Round:
                     theMatchResult = MatchResult(saetzeSpielerA, saetzeSpielerB)
                     spielerA.addMatch(spielerB, theMatchResult)
                     spielerB.addMatch(spielerA, theMatchResult.turned())
-                    print("%s: Vorsicht, Satzergebnisse fehlen in Zeile: %s" % (fileName, line))
+                    message("%s: Vorsicht, Satzergebnisse fehlen in Zeile: %s" % (fileName, line))
                     continue
 
                 satzErgebnisse = z[1:]  # Vorsicht nicht nach int wandeln! -0 muss bleiben
                 if len(satzErgebnisse) != saetzeSpielerA + saetzeSpielerB:
-                    print("%s: Sätze sind nicht komplett in Zeile: %s" % (fileName, line))
+                    message("%s: Sätze sind nicht komplett in Zeile: %s" % (fileName, line))
                     continue
 
                 if saetzeSpielerB != len([s for s in satzErgebnisse if '-' in s]):
-                    print("%s: Satzverhältnis und Sätze passen nicht zusammen in Zeile: %s" % (fileName, line))
+                    message("%s: Satzverhältnis und Sätze passen nicht zusammen in Zeile: %s" % (fileName, line))
                     continue
 
                 theMatchResult = MatchResult(saetzeSpielerA, saetzeSpielerB, satzErgebnisse)
@@ -501,27 +501,27 @@ class RoundInit(Round):
         if os.path.isfile(SPIELER_FileName):
             self._rankedPlayerList = self._calcRankOfPlayers(SPIELER_FileName, aCollectionOfAllPlayers)
             if len(self._rankedPlayerList) < MIN_NumberOfPlayer:
-                print("%d Spieler sind zu wenig, brauche mindestens %d"
-                      % (len(self._rankedPlayerList), MIN_NumberOfPlayer))
+                message("%d Spieler sind zu wenig, brauche mindestens %d"
+                        % (len(self._rankedPlayerList), MIN_NumberOfPlayer))
             else:
                 self.setComplete()
 
         else:
-            print("Die Datei '%s' fehlt." % SPIELER_FileName)
-            print("Erzeuge eine Beispieldatei.")
+            message("Die Datei '%s' fehlt." % SPIELER_FileName)
+            message("Erzeuge eine Beispieldatei.")
             self._createExampleSpielerFile(SPIELER_FileName)
 
     @staticmethod
     def _getClickTTExportFileName():
         xmls = glob.glob('*.xml')
         if len(xmls) == 0:
-            print("Keine clickTT Spieler Export xml Datei gefunden")
+            message("Keine clickTT Spieler Export xml Datei gefunden")
             return ''
         if len(xmls) > 1:
-            print("Mehr als eine clickTT Spieler Export xml Datei gefunden")
+            message("Mehr als eine clickTT Spieler Export xml Datei gefunden")
             return ''
 
-        print("Nutze clickTT Spieler Export Datei: %s" % xmls[0])
+        message("Nutze clickTT Spieler Export Datei: %s" % xmls[0])
         return xmls[0]
 
     def _tryToReadClickTTExport(self):
@@ -534,7 +534,7 @@ class RoundInit(Round):
         with open(SPIELER_FileName, 'w', encoding='utf-8') as fd:
             fd.write('# Erzeugt aus %s\n' % xmlFileName)
             for player in root[0][0]:
-                # print(player.attrib['id'])
+                # message(player.attrib['id'])
                 person = player[0].attrib
                 line = '%s %s, %s\n' % (person['firstname'], person['lastname'], person['ttr'])
                 fd.write(line)
@@ -592,6 +592,10 @@ def getRounds(allPlayers):
             roundList.append(Round(i, allPlayers))
 
     return roundList
+
+
+def message(s):
+    print(s)
 
 
 ############################################################
