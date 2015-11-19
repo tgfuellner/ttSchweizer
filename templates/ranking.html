@@ -2,66 +2,9 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='ns-default.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='ttSchweizer.css') }}" />
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />
- <title>ttSchweizer Ergebnisse</title>
- <style style="text/css">
-    .hoverTable{
-        {# width:100%; #}
-        border-collapse:collapse; 
-    }
-    .hoverTable td, .hoverTable th{ 
-        padding:7px; border:#4e95f4 1px solid;
-    }
-    .hoverTable th{ 
-        font-size: 1.1em;
-        padding-top: 5px;
-        padding-bottom: 4px;
-        background-color: #A7C942;
-        color: #ffffff;
-        text-align: center;
-        vertical-align: bottom;
-        height: 10em;
-    }
-     .th-spieler {
-        font-size: 1em;
-        color: #000000;
-     }
-    {# Define the default color for all the table rows #}
-    .hoverTable tr{
-        background: #b8d1f3;
-    }
-    .hoverTable tr.odd{
-        background: #EAF2D3;
-    }
-    {# Define the hover highlight color for the table row #}
-    .hoverTable tr:hover {
-          background-color: #ffff99;
-    }
-    .verticalText {
-          text-align: center;
-          vertical-align: middle;
-          width: 0.8em;
-          margin: 0px;
-          padding: 0px;
-          padding-left: 3px;
-          padding-right: 3px;
-          padding-top: 10px;
-          white-space: nowrap;
-          -webkit-transform: rotate(-90deg); 
-          -moz-transform: rotate(-90deg);                 
-    }
-    /* Growl-style layout  */
-    .ns-growl {
-        top: 30px;
-        left: 30px;
-        max-width: 800px;
-        border-radius: 5px;
-    }
-    .ns-growl p {
-        margin: 0;
-        line-height: 1.3;
-    }
-</style>
+    <title>ttSchweizer Ergebnisse</title>
 </head>
 <body>
 <h1>Ergebnisse Runde {{ runde }}</h1>
@@ -69,9 +12,9 @@
   {% if messages %}
 <div class="ns-box ns-growl ns-type-notice ns-show">
 	<div class="ns-box-inner">
-    {% for message in messages %}
+    {%- for message in messages %}
 		<p>{{ message }}</p>
-    {% endfor %}
+    {%- endfor %}
 	</div>
 </div>
   {% endif %}
