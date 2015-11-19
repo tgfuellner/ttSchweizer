@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='ns-default.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='ttSchweizer.css') }}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+    <title>ttSchweizer Ergebnisse</title>
+</head>
+<body>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+<div class="ns-box ns-growl ns-type-notice ns-show">
+	<div class="ns-box-inner">
+    {%- for message in messages %}
+		<p>{{ message }}</p>
+    {%- endfor %}
+	</div>
+</div>
+  {% endif %}
+{% endwith %}
+{% block body %}{% endblock %}
+</body>
+</html>
