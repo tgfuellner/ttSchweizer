@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
+import os
 from ttSchweizer import getRounds, Spieler_Collection
-from flask import Flask, render_template, flash
+from flask import Flask, render_template, flash, send_from_directory
 import ttSchweizer
 
 ttSchweizer.message = flash
@@ -27,6 +28,11 @@ def main():
     return render_template('ranking.html', ranking=ranking, runde=currentRound,
                            spielerList=rankedSpieler, thereAreFreilose=thereAreFreilose)
 
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 if __name__ == "__main__":
     app.debug = True

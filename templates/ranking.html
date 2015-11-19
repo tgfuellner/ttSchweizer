@@ -1,7 +1,8 @@
 <!doctype html>
 <html>
 <head>
- <link rel="stylesheet" type="text/css" href="static/ns-default.css" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='ns-default.css') }}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />
  <title>ttSchweizer Ergebnisse</title>
  <style style="text/css">
     .hoverTable{
