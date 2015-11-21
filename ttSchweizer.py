@@ -290,6 +290,13 @@ class Spieler_Collection(dict):
             allPlayers.remove(self["Freilos"])
         return allPlayers
 
+    def getNumberOfRealPlayers(self):
+        """ Freilos wird nicht mitgezählt! """
+        if "Freilos" in self:
+            return len(self)-1
+        return len(self)
+
+
     def getGroupBySiege(self):
         """ Gruppen von Spielern mit gleicher Sieganzahl """
         listOfSiegAnzahl = sorted(set([p.getNumberOfSiege() for p in self.valuesOhneFreilos()]), reverse=True)
@@ -502,7 +509,7 @@ class RoundInit(Round):
             self._rankedPlayerList = self._calcRankOfPlayers(SPIELER_FileName, aCollectionOfAllPlayers)
             if len(self._rankedPlayerList) < MIN_NumberOfPlayer:
                 message("%d Spieler sind zu wenig, brauche mindestens %d"
-                        % (len(self._rankedPlayerList), MIN_NumberOfPlayer))
+                        % (aCollectionOfAllPlayers.getNumberOfRealPlayers(), MIN_NumberOfPlayer))
             else:
                 self.setComplete()
 
