@@ -3,9 +3,11 @@
 
 import os
 from uuid import uuid4
+
+
 from ttSchweizer import getRounds, Spieler_Collection
-from flask import Flask, session, render_template, flash, send_from_directory
-from flask import redirect, url_for
+from flask import Flask, session, render_template, flash
+import flask
 import ttSchweizer
 
 ttSchweizer.message = flash
@@ -20,8 +22,8 @@ def main():
     alleSpieler = Spieler_Collection()
     rounds = getRounds(alleSpieler)
     if len(rounds) == 1:
-        session.clear()
-        return redirect(url_for('new'))
+        flask.get_flashed_messages()
+        return flask.redirect(flask.url_for('new'))
 
     ranking = alleSpieler.getRanking()
     rankedSpieler = [sub[0] for sub in ranking]
@@ -40,12 +42,16 @@ def main():
 def new():
     if 'id' not in session:
         session['id'] = uuid4()
-    return "id = "+ str(session['id'])
+    response = flask.make_response(repr(session))
+    response.content_type = 'text/plain'
+    return response
+
 
 @app.route('/favicon.ico')
 def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+    return flask.send_from_directory(os.path.join(app.root_path, 'static'),
+                                     'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
 
 if __name__ == "__main__":
     app.run()
