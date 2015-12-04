@@ -5,7 +5,7 @@ import os
 from uuid import uuid4
 
 
-from ttSchweizer import getRounds, Spieler_Collection
+from ttSchweizer import getRounds, Spieler_Collection, Spieler, FreiLos
 from flask import Flask, session, render_template, flash
 import flask
 import ttSchweizer
@@ -34,9 +34,22 @@ def main():
         rounds[-1].createStartOfNextRound()
         currentRound += 1
 
-    return render_template('ranking.html', ranking=ranking, runde=currentRound,
-                           spielerList=rankedSpieler, thereAreFreilose=thereAreFreilose)
+    begegnungen = [str(player) for begegnung in rounds[-1].begegnungen for player in begegnung]
+    begegnungen = '!'.join(begegnungen)
 
+    return render_template('ranking.html', ranking=ranking, runde=currentRound,
+                           spielerList=rankedSpieler, thereAreFreilose=thereAreFreilose,
+                           begegnungen=begegnungen)
+
+
+@app.route("/spielerZettel/<begegnungen>")
+def spielerZettel(begegnungen):
+    r = ""
+    l = begegnungen.split('!')
+    for playerA, playerB in zip(l[0::2], l[1::2]):
+        r += "{a} <> {b}\n".format(a=playerA, b=playerB)
+
+    return r
 
 @app.route("/new")
 def new():

@@ -14,6 +14,10 @@
     {%- for message in messages %}
 		<p>{{ message }}</p>
     {%- endfor %}
+    {% if begegnungen %}
+    <hr/>
+    <p>Brauchen Sie <a href="{{ url_for('spielerZettel', begegnungen=begegnungen) }}">Spielerzettel?</a></p>
+    {% endif %}
 	</div>
 </div>
   {% endif %}

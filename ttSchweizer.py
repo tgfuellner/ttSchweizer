@@ -374,6 +374,7 @@ class Round:
         self._isComplete = False
         self._numberOfRound = num
         self._collectionOfAllPlayers = allPlayers
+        self.begegnungen = []
         self._readResultsOfThisRound(getFileNameOfRound(num))
 
     def getNumberOfNextRound(self):
@@ -449,6 +450,7 @@ class Round:
                 z = y[1].strip().split()
                 if not z:
                     message("%s: Noch kein Ergebnis für: %s" % (fileName, line))
+                    self.begegnungen.append((spielerA, spielerB))
                     continue
 
                 satzVerhaeltnis = z[0].split(':')
