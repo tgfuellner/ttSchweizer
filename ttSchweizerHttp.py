@@ -5,7 +5,7 @@ import os
 from uuid import uuid4
 
 
-from ttSchweizer import getRounds, Spieler_Collection, Spieler, FreiLos
+from ttSchweizer import getRounds, Spieler_Collection
 from flask import Flask, session, render_template, flash
 import flask
 import ttSchweizer
@@ -50,6 +50,7 @@ def spielerZettel(begegnungen):
         r += "{a} <> {b}\n".format(a=playerA, b=playerB)
 
     return r
+
 
 @app.route("/new")
 def new():
