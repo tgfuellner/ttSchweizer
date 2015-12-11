@@ -376,6 +376,12 @@ class Round:
         self.begegnungen = []
         self._readResultsOfThisRound(getFileNameOfRound(num))
 
+    def getBegegnungenFlat(self):
+        """ retrun ['A','B',...,'X','Y']
+            Wobei A gegen B und X gegen Y spielt
+        """
+        return [str(player) for begegnung in self.begegnungen for player in begegnung]
+
     def getNumberOfNextRound(self):
         return self._numberOfRound + 1
 
@@ -560,6 +566,9 @@ class RoundInit(Round):
             allPlayers.freilos()
 
         return allPlayers.getTtrSortedList()
+
+    def getBegegnungenFlat(self):
+        return []
 
     def getNumberOfNextRound(self):
         return 1

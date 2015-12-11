@@ -19,13 +19,13 @@ app.secret_key = 'F1r4o6doM%imi!/Baum'
 
 @app.route("/")
 def main():
-    alleSpieler = Spieler_Collection()
-    rounds = getRounds(alleSpieler)
-    if len(rounds) == 1:
+    spieler = Spieler_Collection()
+    rounds = getRounds(spieler)
+    if len(spieler) == 0:
         flask.get_flashed_messages()
         return flask.redirect(flask.url_for('new'))
 
-    ranking = alleSpieler.getRanking()
+    ranking = spieler.getRanking()
     rankedSpieler = [sub[0] for sub in ranking]
     thereAreFreilose = (len([s for s in rankedSpieler if s.hatteFreilos]) > 0)
 
@@ -34,8 +34,7 @@ def main():
         rounds[-1].createStartOfNextRound()
         currentRound += 1
 
-    begegnungen = [str(player) for begegnung in rounds[-1].begegnungen for player in begegnung]
-    begegnungen = '!'.join(begegnungen)
+    begegnungen = '!'.join(rounds[-1].getBegegnungenFlat())
 
     return render_template('ranking.html', ranking=ranking, runde=currentRound,
                            spielerList=rankedSpieler, thereAreFreilose=thereAreFreilose,
