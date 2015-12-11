@@ -6,7 +6,7 @@ from uuid import uuid4
 
 
 from ttSchweizer import getRounds, Spieler_Collection
-from flask import Flask, session, render_template, flash
+from flask import Flask, request, session, render_template, flash
 import flask
 import ttSchweizer
 
@@ -51,14 +51,19 @@ def spielerZettel(begegnungen):
     return r
 
 
-@app.route("/new")
+@app.route("/new", methods=['GET', 'POST'])
 def new():
+    error = None
     if 'id' not in session:
         session['id'] = uuid4()
-    response = flask.make_response(repr(session))
-    response.content_type = 'text/plain'
-    return response
 
+    if request.method == 'POST':
+        print(request.form['turniername'])
+        session['turniername'] = request.form['turniername']
+        flash('{} wurde gestartet'.format(session['turniername']))
+        return flask.redirect(flask.url_for('main'))
+
+    return render_template('new.html', error=error)
 
 @app.route('/favicon.ico')
 def favicon():
