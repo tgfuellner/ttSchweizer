@@ -7,7 +7,7 @@ import random
 import collections
 import xml.etree.ElementTree as Et
 
-SPIELER_FileName = "spieler.tts"
+SPIELER_FileName = "spieler.txt"
 MIN_NumberOfPlayer = 9
 NUMBER_OfRounds = 6
 
@@ -584,7 +584,7 @@ class RoundInit(Round):
 
 
 def getFileNameOfRound(numberOfRound):
-    return "runde-%d.tts" % numberOfRound
+    return "runde-%d.txt" % numberOfRound
 
 
 def getRounds(allPlayers):

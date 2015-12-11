@@ -1,6 +1,6 @@
 #!/bin/bash
 
-F=runde-3.tts
+F=runde-3.txt
 
 ../../ttSchweizer.py >/dev/null
 if [ ! -e "$F" ]
