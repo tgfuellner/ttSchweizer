@@ -2,7 +2,6 @@
 # -*- coding: UTF-8 -*-
 
 import os
-from uuid import uuid4
 
 
 from ttSchweizer import getRounds, Spieler_Collection
@@ -16,15 +15,19 @@ app = Flask(__name__)
 app.debug = True
 app.secret_key = 'F1r4o6doM%imi!/Baum'
 
+def changeToTurnierDirectory(directory):
+    os.chdir(startCurrentWorkingDir)
+    os.chdir(directory)
 
 @app.route("/")
 def main():
-    spieler = Spieler_Collection()
-    rounds = getRounds(spieler)
-    if len(spieler) == 0:
-        flask.get_flashed_messages()
+    if 'turnierName' not in session:
         return flask.redirect(flask.url_for('new'))
 
+    changeToTurnierDirectory(session['turnierName'])
+
+    spieler = Spieler_Collection()
+    rounds = getRounds(spieler)
     ranking = spieler.getRanking()
     rankedSpieler = [sub[0] for sub in ranking]
     thereAreFreilose = (len([s for s in rankedSpieler if s.hatteFreilos]) > 0)
@@ -54,16 +57,29 @@ def spielerZettel(begegnungen):
 @app.route("/new", methods=['GET', 'POST'])
 def new():
     error = None
-    if 'id' not in session:
-        session['id'] = uuid4()
+
+    os.chdir(startCurrentWorkingDir)
 
     if request.method == 'POST':
-        print(request.form['turniername'])
-        session['turniername'] = request.form['turniername']
-        flash('{} wurde gestartet'.format(session['turniername']))
-        return flask.redirect(flask.url_for('main'))
+        turnierName = request.form['turniername']
+        if os.path.exists(turnierName):
+            error = "Ein Turnier mit dem Namen {} existiert schon".format(turnierName)
+        else:
+            os.mkdir(turnierName, 0o755)
+            os.chdir(turnierName)
+            spieler = Spieler_Collection()
+            rounds = getRounds(spieler)
+            flask.get_flashed_messages()
+            session['turnierName'] = turnierName
+            flash('{} wurde gestartet'.format(turnierName))
+            return flask.redirect(flask.url_for('main'))
 
     return render_template('new.html', error=error)
+
+@app.route("/setTurnier/<turnier>")
+def setTurnier(turnier):
+    session['turnierName'] = turnier
+    return flask.redirect(flask.url_for('main'))
 
 @app.route('/favicon.ico')
 def favicon():
@@ -72,4 +88,5 @@ def favicon():
 
 
 if __name__ == "__main__":
+    startCurrentWorkingDir = os.getcwd()
     app.run()
