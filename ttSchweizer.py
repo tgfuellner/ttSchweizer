@@ -367,6 +367,9 @@ class MatchResult:
     def isWon(self):
         return self.gamesWonByPlayerA > self.gamesWonByPlayerB
 
+    def isUndecided(self):
+        return self.gamesWonByPlayerA == self.gamesWonByPlayerB
+
 
 class Round:
     def __init__(self, num, allPlayers):
@@ -468,9 +471,12 @@ class Round:
                 if len(z) == 1:
                     # Nur Satzverhaeltnis keine genaueren Ergebnisse
                     theMatchResult = MatchResult(saetzeSpielerA, saetzeSpielerB)
+                    if theMatchResult.isUndecided():
+                        message("%s: Spiel ist nicht entschieden!: %s" % (fileName, line))
+                        continue
                     spielerA.addMatch(spielerB, theMatchResult)
                     spielerB.addMatch(spielerA, theMatchResult.turned())
-                    message("%s: Vorsicht, Satzergebnisse fehlen in Zeile: %s" % (fileName, line))
+                    #message("%s: Vorsicht, Satzergebnisse fehlen in Zeile: %s" % (fileName, line))
                     continue
 
                 satzErgebnisse = z[1:]  # Vorsicht nicht nach int wandeln! -0 muss bleiben
@@ -593,6 +599,8 @@ class RoundInit(Round):
 
 
 def getFileNameOfRound(numberOfRound):
+    if numberOfRound < 1:
+        return SPIELER_FileName
     return "runde-%d.txt" % numberOfRound
 
 

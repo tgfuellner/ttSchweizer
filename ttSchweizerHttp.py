@@ -4,7 +4,7 @@
 import os
 
 
-from ttSchweizer import getRounds, Spieler_Collection
+from ttSchweizer import getRounds, Spieler_Collection, getFileNameOfRound
 from flask import Flask, request, session, render_template, flash
 import flask
 import ttSchweizer
@@ -79,6 +79,26 @@ def new():
             return flask.redirect(flask.url_for('main'))
 
     return render_template('new.html', error=error, existingTurniere=getExistingTurniere())
+
+@app.route("/edit/<int:roundNumber>", methods=['GET', 'POST'])
+def edit(roundNumber):
+    error = None
+    definingFileForRound = getFileNameOfRound(roundNumber)
+    if not os.path.exists(definingFileForRound):
+        flash("Die Runde {} kann nicht editiert werden!".format(roundNumber))
+        return flask.redirect(flask.url_for('main'))
+
+    if request.method == 'POST':
+        textToWrite = request.form['text']
+        with open(definingFileForRound, "w", encoding='utf-8') as roundFile:
+            roundFile.write(textToWrite)
+        return flask.redirect(flask.url_for('main'))
+
+    with open(definingFileForRound, "r", encoding='utf-8') as roundFile:
+        textToEdit = roundFile.read()
+
+    print(textToEdit)
+    return render_template('edit.html', error=error, roundNumber=roundNumber, text=textToEdit)
 
 @app.route("/setTurnier/<turnier>")
 def setTurnier(turnier):
