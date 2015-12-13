@@ -19,9 +19,13 @@ def changeToTurnierDirectory(directory):
     os.chdir(startCurrentWorkingDir)
     os.chdir(directory)
 
+def getExistingTurniere():
+    return [entry for entry in os.listdir(startCurrentWorkingDir) if os.path.isdir(entry)]
+
 @app.route("/")
 def main():
-    if 'turnierName' not in session:
+    os.chdir(startCurrentWorkingDir)
+    if 'turnierName' not in session or not os.path.exists(session['turnierName']):
         return flask.redirect(flask.url_for('new'))
 
     changeToTurnierDirectory(session['turnierName'])
@@ -74,7 +78,7 @@ def new():
             flash('{} wurde gestartet'.format(turnierName))
             return flask.redirect(flask.url_for('main'))
 
-    return render_template('new.html', error=error)
+    return render_template('new.html', error=error, existingTurniere=getExistingTurniere())
 
 @app.route("/setTurnier/<turnier>")
 def setTurnier(turnier):

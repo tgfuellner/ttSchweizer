@@ -23,5 +23,14 @@
   {% endif %}
 {% endwith %}
 {% block body %}{% endblock %}
+{%- if existingTurniere is defined and existingTurniere %}
+<hr/>
+<h2>Vorhandene Turniere:</h2>
+<p>
+{%- for turnier in existingTurniere %}
+	<a href="{{ url_for('setTurnier', turnier=turnier) }}">{{ turnier }}</a>
+{%- endfor %}
+{% endif %}
+</p>
 </body>
 </html>
