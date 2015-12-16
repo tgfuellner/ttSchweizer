@@ -12,6 +12,7 @@ import ttSchweizer
 ttSchweizer.message = flash
 
 app = Flask(__name__)
+startCurrentWorkingDir = os.getcwd()
 app.debug = True
 app.secret_key = 'F1r4o6doM%imi!/Baum'
 
@@ -112,5 +113,4 @@ def favicon():
 
 
 if __name__ == "__main__":
-    startCurrentWorkingDir = os.getcwd()
     app.run()
