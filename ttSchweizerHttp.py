@@ -6,6 +6,7 @@ import os
 
 from ttSchweizer import getRounds, Spieler_Collection, getFileNameOfRound
 from flask import Flask, request, session, render_template, flash
+from urllib.parse import quote_plus
 import flask
 import ttSchweizer
 
@@ -65,7 +66,7 @@ def new():
     os.chdir(startCurrentWorkingDir)
 
     if request.method == 'POST':
-        turnierName = request.form['turniername']
+        turnierName = quote_plus(request.form['turniername'])
         if os.path.exists(turnierName):
             error = "Ein Turnier mit dem Namen {} existiert schon".format(turnierName)
         else:
@@ -108,7 +109,6 @@ def setTurnier(turnier):
 def favicon():
     return flask.send_from_directory(os.path.join(app.root_path, 'static'),
                                      'favicon.ico', mimetype='image/vnd.microsoft.icon')
-print("__name__ = ", __name__)
 
 if __name__ == "flask_app":
     os.chdir('ttSchweizerData')
