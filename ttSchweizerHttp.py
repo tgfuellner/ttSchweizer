@@ -97,7 +97,6 @@ def edit(roundNumber):
     with open(definingFileForRound, "r", encoding='utf-8') as roundFile:
         textToEdit = roundFile.read()
 
-    print(textToEdit)
     return render_template('edit.html', error=error, roundNumber=roundNumber, text=textToEdit)
 
 @app.route("/setTurnier/<turnier>")
