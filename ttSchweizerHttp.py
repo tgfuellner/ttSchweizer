@@ -108,7 +108,11 @@ def setTurnier(turnier):
 def favicon():
     return flask.send_from_directory(os.path.join(app.root_path, 'static'),
                                      'favicon.ico', mimetype='image/vnd.microsoft.icon')
+print("__name__ = ", __name__)
 
+if __name__ == "flask_app":
+    os.chdir('ttSchweizerData')
+    startCurrentWorkingDir = os.getcwd()
 
 if __name__ == "__main__":
     startCurrentWorkingDir = os.getcwd()
