@@ -8,7 +8,7 @@ import collections
 import xml.etree.ElementTree as Et
 
 SPIELER_FileName = "spieler.txt"
-MIN_NumberOfPlayer = 9
+MIN_NumberOfPlayer = 3
 NUMBER_OfRounds = 6
 
 
@@ -380,7 +380,7 @@ class Round:
         self._readResultsOfThisRound(getFileNameOfRound(num))
 
     def getBegegnungenFlat(self):
-        """ retrun ['A','B',...,'X','Y']
+        """ return ['A','B',...,'X','Y']
             Wobei A gegen B und X gegen Y spielt
         """
         return [str(player) for begegnung in self.begegnungen for player in begegnung]
