@@ -9,7 +9,8 @@ import xml.etree.ElementTree as Et
 
 SPIELER_FileName = "spieler.txt"
 MIN_NumberOfPlayer = 3
-NUMBER_OfRounds = 6
+INIT_NUMBER_OfRounds = 6
+NUMBER_OfRounds = INIT_NUMBER_OfRounds
 
 
 class Spieler:
@@ -419,9 +420,10 @@ class Round:
                 message("Wiederhole nochmal Auslosung")
 
         if not begegnungen:
-                message("Auslosung ist nicht mehr möglich")
-                NUMBER_OfRounds = self._numberOfRound
+            message("Auslosung ist nicht mehr möglich")
+            NUMBER_OfRounds = self._numberOfRound
         else:
+            NUMBER_OfRounds = INIT_NUMBER_OfRounds
             with open(getFileNameOfRound(self.getNumberOfNextRound()), 'w', encoding='utf-8') as the_file:
                 self.writeHeader(the_file)
                 for spielerA, spielerB in begegnungen:
