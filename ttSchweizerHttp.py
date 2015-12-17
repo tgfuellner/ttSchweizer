@@ -44,9 +44,9 @@ def main():
 
     begegnungen = '!'.join(rounds[-1].getBegegnungenFlat())
 
-    return render_template('ranking.html', ranking=ranking, runde=currentRound,
+    return render_template('ranking.html', ranking=ranking, runde=currentRound, editRound=currentRound+1,
                            spielerList=rankedSpieler, thereAreFreilose=thereAreFreilose,
-                           begegnungen=begegnungen)
+                           begegnungen=begegnungen, text=getDefiningTextFor(currentRound+1))
 
 
 @app.route("/spielerZettel/<begegnungen>")
@@ -95,10 +95,17 @@ def edit(roundNumber):
             roundFile.write(textToWrite)
         return flask.redirect(flask.url_for('main'))
 
-    with open(definingFileForRound, "r", encoding='utf-8') as roundFile:
-        textToEdit = roundFile.read()
+    return render_template('edit.html', error=error, editRound=roundNumber,
+                           text=getDefiningTextFor(roundNumber))
 
-    return render_template('edit.html', error=error, roundNumber=roundNumber, text=textToEdit)
+def getDefiningTextFor(roundNumber):
+    definingFileForRound = getFileNameOfRound(roundNumber)
+    if not os.path.exists(definingFileForRound):
+        return ""
+    with open(definingFileForRound, "r", encoding='utf-8') as roundFile:
+        text = roundFile.read()
+
+    return text
 
 @app.route("/setTurnier/<turnier>")
 def setTurnier(turnier):
