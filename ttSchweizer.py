@@ -395,6 +395,7 @@ class Round:
         return self._isComplete
 
     def createStartOfNextRound(self):
+        global NUMBER_OfRounds
         if self._numberOfRound == NUMBER_OfRounds:
             return
 
@@ -417,10 +418,14 @@ class Round:
                     break
                 message("Wiederhole nochmal Auslosung")
 
-        with open(getFileNameOfRound(self.getNumberOfNextRound()), 'w', encoding='utf-8') as the_file:
-            self.writeHeader(the_file)
-            for spielerA, spielerB in begegnungen:
-                self.writeBegegnung(the_file, spielerA, spielerB)
+        if not begegnungen:
+                message("Auslosung ist nicht mehr möglich")
+                NUMBER_OfRounds = self._numberOfRound
+        else:
+            with open(getFileNameOfRound(self.getNumberOfNextRound()), 'w', encoding='utf-8') as the_file:
+                self.writeHeader(the_file)
+                for spielerA, spielerB in begegnungen:
+                    self.writeBegegnung(the_file, spielerA, spielerB)
 
     @staticmethod
     def isComment(line):
