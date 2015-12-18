@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
 from ttSchweizer import *
@@ -329,6 +329,9 @@ class TestMatchResult(unittest.TestCase):
         res = MatchResult(3, 1)
         self.assertTrue(res.isWon())
         self.assertFalse(res.turned().isWon())
+        res = MatchResult(3, 456)
+        self.assertFalse(res.isWon())
+        self.assertTrue(res.turned().isWon())
 
 
 if __name__ == '__main__':
