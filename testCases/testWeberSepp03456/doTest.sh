@@ -2,16 +2,12 @@
 
 F=runde-3.txt
 
-../../ttSchweizer.py >/dev/null
-if [ ! -e "$F" ]
+../../ttSchweizer.py >out.txt
+if [ -e "$F" ]
 then
-    echo "$F existiert nicht, sollte aber erstellt werden."
+    echo "$F sollte nicht erstellt werden."
 fi
 
-echo "Bin mir nicht klar was getestet werden soll"
-#if grep -q "Michi <> Mourad" $F
-#then
-#    echo "Die Begegnung Michi <> Mourad darf nicht in $F vorhanden sein"
-#fi
+diff out.txt out.txt-expected
 
-rm $F
+rm out.txt

@@ -75,6 +75,21 @@ class TestBegegnungen(unittest.TestCase):
             p1.addMatch(p2, theMatchResult)
             p2.addMatch(p1, theMatchResult.turned())
 
+    def test_getRankingForWeber03456Bug(self):
+        allPlayers = Spieler_Collection()
+        allPlayersList = []
+        for name, ttr in (
+            ('Heinz',1454),('Michi',1620),('Dann',1600),('Bastion',1580),('Mourad',1500),('Utzi',1450)):
+            allPlayersList.append(allPlayers.spieler(name, ttr))
+
+        Heinz, Michi, Dann, Bastion, Mourad, Utzi = allPlayersList
+        self.createBegegnungen((Michi, Heinz, 3, 0), (Dann, Mourad, 3, 2), (Bastion, Utzi, 3, 0))
+        self.createBegegnungen((Michi, Bastion, 3, 0), (Dann, Heinz, 0, 3), (Mourad, Utzi, 0, 3))
+        groups = GroupeOfPlayersWithSameSieganzahl([[Dann, Bastion, Heinz, Utzi], [Mourad]])
+
+        self.assertEqual(Mourad, Michi.findOponent(groups))
+        self.assertEqual(0, Mourad.getNumberOfSiege())
+
     def setupRound1(self, allPlayers):
         allPlayersList = []
         for name, ttr in (

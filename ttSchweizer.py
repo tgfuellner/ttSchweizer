@@ -474,6 +474,9 @@ class Round:
                     continue
 
                 saetzeSpielerA, saetzeSpielerB = [int(i) for i in satzVerhaeltnis]
+                if saetzeSpielerA > 6 or saetzeSpielerB > 6:
+                    message("%s: Zu viele Sätze in Zeile: %s" % (fileName, line))
+                    continue
 
                 if len(z) == 1:
                     # Nur Satzverhaeltnis keine genaueren Ergebnisse
