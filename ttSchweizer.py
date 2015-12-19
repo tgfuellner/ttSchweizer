@@ -409,7 +409,6 @@ class Round:
             begegnungen = self._collectionOfAllPlayers.getBegegnungen(groups)
             if begegnungen:
                 break
-            message("Wiederhole Auslosung")
 
         if not begegnungen:
             for _ in range(numberOfMaxRetries):
@@ -417,7 +416,6 @@ class Round:
                 begegnungen = self._collectionOfAllPlayers.getBegegnungen(groups)
                 if begegnungen:
                     break
-                message("Wiederhole nochmal Auslosung")
 
         if not begegnungen:
             message("Auslosung ist nicht mehr möglich")
