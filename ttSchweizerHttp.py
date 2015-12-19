@@ -1,16 +1,19 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
-import os
-
-
+import os, re
 from ttSchweizer import getRounds, Spieler_Collection, getFileNameOfRound
 from flask import Flask, request, session, render_template, flash
 from urllib.parse import quote_plus
 import flask
 import ttSchweizer
 
-ttSchweizer.message = flash
+def message(s):
+    # runde-1.txt --> Runde 1
+    s = re.sub('runde-(\d+).txt', lambda m: 'Runde '+m.group(1), s)
+    flash(s)
+
+ttSchweizer.message = message
 
 app = Flask(__name__)
 app.debug = True
