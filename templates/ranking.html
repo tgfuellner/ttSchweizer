@@ -1,7 +1,12 @@
 {% extends "layout.html" %}
 {% block body %}
-<h1>Ergebnisse nach Runde {{ runde }} für
-<a href="{{ url_for('new') }}">Turnier</a>
+<h1>Ergebnisse nach 
+{%- if runde >= 0 %}
+<a href="{{ url_for('edit',roundNumber=runde) }}">Runde {{ runde }}</a>
+{%- else %}
+Runde {{ runde }}
+{%- endif %}
+für <a href="{{ url_for('new') }}">Turnier</a>
 {{ session['turnierName'] }}</h1>
 <table class="hoverTable">
 <tr>

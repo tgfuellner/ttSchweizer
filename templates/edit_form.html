@@ -1,4 +1,8 @@
-<h2>Eingabe für Runde {{ editRound }}</h2>
+<h2>Eingabe für Runde {{ editRound }}
+{%- if editRound > 0 %}
+(<a href="{{ url_for('edit',roundNumber=editRound-1) }}">{{ editRound-1 }}</a>)
+{%- endif %}
+</h2>
 {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
 <form action="{{ url_for('edit', roundNumber=editRound) }}" method=post>
   <dl>
