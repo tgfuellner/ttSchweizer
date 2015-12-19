@@ -24,7 +24,7 @@ def changeToTurnierDirectory(directory):
     os.chdir(directory)
 
 def getExistingTurniere():
-    return [entry for entry in os.listdir(startCurrentWorkingDir) if os.path.isdir(entry)]
+    return sorted([entry for entry in os.listdir(startCurrentWorkingDir) if os.path.isdir(entry)])
 
 @app.route("/")
 def main():
