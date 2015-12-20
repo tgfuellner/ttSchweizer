@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 import os, re
-from ttSchweizer import getRounds, Spieler_Collection, getFileNameOfRound
+from ttSchweizer import getRounds, Spieler_Collection, getFileNameOfRound, resetNumberOfRounds
 from flask import Flask, request, session, render_template, flash
 from urllib.parse import quote_plus
 import flask
@@ -113,6 +113,7 @@ def getDefiningTextFor(roundNumber):
 @app.route("/setTurnier/<turnier>")
 def setTurnier(turnier):
     session['turnierName'] = turnier
+    resetNumberOfRounds()
     return flask.redirect(flask.url_for('main'))
 
 @app.route('/favicon.ico')

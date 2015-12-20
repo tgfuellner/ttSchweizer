@@ -605,6 +605,9 @@ class RoundInit(Round):
             the_file.write('# Folgende Zeile ist ein Beispiel:\n')
             the_file.write('Heinz Musterspieler, 1454\n')
 
+def resetNumberOfRounds():
+    global NUMBER_OfRounds
+    NUMBER_OfRounds = INIT_NUMBER_OfRounds
 
 def getFileNameOfRound(numberOfRound):
     if numberOfRound < 1:
