@@ -223,7 +223,6 @@ class Spieler_Collection(dict):
 
     def __getitem__(self, key):
         if key not in self:
-            message("Der Spieler '%s' ist nicht bekannt!" % key)
             return None
         val = dict.__getitem__(self, key)
         return val
@@ -448,13 +447,21 @@ class Round:
                 if len(x) != 2:
                     message("%s: Die Zeichefolge <> muss genau einmal vorkommen in Zeile: %s" % (fileName, line))
                     continue
+
+                wrongPLayer = "{}: Der Spieler '{}' ist in Runde 0 nicht eingetragen."
                 spielerA = self._collectionOfAllPlayers[x[0].strip()]
+                if not spielerA:
+                    message(wrongPLayer.format(fileName, x[0].strip()))
+                    continue
 
                 y = x[1].split('!')
                 if len(y) != 2:
                     message("%s: Das Zeichen ! muss genau einmal vorkommen in Zeile: %s" % (fileName, line))
                     continue
                 spielerB = self._collectionOfAllPlayers[y[0].strip()]
+                if not spielerB:
+                    message(wrongPLayer.format(fileName, y[0].strip()))
+                    continue
 
                 if isinstance(spielerB, FreiLos):
                     spielerA.addFreilos(spielerB)
