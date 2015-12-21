@@ -91,6 +91,15 @@ class Spieler:
             return '-'
         return ''
 
+    def getMatrixElementTooltip(self, other):
+        if self == other:
+            return ''
+        if self.hasWonAgainst(other):
+            return '{} - {}'.format(self,other)
+        if other.hasWonAgainst(self):
+            return '{} - {}'.format(self,other)
+        return ''
+
     def addMatch(self, otherSpieler, theMatchResult):
         self.ergebnisse[otherSpieler] = theMatchResult
 
