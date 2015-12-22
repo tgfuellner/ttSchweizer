@@ -28,7 +28,9 @@ für <a href="{{ url_for('new') }}">Turnier</a>
  <td>{{ spieler }}</td>
 {%- for player in spielerList %}
  <td class="tooltips">{{ spieler.getMatrixElement(player) }}
- {%- if spieler.getMatrixElementTooltip(player) %}<span>{{ spieler.getMatrixElementTooltip(player) }}</span>{%- endif %}</td>
+ {%- if spieler.getMatrixElementTooltipNames(player) %}<span>{{
+      spieler.getMatrixElementTooltipNames(player) }}<br/>{{
+      spieler.getMatrixElementTooltipResult(player) }}</span>{%- endif %}</td>
 {%- endfor %}
  <td align="right">{{ siege }}</td>
  <td align="right">{{ buchz }}</td>

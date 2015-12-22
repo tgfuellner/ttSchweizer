@@ -91,13 +91,20 @@ class Spieler:
             return '-'
         return ''
 
-    def getMatrixElementTooltip(self, other):
+    def getMatrixElementTooltipNames(self, other):
         if self == other:
             return ''
         if self.hasWonAgainst(other):
             return '{} - {}'.format(self,other)
         if other.hasWonAgainst(self):
             return '{} - {}'.format(self,other)
+        return ''
+
+    def getMatrixElementTooltipResult(self, other):
+        if self == other:
+            return ''
+        if self.hasPlayedAgainst(other):
+            return str(self.ergebnisse[other])
         return ''
 
     def addMatch(self, otherSpieler, theMatchResult):
@@ -362,6 +369,9 @@ class MatchResult:
 
     def __repr__(self):
         return "%d:%d %s" % (self.gamesWonByPlayerA, self.gamesWonByPlayerB, self.gamePoints)
+
+    def __str__(self):
+        return self.__repr__()
 
     def turned(self):
         turnedGamePoints = []
