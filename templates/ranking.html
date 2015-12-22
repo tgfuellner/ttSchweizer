@@ -30,7 +30,11 @@ für <a href="{{ url_for('new') }}">Turnier</a>
  <td class="tooltips">{{ spieler.getMatrixElement(player) }}
  {%- if spieler.getMatrixElementTooltipNames(player) %}<span>{{
       spieler.getMatrixElementTooltipNames(player) }}<br/>{{
-      spieler.getMatrixElementTooltipResult(player) }}</span>{%- endif %}</td>
+      spieler.getMatrixElementTooltipResult(player)
+      }}{%- if spieler.willPlayAgainst(player) %}<br/>
+<form action="{{ url_for('editSingle', roundNumber=editRound, a=spieler, b=player) }}" method=post>
+    <input type="text" name="result" cols="30"</input>
+</form> {%- endif %}</span>{%- endif %}</td>
 {%- endfor %}
  <td align="right">{{ siege }}</td>
  <td align="right">{{ buchz }}</td>

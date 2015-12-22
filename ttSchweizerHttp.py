@@ -101,6 +101,19 @@ def edit(roundNumber):
     return render_template('edit.html', error=error, editRound=roundNumber,
                            text=getDefiningTextFor(roundNumber))
 
+@app.route("/editSingle/<int:roundNumber>/<a>/<b>", methods=['POST'])
+def editSingle(roundNumber,a,b):
+    definingFileForRound = getFileNameOfRound(roundNumber)
+    wholeRoundDef = getDefiningTextFor(roundNumber)
+    wholeRoundDef = re.sub('{a}\s*<>\s*{b}\s*!'.format(a=a, b=b),
+                            '{} <> {} ! {}'.format(a, b, request.form['result']),
+                            wholeRoundDef)
+    print(wholeRoundDef)
+    with open(definingFileForRound, "w", encoding='utf-8') as roundFile:
+        roundFile.write(wholeRoundDef)
+
+    return flask.redirect(flask.url_for('main'))
+
 def getDefiningTextFor(roundNumber):
     definingFileForRound = getFileNameOfRound(roundNumber)
     if not os.path.exists(definingFileForRound):
