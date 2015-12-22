@@ -497,48 +497,55 @@ class Round:
                     spielerA.addFreilos(spielerB)
                     continue
 
-                z = y[1].strip().split()
-                if not z:
-                    message("%s: Noch kein Ergebnis für: %s" % (fileName, line))
+                theMatchResult = self.parseMatchResult(y[1], fileName, line)
+                if not theMatchResult:
                     self.begegnungen.append((spielerA, spielerB))
                     continue
 
-                satzVerhaeltnis = z[0].split(':')
-                if len(satzVerhaeltnis) != 2:
-                    message("%s: Das Satzverhältnis ist nicht korrekt in Zeile: %s" % (fileName, line))
-                    continue
-
-                saetzeSpielerA, saetzeSpielerB = [int(i) for i in satzVerhaeltnis]
-                if saetzeSpielerA > 6 or saetzeSpielerB > 6:
-                    message("%s: Zu viele Sätze in Zeile: %s" % (fileName, line))
-                    continue
-
-                if len(z) == 1:
-                    # Nur Satzverhaeltnis keine genaueren Ergebnisse
-                    theMatchResult = MatchResult(saetzeSpielerA, saetzeSpielerB)
-                    if theMatchResult.isUndecided():
-                        message("%s: Spiel ist nicht entschieden!: %s" % (fileName, line))
-                        continue
-                    spielerA.addMatch(spielerB, theMatchResult)
-                    spielerB.addMatch(spielerA, theMatchResult.turned())
-                    #message("%s: Vorsicht, Satzergebnisse fehlen in Zeile: %s" % (fileName, line))
-                    continue
-
-                satzErgebnisse = z[1:]  # Vorsicht nicht nach int wandeln! -0 muss bleiben
-                if len(satzErgebnisse) != saetzeSpielerA + saetzeSpielerB:
-                    message("%s: Sätze sind nicht komplett in Zeile: %s" % (fileName, line))
-                    continue
-
-                if saetzeSpielerB != len([s for s in satzErgebnisse if '-' in s]):
-                    message("%s: Satzverhältnis und Sätze passen nicht zusammen in Zeile: %s" % (fileName, line))
-                    continue
-
-                theMatchResult = MatchResult(saetzeSpielerA, saetzeSpielerB, satzErgebnisse)
                 spielerA.addMatch(spielerB, theMatchResult)
                 spielerB.addMatch(spielerA, theMatchResult.turned())
 
         if self._collectionOfAllPlayers.allHavePlayed(self._numberOfRound):
             self.setComplete()
+
+    @staticmethod
+    def parseMatchResult(inString, fileName, line):
+        """ return a MatchResult instance """
+        z = inString.strip().split()
+        if not z:
+            message("%s: Noch kein Ergebnis für: %s" % (fileName, line))
+            return None
+
+        
+        satzVerhaeltnis = z[0].strip(':').split(':')
+        if len(satzVerhaeltnis) != 2:
+            message("%s: Das Satzverhältnis ist nicht korrekt in Zeile: %s" % (fileName, line))
+            return None
+
+        saetzeSpielerA, saetzeSpielerB = [int(i) for i in satzVerhaeltnis]
+        if saetzeSpielerA > 6 or saetzeSpielerB > 6:
+            message("%s: Zu viele Sätze in Zeile: %s" % (fileName, line))
+            return None
+
+        if len(z) == 1:
+            # Nur Satzverhaeltnis keine genaueren Ergebnisse
+            theMatchResult = MatchResult(saetzeSpielerA, saetzeSpielerB)
+            if theMatchResult.isUndecided():
+                message("%s: Spiel ist nicht entschieden!: %s" % (fileName, line))
+                return None
+            #message("%s: Vorsicht, Satzergebnisse fehlen in Zeile: %s" % (fileName, line))
+            return theMatchResult
+
+        satzErgebnisse = z[1:]  # Vorsicht nicht nach int wandeln! -0 muss bleiben
+        if len(satzErgebnisse) != saetzeSpielerA + saetzeSpielerB:
+            message("%s: Sätze sind nicht komplett in Zeile: %s" % (fileName, line))
+            return None
+
+        if saetzeSpielerB != len([s for s in satzErgebnisse if '-' in s]):
+            message("%s: Satzverhältnis und Sätze passen nicht zusammen in Zeile: %s" % (fileName, line))
+            return None
+
+        return MatchResult(saetzeSpielerA, saetzeSpielerB, satzErgebnisse)
 
     def writeHeader(self, fd):
         fd.write('# Runde %d\n#\n' % self.getNumberOfNextRound())
