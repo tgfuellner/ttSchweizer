@@ -85,6 +85,13 @@ class Spieler:
             return match.isWon()
         return False
 
+    def willPlayAgainst(self, other):
+        for begegnung in currentRound.begegnungen:
+            if self in begegnung and other in begegnung:
+                return True
+
+        return False
+
     def getMatrixElement(self, other):
         if self == other:
             return 'X'
@@ -92,14 +99,14 @@ class Spieler:
             return '+'
         if other.hasWonAgainst(self):
             return '-'
+        if self.willPlayAgainst(other):
+            return '?'
         return ''
 
     def getMatrixElementTooltipNames(self, other):
         if self == other:
             return ''
-        if self.hasWonAgainst(other):
-            return '{} - {}'.format(self,other)
-        if other.hasWonAgainst(self):
+        if self.hasPlayedAgainst(other) or self.willPlayAgainst(other):
             return '{} - {}'.format(self,other)
         return ''
 
