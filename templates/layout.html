@@ -48,11 +48,11 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
-{% with messages = get_flashed_messages() %}
+{% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
 <div class="info message">
-    {%- for message in messages %}
-		<p>{{ message }}</p>
+    {%- for category, message in messages %}
+		<p class="{{ category }}">{{ message }}</p>
     {%- endfor %}
     {% if begegnungen %}
     <hr/>

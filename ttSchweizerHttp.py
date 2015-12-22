@@ -8,10 +8,10 @@ from urllib.parse import quote_plus
 import flask
 import ttSchweizer
 
-def message(s):
+def message(s, type='none'):
     # runde-1.txt --> Runde 1
     s = re.sub('runde-(\d+).txt', lambda m: 'Runde '+m.group(1), s)
-    flash(s)
+    flash(s, type)
 
 ttSchweizer.message = message
 
@@ -105,10 +105,9 @@ def edit(roundNumber):
 def editSingle(roundNumber,a,b):
     definingFileForRound = getFileNameOfRound(roundNumber)
     wholeRoundDef = getDefiningTextFor(roundNumber)
-    wholeRoundDef = re.sub('{a}\s*<>\s*{b}\s*!'.format(a=a, b=b),
+    wholeRoundDef = re.sub('{a}\s*<>\s*{b}\s*!.*'.format(a=a, b=b),
                             '{} <> {} ! {}'.format(a, b, request.form['result']),
                             wholeRoundDef)
-    print(wholeRoundDef)
     with open(definingFileForRound, "w", encoding='utf-8') as roundFile:
         roundFile.write(wholeRoundDef)
 

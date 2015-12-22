@@ -519,30 +519,31 @@ class Round:
         
         satzVerhaeltnis = z[0].strip(':').split(':')
         if len(satzVerhaeltnis) != 2:
-            message("%s: Das Satzverhältnis ist nicht korrekt in Zeile: %s" % (fileName, line))
+            message("%s: Das Satzverhältnis ist nicht korrekt in Zeile: %s" % (fileName, line), 'error')
             return None
 
         saetzeSpielerA, saetzeSpielerB = [int(i) for i in satzVerhaeltnis]
         if saetzeSpielerA > 6 or saetzeSpielerB > 6:
-            message("%s: Zu viele Sätze in Zeile: %s" % (fileName, line))
+            message("%s: Zu viele Sätze in Zeile: %s" % (fileName, line), 'error')
             return None
 
         if len(z) == 1:
             # Nur Satzverhaeltnis keine genaueren Ergebnisse
             theMatchResult = MatchResult(saetzeSpielerA, saetzeSpielerB)
             if theMatchResult.isUndecided():
-                message("%s: Spiel ist nicht entschieden!: %s" % (fileName, line))
+                message("%s: Spiel ist nicht entschieden!: %s" % (fileName, line), 'error')
                 return None
             #message("%s: Vorsicht, Satzergebnisse fehlen in Zeile: %s" % (fileName, line))
             return theMatchResult
 
         satzErgebnisse = z[1:]  # Vorsicht nicht nach int wandeln! -0 muss bleiben
         if len(satzErgebnisse) != saetzeSpielerA + saetzeSpielerB:
-            message("%s: Sätze sind nicht komplett in Zeile: %s" % (fileName, line))
+            message("%s: Sätze sind nicht komplett in Zeile: %s" % (fileName, line), 'error')
             return None
 
         if saetzeSpielerB != len([s for s in satzErgebnisse if '-' in s]):
-            message("%s: Satzverhältnis und Sätze passen nicht zusammen in Zeile: %s" % (fileName, line))
+            message("%s: Satzverhältnis und Sätze passen nicht zusammen in Zeile: %s" % (fileName, line),
+                    'error')
             return None
 
         return MatchResult(saetzeSpielerA, saetzeSpielerB, satzErgebnisse)
@@ -676,7 +677,7 @@ def getRounds(allPlayers):
     return roundList
 
 
-def message(s):
+def message(s, type='info'):
     print(s)
 
 
