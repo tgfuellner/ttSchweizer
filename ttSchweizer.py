@@ -381,7 +381,8 @@ class MatchResult:
         return "%d:%d %s" % (self.gamesWonByPlayerA, self.gamesWonByPlayerB, self.gamePoints)
 
     def __str__(self):
-        return self.__repr__()
+        return "%d:%d %s" % (self.gamesWonByPlayerA, self.gamesWonByPlayerB,
+            ', '.join(self.gamePoints))
 
     def turned(self):
         turnedGamePoints = []
