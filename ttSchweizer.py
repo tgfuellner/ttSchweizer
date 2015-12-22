@@ -9,8 +9,11 @@ import xml.etree.ElementTree as Et
 
 SPIELER_FileName = "spieler.txt"
 MIN_NumberOfPlayer = 3
-INIT_NUMBER_OfRounds = 6
-NUMBER_OfRounds = INIT_NUMBER_OfRounds
+INIT_NUMBER_OfRounds = 10
+
+
+number_OfRounds = INIT_NUMBER_OfRounds
+currentRound = None
 
 
 class Spieler:
@@ -414,8 +417,8 @@ class Round:
         return self._isComplete
 
     def createStartOfNextRound(self):
-        global NUMBER_OfRounds
-        if self._numberOfRound == NUMBER_OfRounds:
+        global number_OfRounds
+        if self._numberOfRound == number_OfRounds:
             return
 
         message("Auslosung von Runde %d" % self.getNumberOfNextRound())
@@ -437,9 +440,9 @@ class Round:
 
         if not begegnungen:
             message("Auslosung ist nicht mehr möglich")
-            NUMBER_OfRounds = self._numberOfRound
+            number_OfRounds = self._numberOfRound
         else:
-            NUMBER_OfRounds = INIT_NUMBER_OfRounds
+            number_OfRounds = INIT_NUMBER_OfRounds
             with open(getFileNameOfRound(self.getNumberOfNextRound()), 'w', encoding='utf-8') as the_file:
                 self.writeHeader(the_file)
                 for spielerA, spielerB in begegnungen:
@@ -632,8 +635,8 @@ class RoundInit(Round):
             the_file.write('Heinz Musterspieler, 1454\n')
 
 def resetNumberOfRounds():
-    global NUMBER_OfRounds
-    NUMBER_OfRounds = INIT_NUMBER_OfRounds
+    global number_OfRounds
+    number_OfRounds = INIT_NUMBER_OfRounds
 
 def getFileNameOfRound(numberOfRound):
     if numberOfRound < 1:
@@ -647,11 +650,13 @@ def getRounds(allPlayers):
         :param allPlayers: alle Spieler
         :return: Liste aller Runden
     """
+    global currentRound
     roundList = [RoundInit(allPlayers)]
-    for i in range(1, 1 + NUMBER_OfRounds):
+    for i in range(1, 1 + number_OfRounds):
         if os.path.isfile(getFileNameOfRound(i)):
             # noinspection PyTypeChecker
-            roundList.append(Round(i, allPlayers))
+            currentRound = Round(i, allPlayers)
+            roundList.append(currentRound)
 
     return roundList
 
