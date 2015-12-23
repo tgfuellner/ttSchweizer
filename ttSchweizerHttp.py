@@ -8,10 +8,12 @@ from urllib.parse import quote_plus
 import flask
 import ttSchweizer
 
+
 def message(s, type='none'):
     # runde-1.txt --> Runde 1
-    s = re.sub('runde-(\d+).txt', lambda m: 'Runde '+m.group(1), s)
+    s = re.sub('runde-(\d+).txt', lambda m: 'Runde ' + m.group(1), s)
     flash(s, type)
+
 
 ttSchweizer.message = message
 
@@ -19,12 +21,15 @@ app = Flask(__name__)
 app.debug = True
 app.secret_key = 'F1r4o6doM%imi!/Baum'
 
+
 def changeToTurnierDirectory(directory):
     os.chdir(startCurrentWorkingDir)
     os.chdir(directory)
 
+
 def getExistingTurniere():
     return sorted([entry for entry in os.listdir(startCurrentWorkingDir) if os.path.isdir(entry)])
+
 
 @app.route("/")
 def main():
@@ -47,9 +52,9 @@ def main():
 
     begegnungen = '!'.join(rounds[-1].getBegegnungenFlat())
 
-    return render_template('ranking.html', ranking=ranking, runde=currentRound, editRound=currentRound+1,
+    return render_template('ranking.html', ranking=ranking, runde=currentRound, editRound=currentRound + 1,
                            spielerList=rankedSpieler, thereAreFreilose=thereAreFreilose,
-                           begegnungen=begegnungen, text=getDefiningTextFor(currentRound+1))
+                           begegnungen=begegnungen, text=getDefiningTextFor(currentRound + 1))
 
 
 @app.route("/spielerZettel/<begegnungen>")
@@ -76,13 +81,14 @@ def new():
             os.mkdir(turnierName, 0o755)
             os.chdir(turnierName)
             spieler = Spieler_Collection()
-            rounds = getRounds(spieler)
+            getRounds(spieler)
             flask.get_flashed_messages()
             session['turnierName'] = turnierName
             flash('{} wurde gestartet'.format(turnierName))
             return flask.redirect(flask.url_for('main'))
 
     return render_template('new.html', error=error, existingTurniere=getExistingTurniere())
+
 
 @app.route("/edit/<int:roundNumber>", methods=['GET', 'POST'])
 def edit(roundNumber):
@@ -93,28 +99,39 @@ def edit(roundNumber):
         return flask.redirect(flask.url_for('main'))
 
     if request.method == 'POST':
-        textToWrite = request.form['text']
-        with open(definingFileForRound, "w", encoding='utf-8') as roundFile:
-            roundFile.write(textToWrite)
+        if request.form['action'] == 'Löschen':
+            os.remove(definingFileForRound)
+            spieler = Spieler_Collection()
+            rounds = getRounds(spieler)
+            if rounds[-1].isComplete():
+                rounds[-1].createStartOfNextRound()
+
+        else:
+            textToWrite = request.form['text']
+            with open(definingFileForRound, "w", encoding='utf-8') as roundFile:
+                roundFile.write(textToWrite)
+
         return flask.redirect(flask.url_for('main'))
 
     return render_template('edit.html', error=error, editRound=roundNumber,
                            text=getDefiningTextFor(roundNumber))
 
+
 @app.route("/editSingle/<int:roundNumber>/<a>/<b>", methods=['POST'])
-def editSingle(roundNumber,a,b):
+def editSingle(roundNumber, a, b):
     result = '{}:{}  {} {} {} {} {}'.format(request.form['setWon'], request.form['setLost'],
-        request.form['set1'], request.form['set2'], request.form['set3'],
-        request.form['set4'], request.form['set5'])
+                                            request.form['set1'], request.form['set2'], request.form['set3'],
+                                            request.form['set4'], request.form['set5'])
     definingFileForRound = getFileNameOfRound(roundNumber)
     wholeRoundDef = getDefiningTextFor(roundNumber)
     wholeRoundDef = re.sub('{a}\s*<>\s*{b}\s*!.*'.format(a=a, b=b),
-                            '{} <> {} ! {}'.format(a, b, result),
-                            wholeRoundDef)
+                           '{} <> {} ! {}'.format(a, b, result),
+                           wholeRoundDef)
     with open(definingFileForRound, "w", encoding='utf-8') as roundFile:
         roundFile.write(wholeRoundDef)
 
     return flask.redirect(flask.url_for('main'))
+
 
 def getDefiningTextFor(roundNumber):
     definingFileForRound = getFileNameOfRound(roundNumber)
@@ -125,16 +142,19 @@ def getDefiningTextFor(roundNumber):
 
     return text
 
+
 @app.route("/setTurnier/<turnier>")
 def setTurnier(turnier):
     session['turnierName'] = turnier
     resetNumberOfRounds()
     return flask.redirect(flask.url_for('main'))
 
+
 @app.route('/favicon.ico')
 def favicon():
     return flask.send_from_directory(os.path.join(app.root_path, 'static'),
                                      'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
 
 if __name__ == "flask_app":
     os.chdir('ttSchweizerData')

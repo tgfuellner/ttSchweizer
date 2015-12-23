@@ -11,7 +11,6 @@ SPIELER_FileName = "spieler.txt"
 MIN_NumberOfPlayer = 3
 INIT_NUMBER_OfRounds = 10
 
-
 number_OfRounds = INIT_NUMBER_OfRounds
 currentRound = None
 
@@ -107,7 +106,7 @@ class Spieler:
         if self == other:
             return ''
         if self.hasPlayedAgainst(other) or self.willPlayAgainst(other):
-            return '{} - {}'.format(self,other)
+            return '{} - {}'.format(self, other)
         return ''
 
     def getMatrixElementTooltipResult(self, other):
@@ -319,7 +318,7 @@ class Spieler_Collection(dict):
     def getNumberOfRealPlayers(self):
         """ Freilos wird nicht mitgezählt! """
         if "Freilos" in self:
-            return len(self)-1
+            return len(self) - 1
         return len(self)
 
     def getGroupBySiege(self):
@@ -382,7 +381,7 @@ class MatchResult:
 
     def __str__(self):
         return "%d:%d %s" % (self.gamesWonByPlayerA, self.gamesWonByPlayerB,
-            ', '.join(self.gamePoints))
+                             ', '.join(self.gamePoints))
 
     def turned(self):
         turnedGamePoints = []
@@ -510,13 +509,16 @@ class Round:
 
     @staticmethod
     def parseMatchResult(inString, fileName, line):
-        """ return a MatchResult instance """
+        """ return a MatchResult instance
+        :param line: whole pure row in file, only used for message
+        :param fileName: Name of file, only used for message
+        :param inString: this string is pared
+        """
         z = inString.strip().split()
         if not z:
             message("%s: Noch kein Ergebnis für: %s" % (fileName, line))
             return None
 
-        
         satzVerhaeltnis = z[0].strip(':').split(':')
         if len(satzVerhaeltnis) != 2:
             message("%s: Das Satzverhältnis ist nicht korrekt in Zeile: %s" % (fileName, line), 'error')
@@ -533,7 +535,7 @@ class Round:
             if theMatchResult.isUndecided():
                 message("%s: Spiel ist nicht entschieden!: %s" % (fileName, line), 'error')
                 return None
-            #message("%s: Vorsicht, Satzergebnisse fehlen in Zeile: %s" % (fileName, line))
+            # message("%s: Vorsicht, Satzergebnisse fehlen in Zeile: %s" % (fileName, line))
             return theMatchResult
 
         satzErgebnisse = z[1:]  # Vorsicht nicht nach int wandeln! -0 muss bleiben
@@ -650,9 +652,11 @@ class RoundInit(Round):
             the_file.write('# Folgende Zeile ist ein Beispiel:\n')
             the_file.write('Heinz Musterspieler, 1454\n')
 
+
 def resetNumberOfRounds():
     global number_OfRounds
     number_OfRounds = INIT_NUMBER_OfRounds
+
 
 def getFileNameOfRound(numberOfRound):
     if numberOfRound < 1:
@@ -670,14 +674,16 @@ def getRounds(allPlayers):
     roundList = [RoundInit(allPlayers)]
     for i in range(1, 1 + number_OfRounds):
         if os.path.isfile(getFileNameOfRound(i)):
-            # noinspection PyTypeChecker
             currentRound = Round(i, allPlayers)
+            # noinspection PyTypeChecker
             roundList.append(currentRound)
+        else:
+            break
 
     return roundList
 
 
-def message(s, type='info'):
+def message(s, category='info'):
     print(s)
 
 
