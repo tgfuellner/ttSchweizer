@@ -1,0 +1,10 @@
+# Runde 5
+#
+# Ergebnisse bitte wie folgt eingeben (Spiel  Satz1, Satz2, Satz3 ...):
+# Heinz Musterspieler <> Klara Platzhalter ! 3:1 8 -4 12 3
+Josef Moser <> Thomas Gfüllner ! 2:3      
+Stefan Hofinger <> Hermann Zacherl ! 0:3      
+Tanja Pointner <> Helmut Brandl ! 0:3      
+Stefan Stöckl <> Stefan Frank ! 3:0      
+Stefan Brandlhuber <> Thomas Alsters ! 1:3      
+Christina Schleinkofer <> Paul Rott ! 2:3      

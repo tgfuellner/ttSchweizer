@@ -1,0 +1,10 @@
+# Runde 4
+#
+# Ergebnisse bitte wie folgt eingeben (Spiel  Satz1, Satz2, Satz3 ...):
+# Heinz Musterspieler <> Klara Platzhalter ! 3:1 8 -4 12 3
+Josef Moser <> Paul Rott ! 3:0      
+Thomas Gfüllner <> Stefan Stöckl ! 3:0      
+Hermann Zacherl <> Helmut Brandl ! 3:0      
+Stefan Hofinger <> Stefan Brandlhuber ! 3:2      
+Thomas Alsters <> Tanja Pointner ! 3:0      
+Stefan Frank <> Christina Schleinkofer ! 0:3      

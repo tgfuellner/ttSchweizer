@@ -1,0 +1,10 @@
+# Runde 6
+#
+# Ergebnisse bitte wie folgt eingeben (Spiel  Satz1, Satz2, Satz3 ...):
+# Heinz Musterspieler <> Klara Platzhalter ! 3:1 8 -4 12 3
+Thomas Gfüllner <> Thomas Alsters ! 3:1      
+ Tanja Pointner <> Stefan Frank ! 1:0      
+Josef Moser <> Hermann Zacherl ! 3:0      
+Stefan Brandlhuber <> Christina Schleinkofer ! 1:0      
+Stefan Stöckl <> Stefan Hofinger ! 1:0      
+Helmut Brandl <> Paul Rott ! 1:0      

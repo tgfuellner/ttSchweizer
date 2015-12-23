@@ -1,0 +1,10 @@
+# Runde 7
+#
+# Ergebnisse bitte wie folgt eingeben (Spiel  Satz1, Satz2, Satz3 ...):
+# Heinz Musterspieler <> Klara Platzhalter ! 3:1 8 -4 12 3
+Thomas Gfüllner <> Hermann Zacherl ! 1:3      
+Josef Moser <> Thomas Alsters ! 3:0      
+Stefan Brandlhuber <> Stefan Frank ! 1:0      
+Tanja Pointner <> Christina Schleinkofer ! 0:1      
+Stefan Stöckl <> Helmut Brandl ! 1:0      
+Stefan Hofinger <> Paul Rott ! 1:0      

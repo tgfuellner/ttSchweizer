@@ -1,0 +1,12 @@
+# Runde 2
+#
+# Ergebnisse bitte wie folgt eingeben (Spiel  Satz1, Satz2, Satz3 ...):
+# Heinz Musterspieler <> Klara Platzhalter ! 3:1 8 -4 12 3
+Josef Moser <> Stefan Stöckl ! 3:0
+Thomas Alsters <> Helmut Brandl ! 3:1      
+Hermann Zacherl <> Stefan Brandlhuber ! 3:0      
+
+Stefan Hofinger <> Tanja Pointner ! 3:0      
+Christina Schleinkofer <>  Thomas Gfüllner ! 0:3
+ 
+Stefan Frank <> Paul Rott ! 0:3      
