@@ -91,6 +91,13 @@ class Spieler:
 
         return False
 
+    def playedAgainstInCurrentRound(self, other):
+        for a, b in currentRound.finishedBegegnungen:
+            if self is a and other is b:
+                return True
+
+        return False
+
     def getMatrixElement(self, other):
         if self == other:
             return 'X'
@@ -105,6 +112,8 @@ class Spieler:
     def getMatrixElementStyle(self, other):
         if self.willPlayAgainst(other):
             return 'awaited'
+        if self.playedAgainstInCurrentRound(other):
+            return 'justPlayed'
         return ''
 
     def getMatrixElementTooltipNames(self, other):
@@ -411,6 +420,7 @@ class Round:
         self._numberOfRound = num
         self._collectionOfAllPlayers = allPlayers
         self.unfinishedBegegnungen = []
+        self.finishedBegegnungen = []
         self._readResultsOfThisRound(getFileNameOfRound(num))
 
     def __repr__(self):
@@ -508,6 +518,8 @@ class Round:
                 if not theMatchResult:
                     self.unfinishedBegegnungen.append((spielerA, spielerB))
                     continue
+
+                self.finishedBegegnungen.append((spielerA, spielerB))
 
                 spielerA.addMatch(spielerB, theMatchResult)
                 spielerB.addMatch(spielerA, theMatchResult.turned())

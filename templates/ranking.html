@@ -1,12 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
 <h1>
-{%- if runde >= 0 %}
-<a href="{{ url_for('edit',roundNumber=runde) }}">Runde {{ runde }}</a>
-{%- else %}
-Runde {{ runde }}
-{%- endif %}
-für Turnier {{ session['turnierName'] }}</h1>
+Runde {{ runde }} für Turnier {{ session['turnierName'] }}</h1>
 <table class="hoverTable">
 <tr>
  <th><div class="verticalText">Platz</div></th>
@@ -30,7 +25,7 @@ für Turnier {{ session['turnierName'] }}</h1>
  {%- if spieler.getMatrixElementTooltipNames(player) %}<span>{{
       spieler.getMatrixElementTooltipNames(player) }}<br/>{{
       spieler.getMatrixElementTooltipResult(player)
-      }}{%- if spieler.willPlayAgainst(player) %}<br/>
+      }}{%- if spieler.willPlayAgainst(player) or spieler.playedAgainstInCurrentRound(player) %}<br/>
 <form action="{{ url_for('editSingle', roundNumber=editRound, a=spieler, b=player) }}" method=post>
     <input type="number" name="setWon" min="0"/>:
     <input type="number" name="setLost" min="0"/>&nbsp;

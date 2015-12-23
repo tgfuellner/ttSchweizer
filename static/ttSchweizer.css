@@ -233,6 +233,10 @@ td.awaited {
   background-color: #FF0000;
 }
 
+td.justPlayed {
+  color: #FF0000;
+}
+
 
 td.tooltips:hover span {
   display: block;
