@@ -477,10 +477,10 @@ class Round:
                     message("%s: Die Zeichefolge <> muss genau einmal vorkommen in Zeile: %s" % (fileName, line))
                     continue
 
-                wrongPLayer = "{}: Der Spieler '{}' ist in Runde 0 nicht eingetragen."
+                wrongPLayer = "{}: Der Spieler '{}' ist in Runde 0 nicht eingetragen in Zeile {}"
                 spielerA = self._collectionOfAllPlayers[x[0].strip()]
                 if not spielerA:
-                    message(wrongPLayer.format(fileName, x[0].strip()))
+                    message(wrongPLayer.format(fileName, x[0].strip(), line))
                     continue
 
                 y = x[1].split('!')
@@ -489,7 +489,7 @@ class Round:
                     continue
                 spielerB = self._collectionOfAllPlayers[y[0].strip()]
                 if not spielerB:
-                    message(wrongPLayer.format(fileName, y[0].strip()))
+                    message(wrongPLayer.format(fileName, y[0].strip(), line))
                     continue
 
                 if isinstance(spielerB, FreiLos):
