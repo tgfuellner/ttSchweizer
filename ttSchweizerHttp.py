@@ -13,6 +13,9 @@ from ttSchweizer import getRounds, Spieler_Collection, getFileNameOfRound, reset
 
 
 def message(s, category='none'):
+    if 'Noch kein Ergebnis für' in s:
+        return
+
     # runde-1.txt --> Runde 1
     s = re.sub('runde-(\d+).txt', lambda m: 'Runde ' + m.group(1), s)
     flash(s, category)
