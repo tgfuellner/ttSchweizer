@@ -1,18 +1,21 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
-import os, re
-from ttSchweizer import getRounds, Spieler_Collection, getFileNameOfRound, resetNumberOfRounds
-from flask import Flask, request, session, render_template, flash
+import os
+import re
 from urllib.parse import quote_plus
+
 import flask
+from flask import Flask, request, session, render_template, flash
+
 import ttSchweizer
+from ttSchweizer import getRounds, Spieler_Collection, getFileNameOfRound, resetNumberOfRounds
 
 
-def message(s, type='none'):
+def message(s, category='none'):
     # runde-1.txt --> Runde 1
     s = re.sub('runde-(\d+).txt', lambda m: 'Runde ' + m.group(1), s)
-    flash(s, type)
+    flash(s, category)
 
 
 ttSchweizer.message = message
@@ -50,7 +53,7 @@ def main():
         rounds[-1].createStartOfNextRound()
         currentRound += 1
 
-    begegnungen = '!'.join(rounds[-1].getBegegnungenFlat())
+    begegnungen = '!'.join(rounds[-1].getUnfinishedBegegnungenFlat())
 
     if 'expertMode' in session and session['expertMode']:
         textToEdit = getDefiningTextFor(currentRound + 1)
@@ -159,8 +162,9 @@ def setTurnier(turnier):
     session['turnierName'] = turnier
     session['exportMode'] = False
     resetNumberOfRounds()
-    refreshModel();
+    refreshModel()
     return flask.redirect(flask.url_for('main'))
+
 
 @app.route('/expertMode/<int:mode>')
 def expertMode(mode):

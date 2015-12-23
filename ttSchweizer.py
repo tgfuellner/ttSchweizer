@@ -85,7 +85,7 @@ class Spieler:
         return False
 
     def willPlayAgainst(self, other):
-        for a, b in currentRound.begegnungen:
+        for a, b in currentRound.unfinishedBegegnungen:
             if self is a and other is b:
                 return True
 
@@ -410,14 +410,14 @@ class Round:
         self._isComplete = False
         self._numberOfRound = num
         self._collectionOfAllPlayers = allPlayers
-        self.begegnungen = []
+        self.unfinishedBegegnungen = []
         self._readResultsOfThisRound(getFileNameOfRound(num))
 
-    def getBegegnungenFlat(self):
+    def getUnfinishedBegegnungenFlat(self):
         """ return ['A','B',...,'X','Y']
             Wobei A gegen B und X gegen Y spielt
         """
-        return [str(player) for begegnung in self.begegnungen for player in begegnung]
+        return [str(player) for begegnung in self.unfinishedBegegnungen for player in begegnung]
 
     def getNumberOfNextRound(self):
         return self._numberOfRound + 1
@@ -503,7 +503,7 @@ class Round:
 
                 theMatchResult = self.parseMatchResult(y[1], fileName, line)
                 if not theMatchResult:
-                    self.begegnungen.append((spielerA, spielerB))
+                    self.unfinishedBegegnungen.append((spielerA, spielerB))
                     continue
 
                 spielerA.addMatch(spielerB, theMatchResult)
@@ -633,7 +633,7 @@ class RoundInit(Round):
 
         return allPlayers.getTtrSortedList()
 
-    def getBegegnungenFlat(self):
+    def getUnfinishedBegegnungenFlat(self):
         return []
 
     def getNumberOfNextRound(self):
