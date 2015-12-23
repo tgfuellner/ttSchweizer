@@ -62,9 +62,6 @@ body
 input[type="number"] {
        width:2em;
 }
-input[type="text"] {
-       width:2em;
-}
 
 /* Notification */
 .message
