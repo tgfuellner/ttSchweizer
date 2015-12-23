@@ -6,6 +6,16 @@ body
 		 background: #f1f1f1;
 }
 
+a {
+    text-decoration: none;
+	opacity: 0.8;
+}
+
+a:hover,
+a:focus {
+	opacity: 1;
+}
+
 .hoverTable{
     border-collapse:collapse;
 }
