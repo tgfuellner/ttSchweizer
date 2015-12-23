@@ -54,16 +54,15 @@ $(document).ready(function(){
     {%- for category, message in messages %}
 		<p class="{{ category }}">{{ message }}</p>
     {%- endfor %}
-    {% if begegnungen %}
-    <hr/>
-    <p>Brauchen Sie <a href="{{ url_for('spielerZettel', begegnungen=begegnungen) }}">Spielerzettel?</a></p>
-    {% endif %}
 </div>
   {% endif %}
 {% endwith %}
 <div class="menu">
 <a href="{{ url_for('main') }}">Start</a>
 <a href="{{ url_for('new') }}">Turniere</a>
+{%- if begegnungen %}
+<a href="{{ url_for('spielerZettel', begegnungen=begegnungen) }}">Spielerzettel</a>
+{%- endif %}
 {%- if session['expertMode'] %}
 <a href="{{ url_for('expertMode',mode=0) }}">Normalansicht</a>
 {%- else %}
