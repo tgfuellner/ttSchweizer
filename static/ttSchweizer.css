@@ -22,7 +22,7 @@ a:focus {
     word-spacing: 20px;
     padding:7px; border:#4e95f4 1px solid;
     top: 0px;
-    position: floating;
+    display: inline-block;
 }
 
 .hoverTable{
