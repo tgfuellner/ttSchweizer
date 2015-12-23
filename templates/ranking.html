@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
-<h1>Ergebnisse nach 
+<h1>
 {%- if runde >= 0 %}
 <a href="{{ url_for('edit',roundNumber=runde) }}">Runde {{ runde }}</a>
 {%- else %}

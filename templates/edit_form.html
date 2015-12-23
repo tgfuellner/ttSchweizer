@@ -5,10 +5,15 @@
 </h2>
 {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
 <form action="{{ url_for('edit', roundNumber=editRound) }}" method=post>
-  <dl>
-    <dt>Bitte anpassen:
-    <dd><textarea name="text" cols="70" rows="18">{{ text }}</textarea>
-    <dd><input type="submit" name="action" value="Speichern"/>
-        <input type="submit" name="action" value="Löschen"/>
-  </dl>
+ <table>
+ <tr>
+  <td>
+  <textarea name="text" cols="70" rows="18">{{ text }}</textarea>
+  </td>
+  <td>
+  <input type="submit" name="action" value="Speichern"/><p/>
+  <input type="submit" name="action" value="Löschen"/>
+  </td>
+ </tr>
+ </table>
 </form>
