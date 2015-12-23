@@ -52,9 +52,14 @@ def main():
 
     begegnungen = '!'.join(rounds[-1].getBegegnungenFlat())
 
+    if 'expertMode' in session and session['expertMode']:
+        textToEdit = getDefiningTextFor(currentRound + 1)
+    else:
+        textToEdit = False
+
     return render_template('ranking.html', ranking=ranking, runde=currentRound, editRound=currentRound + 1,
                            spielerList=rankedSpieler, thereAreFreilose=thereAreFreilose,
-                           begegnungen=begegnungen, text=getDefiningTextFor(currentRound + 1))
+                           begegnungen=begegnungen, text=textToEdit)
 
 
 @app.route("/spielerZettel/<begegnungen>")
@@ -84,6 +89,7 @@ def new():
             getRounds(spieler)
             flask.get_flashed_messages()
             session['turnierName'] = turnierName
+            session['exportMode'] = False
             flash('{} wurde gestartet'.format(turnierName))
             return flask.redirect(flask.url_for('main'))
 
@@ -151,7 +157,14 @@ def getDefiningTextFor(roundNumber):
 @app.route("/setTurnier/<turnier>")
 def setTurnier(turnier):
     session['turnierName'] = turnier
+    session['exportMode'] = False
     resetNumberOfRounds()
+    refreshModel();
+    return flask.redirect(flask.url_for('main'))
+
+@app.route('/expertMode/<int:mode>')
+def expertMode(mode):
+    session['expertMode'] = (mode != 0)
     return flask.redirect(flask.url_for('main'))
 
 

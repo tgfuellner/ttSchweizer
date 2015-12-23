@@ -61,6 +61,15 @@ $(document).ready(function(){
 </div>
   {% endif %}
 {% endwith %}
+<div class="menu">
+<a href="{{ url_for('main') }}">Start</a>
+<a href="{{ url_for('new') }}">Turniere</a>
+{%- if session['expertMode'] %}
+<a href="{{ url_for('expertMode',mode=0) }}">Normalansicht</a>
+{%- else %}
+<a href="{{ url_for('expertMode',mode=1) }}">Expertenansicht</a>
+{%- endif %}
+</div>
 {% block body %}{% endblock %}
 {%- if existingTurniere is defined and existingTurniere %}
 <hr/>
