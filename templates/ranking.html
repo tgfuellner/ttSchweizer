@@ -33,7 +33,14 @@ für <a href="{{ url_for('new') }}">Turnier</a>
       spieler.getMatrixElementTooltipResult(player)
       }}{%- if spieler.willPlayAgainst(player) %}<br/>
 <form action="{{ url_for('editSingle', roundNumber=editRound, a=spieler, b=player) }}" method=post>
-    <input type="text" name="result" cols="30"</input>
+    <input type="number" name="setWon" min="0"/>:
+    <input type="number" name="setLost" min="0"/>&nbsp;
+    <input type="number" name="set1"/>
+    <input type="number" name="set2"/>
+    <input type="number" name="set3"/>
+    <input type="number" name="set4"/>
+    <input type="number" name="set5"/>
+    <input type="submit" value="Ok">
 </form> {%- endif %}</span>{%- endif %}</td>
 {%- endfor %}
  <td align="right">{{ siege }}</td>

@@ -103,10 +103,13 @@ def edit(roundNumber):
 
 @app.route("/editSingle/<int:roundNumber>/<a>/<b>", methods=['POST'])
 def editSingle(roundNumber,a,b):
+    result = '{}:{}  {} {} {} {} {}'.format(request.form['setWon'], request.form['setLost'],
+        request.form['set1'], request.form['set2'], request.form['set3'],
+        request.form['set4'], request.form['set5'])
     definingFileForRound = getFileNameOfRound(roundNumber)
     wholeRoundDef = getDefiningTextFor(roundNumber)
     wholeRoundDef = re.sub('{a}\s*<>\s*{b}\s*!.*'.format(a=a, b=b),
-                            '{} <> {} ! {}'.format(a, b, request.form['result']),
+                            '{} <> {} ! {}'.format(a, b, result),
                             wholeRoundDef)
     with open(definingFileForRound, "w", encoding='utf-8') as roundFile:
         roundFile.write(wholeRoundDef)
