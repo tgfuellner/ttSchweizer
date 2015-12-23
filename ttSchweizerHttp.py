@@ -162,6 +162,7 @@ def setTurnier(turnier):
     session['turnierName'] = turnier
     session['exportMode'] = False
     resetNumberOfRounds()
+    changeToTurnierDirectory(session['turnierName'])
     refreshModel()
     return flask.redirect(flask.url_for('main'))
 

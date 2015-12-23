@@ -413,6 +413,9 @@ class Round:
         self.unfinishedBegegnungen = []
         self._readResultsOfThisRound(getFileNameOfRound(num))
 
+    def __repr__(self):
+        return 'Round num={}, complete={}'.format(self._numberOfRound, self._isComplete)
+
     def getUnfinishedBegegnungenFlat(self):
         """ return ['A','B',...,'X','Y']
             Wobei A gegen B und X gegen Y spielt
@@ -590,6 +593,9 @@ class RoundInit(Round):
             message("Die Datei '%s' fehlt." % SPIELER_FileName)
             message("Erzeuge eine Beispieldatei.")
             self._createExampleSpielerFile(SPIELER_FileName)
+
+    def __repr__(self):
+        return 'Round num={}, complete={}'.format(0, self._isComplete)
 
     @staticmethod
     def _getClickTTExportFileName():
