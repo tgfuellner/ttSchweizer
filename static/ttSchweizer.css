@@ -210,6 +210,10 @@ td.tooltips:hover {
   background-color: #A7C942;
 }
 
+td.awaited {
+  background-color: #FF0000;
+}
+
 
 td.tooltips:hover span {
   display: block;

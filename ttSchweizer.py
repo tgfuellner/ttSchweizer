@@ -102,6 +102,11 @@ class Spieler:
             return '?'
         return ''
 
+    def getMatrixElementStyle(self, other):
+        if self.willPlayAgainst(other):
+            return 'awaited'
+        return ''
+
     def getMatrixElementTooltipNames(self, other):
         if self == other:
             return ''
