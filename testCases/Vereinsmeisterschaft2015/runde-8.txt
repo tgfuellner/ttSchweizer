@@ -1,10 +1,2 @@
-# Runde 8
-#
-# Ergebnisse bitte wie folgt eingeben (Spiel  Satz1, Satz2, Satz3 ...):
-# Heinz Musterspieler <> Klara Platzhalter ! 3:1 8 -4 12 3
-Josef Moser <> Tanja Pointner ! 
-Thomas Gfüllner <> Stefan Hofinger ! 
-Thomas Alsters <> Stefan Frank ! 
-Hermann Zacherl <> Paul Rott ! 
-Stefan Stöckl <> Stefan Brandlhuber ! 
-Helmut Brandl <> Christina Schleinkofer ! 
+# Runde 8 ende
+

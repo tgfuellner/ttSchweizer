@@ -106,12 +106,7 @@ def edit(roundNumber):
             with open(definingFileForRound, "w", encoding='utf-8') as roundFile:
                 roundFile.write(textToWrite)
 
-        spieler = Spieler_Collection()
-        rounds = getRounds(spieler)
-        if rounds[-1].isComplete():
-            rounds[-1].createStartOfNextRound()
-        flask.get_flashed_messages()
-
+        refreshModel()
         return flask.redirect(flask.url_for('main'))
 
     return render_template('edit.html', error=error, editRound=roundNumber,
@@ -131,7 +126,16 @@ def editSingle(roundNumber, a, b):
     with open(definingFileForRound, "w", encoding='utf-8') as roundFile:
         roundFile.write(wholeRoundDef)
 
+    refreshModel()
     return flask.redirect(flask.url_for('main'))
+
+
+def refreshModel():
+    spieler = Spieler_Collection()
+    rounds = getRounds(spieler)
+    if rounds[-1].isComplete():
+        rounds[-1].createStartOfNextRound()
+    flask.get_flashed_messages()
 
 
 def getDefiningTextFor(roundNumber):
