@@ -21,6 +21,12 @@ Durch die feste Rundenanzahl ist der Zeitrahmen eines Turniers sehr gut planbar.
 * *runde1.tts* wird durch Losen aus *spieler.tts* erzeugt
 * *ergebnis.html* wird nach jedem Aufruf aktualisiert
 
+## Packet Abhängigkeitet
+
+* sudo pip3 install flask
+* sudo pip3 install flask-login
+* sudo pip3 install Flask-SQLAlchemy
+
 ## Hints
 
 * spieler.tts nach TTR sortieren: `sort -nr --field-separator=, --key=2 spieler.tts`

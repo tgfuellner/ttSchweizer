@@ -7,6 +7,8 @@ from urllib.parse import quote_plus
 
 import flask
 from flask import Flask, request, session, render_template, flash
+from flask.ext.login import LoginManager, UserMixin, login_user, logout_user, login_required
+from flask.ext.sqlalchemy import SQLAlchemy
 
 import ttSchweizer
 from ttSchweizer import getRounds, Spieler_Collection, getFileNameOfRound, resetNumberOfRounds
@@ -26,6 +28,18 @@ ttSchweizer.message = message
 app = Flask(__name__)
 app.debug = True
 app.secret_key = 'F1r4o6doM%imi!/Baum'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sql.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+
+login_manager = LoginManager(app)
+login_manager.init_app(app)
+login_manager.login_view = '/login'
+login_manager.login_message = 'Bitte einloggen'
+login_manager.login_message_category = 'info'
+login_manager.needs_refresh_message_category = 'info'
+
+db = SQLAlchemy(app)
 
 
 def changeToTurnierDirectory(directory):
@@ -37,7 +51,89 @@ def getExistingTurniere():
     return sorted([entry for entry in os.listdir(startCurrentWorkingDir) if os.path.isdir(entry)])
 
 
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String)
+    password = db.Column(db.String)
+
+
+@login_manager.user_loader
+def user_loader(user_id):
+    user = User.query.filter_by(id=user_id)
+    if user.count() == 1:
+        return user.one()
+    return None
+
+
+@app.before_first_request
+def init_request():
+    db.create_all()
+
+
+@app.route('/logout')
+def logout():
+    global startCurrentWorkingDir
+    startCurrentWorkingDir = STARTcURRENTwORKINGdIR
+    logout_user()
+    return flask.redirect(flask.url_for('main'))
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'GET':
+        return render_template('User/register.html')
+    elif request.method == 'POST':
+        username = request.form['txtUsername']
+        password = request.form['txtPassword']
+
+        user = User.query.filter_by(username=username)
+        if user.count() == 0:
+            user = User(username=username, password=password)
+            db.session.add(user)
+            db.session.commit()
+
+            flash('Der Username {0} wurde registriert. Bitte einloggen'.format(username))
+            return flask.redirect(flask.url_for('login'))
+        else:
+            flash('Der Username {0} ist schon vergeben.  Bitte einen anderen probieren.'.format(username))
+            return flask.redirect(flask.url_for('register'))
+    else:
+        flask.abort(405)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('User/login.html', next=request.args.get('next'))
+    elif request.method == 'POST':
+        username = request.form['txtUsername']
+        password = request.form['txtPassword']
+
+        user = User.query.filter_by(username=username).filter_by(password=password)
+        if user.count() == 1:
+            login_user(user.one())
+
+            global startCurrentWorkingDir
+            if not os.path.split(startCurrentWorkingDir) == 'username':
+                startCurrentWorkingDir = os.path.join(startCurrentWorkingDir, username)
+                if not os.path.exists(startCurrentWorkingDir):
+                    os.makedirs(startCurrentWorkingDir)
+
+            flash('Servus {0}'.format(username))
+            try:
+                next = request.form['next']
+                return flask.redirect(next)
+            except:
+                return flask.redirect(flask.url_for('main'))
+        else:
+            flash('Ungültiger Login')
+            return flask.redirect(flask.url_for('login'))
+    else:
+        return flask.abort(405)
+
+
 @app.route("/")
+@login_required
 def main():
     os.chdir(startCurrentWorkingDir)
     if 'turnierName' not in session or not os.path.exists(session['turnierName']):
@@ -69,6 +165,7 @@ def main():
 
 
 @app.route("/spielerZettel/<begegnungen>")
+@login_required
 def spielerZettel(begegnungen):
     r = ""
     l = begegnungen.split('!')
@@ -79,6 +176,7 @@ def spielerZettel(begegnungen):
 
 
 @app.route("/new", methods=['GET', 'POST'])
+@login_required
 def new():
     error = None
 
@@ -103,6 +201,7 @@ def new():
 
 
 @app.route("/edit/<int:roundNumber>", methods=['GET', 'POST'])
+@login_required
 def edit(roundNumber):
     error = None
     definingFileForRound = getFileNameOfRound(roundNumber)
@@ -126,6 +225,7 @@ def edit(roundNumber):
 
 
 @app.route("/editSingle/<int:roundNumber>/<a>/<b>", methods=['POST'])
+@login_required
 def editSingle(roundNumber, a, b):
     result = '{}:{}  {} {} {} {} {}'.format(request.form['setWon'], request.form['setLost'],
                                             request.form['set1'], request.form['set2'], request.form['set3'],
@@ -162,6 +262,7 @@ def getDefiningTextFor(roundNumber):
 
 
 @app.route("/setTurnier/<turnier>")
+@login_required
 def setTurnier(turnier):
     session['turnierName'] = turnier
     session['exportMode'] = False
@@ -185,8 +286,8 @@ def favicon():
 
 if __name__ == "flask_app":
     os.chdir('ttSchweizerData')
-    startCurrentWorkingDir = os.getcwd()
+    STARTcURRENTwORKINGdIR = startCurrentWorkingDir = os.getcwd()
 
 if __name__ == "__main__":
-    startCurrentWorkingDir = os.getcwd()
+    STARTcURRENTwORKINGdIR = startCurrentWorkingDir = os.getcwd()
     app.run()

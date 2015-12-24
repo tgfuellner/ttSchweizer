@@ -85,16 +85,18 @@ class Spieler:
         return False
 
     def willPlayAgainst(self, other):
-        for a, b in currentRound.unfinishedBegegnungen:
-            if self is a and other is b:
-                return True
+        if currentRound:
+            for a, b in currentRound.unfinishedBegegnungen:
+                if self is a and other is b:
+                    return True
 
         return False
 
     def playedAgainstInCurrentRound(self, other):
-        for a, b in currentRound.finishedBegegnungen:
-            if self is a and other is b:
-                return True
+        if currentRound:
+            for a, b in currentRound.finishedBegegnungen:
+                if self is a and other is b:
+                    return True
 
         return False
 

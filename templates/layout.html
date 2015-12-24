@@ -52,7 +52,7 @@ $(document).ready(function(){
   {% if messages %}
 <div class="info message">
     {%- for category, message in messages %}
-		<p class="{{ category }}">{{ message }}</p>
+		<p class="info">{{ message }}</p>
     {%- endfor %}
 </div>
   {% endif %}
@@ -68,6 +68,7 @@ $(document).ready(function(){
 {%- else %}
 <a href="{{ url_for('expertMode',mode=1) }}">Expertenansicht</a>
 {%- endif %}
+<a href="{{ url_for('logout') }}">Logout</a>
 </div>
 {% block body %}{% endblock %}
 {%- if existingTurniere is defined and existingTurniere %}

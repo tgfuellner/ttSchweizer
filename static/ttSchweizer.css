@@ -102,7 +102,7 @@ input[type="number"] {
 
 .info
 {
- background: rgba(42,45,50,0.75);
+ background-color: rgba(42,45,50,0.75);
  border-color: #3b8eb5;
 }
 
