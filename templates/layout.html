@@ -74,9 +74,11 @@ $(document).ready(function(){
 <hr/>
 <h2>Vorhandene Turniere:</h2>
 <p>
+<div class="menu">
 {%- for turnier in existingTurniere %}
 	<a href="{{ url_for('setTurnier', turnier=turnier) }}">{{ turnier }}</a>
 {%- endfor %}
+</div>
 {% endif %}
 </p>
 </body>
