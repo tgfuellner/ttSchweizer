@@ -77,7 +77,7 @@ $(document).ready(function(){
 <p>
 <div class="menu">
 {%- for turnier in existingTurniere %}
-	<a href="{{ url_for('setTurnier', turnier=turnier) }}">{{ turnier }}</a>
+	<a href="{{ url_for('setTurnier', turnier=turnier) }}">{{ turnier }} </a>
 {%- endfor %}
 </div>
 {% endif %}
