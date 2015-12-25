@@ -154,7 +154,7 @@ def main():
 
     begegnungen = '!'.join(rounds[-1].getUnfinishedBegegnungenFlat())
 
-    if 'expertMode' in session and session['expertMode']:
+    if 'expertMode' in session and session['expertMode'] or currentRound < 1:
         textToEdit = getDefiningTextFor(currentRound + 1)
     else:
         textToEdit = False
