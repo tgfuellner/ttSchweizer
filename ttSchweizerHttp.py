@@ -7,7 +7,7 @@ from urllib.parse import quote_plus
 
 import flask
 from flask import Flask, request, session, render_template, flash
-from flask.ext.login import LoginManager, UserMixin, login_user, logout_user, login_required
+from flask.ext.login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask.ext.sqlalchemy import SQLAlchemy
 
 import ttSchweizer
@@ -42,13 +42,19 @@ login_manager.needs_refresh_message_category = 'info'
 db = SQLAlchemy(app)
 
 
+def getUserDirector():
+    return os.path.join(STARTcURRENTwORKINGdIR, current_user.username)
+
+def changeToUserDirectory():
+    os.chdir(getUserDirector())
+    
 def changeToTurnierDirectory(directory):
-    os.chdir(startCurrentWorkingDir)
+    changeToUserDirectory()
     os.chdir(directory)
 
 
 def getExistingTurniere():
-    return sorted([entry for entry in os.listdir(startCurrentWorkingDir) if os.path.isdir(entry)])
+    return sorted([entry for entry in os.listdir(getUserDirector()) if os.path.isdir(entry)])
 
 
 class User(db.Model, UserMixin):
@@ -72,8 +78,6 @@ def init_request():
 
 @app.route('/logout')
 def logout():
-    global startCurrentWorkingDir
-    startCurrentWorkingDir = STARTcURRENTwORKINGdIR
     logout_user()
     return flask.redirect(flask.url_for('main'))
 
@@ -113,11 +117,8 @@ def login():
         if user.count() == 1:
             login_user(user.one())
 
-            global startCurrentWorkingDir
-            if not os.path.split(startCurrentWorkingDir) == 'username':
-                startCurrentWorkingDir = os.path.join(startCurrentWorkingDir, username)
-                if not os.path.exists(startCurrentWorkingDir):
-                    os.makedirs(startCurrentWorkingDir)
+            if not os.path.exists(getUserDirector()):
+                os.makedirs(getUserDirector())
 
             flash('Servus {0}'.format(username))
             try:
@@ -135,7 +136,7 @@ def login():
 @app.route("/")
 @login_required
 def main():
-    os.chdir(startCurrentWorkingDir)
+    changeToUserDirectory()
     if 'turnierName' not in session or not os.path.exists(session['turnierName']):
         return flask.redirect(flask.url_for('new'))
 
@@ -154,7 +155,7 @@ def main():
 
     begegnungen = '!'.join(rounds[-1].getUnfinishedBegegnungenFlat())
 
-    if 'expertMode' in session and session['expertMode'] or currentRound < 1:
+    if 'expertMode' in session and session['expertMode'] or currentRound < 0:
         textToEdit = getDefiningTextFor(currentRound + 1)
     else:
         textToEdit = False
@@ -180,7 +181,7 @@ def spielerZettel(begegnungen):
 def new():
     error = None
 
-    os.chdir(startCurrentWorkingDir)
+    changeToUserDirectory()
 
     if request.method == 'POST':
         turnierName = quote_plus(request.form['turniername'])
@@ -286,8 +287,8 @@ def favicon():
 
 if __name__ == "flask_app":
     os.chdir('ttSchweizerData')
-    STARTcURRENTwORKINGdIR = startCurrentWorkingDir = os.getcwd()
+    STARTcURRENTwORKINGdIR = os.getcwd()
 
 if __name__ == "__main__":
-    STARTcURRENTwORKINGdIR = startCurrentWorkingDir = os.getcwd()
+    STARTcURRENTwORKINGdIR = os.getcwd()
     app.run()
