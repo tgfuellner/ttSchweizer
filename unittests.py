@@ -28,6 +28,16 @@ class TestSpieler(unittest.TestCase):
 
         self.assertEqual([C, B], list(A.getOponents()))
 
+    def test_findOponentNoOneBecauseNotAllCanPlay(self):
+        A = Spieler('A', 1)
+        B = Spieler('B', 2)
+        C = Spieler('C', 3)
+
+        groups = GroupeOfPlayersWithSameSieganzahl([[B], [C]])
+        A.addMatch(B, MatchResult(3, 0))
+
+        self.assertEqual(None, A.findOponent(groups))
+
     def test_findOponentOnlyOneIsPossible(self):
         A = Spieler('A', 1)
         B = Spieler('B', 2)
@@ -36,7 +46,9 @@ class TestSpieler(unittest.TestCase):
         self.assertEqual(B, A.findOponent(groups))
 
         C = Spieler('C', 3)
-        groups = GroupeOfPlayersWithSameSieganzahl([[B], [C]])
+        D = Spieler('D', 4)
+
+        groups = GroupeOfPlayersWithSameSieganzahl([[B], [C], [D]])
         A.addMatch(B, MatchResult(3, 0))
 
         self.assertEqual(C, A.findOponent(groups))
@@ -58,11 +70,13 @@ class TestSpieler(unittest.TestCase):
         V = Spieler('V', 2)
         W = Spieler('W', 2)
         X = Spieler('X', 2)
+        Y = Spieler('Y', 2)
         B.addMatch(U, MatchResult(3, 0))
         B.addMatch(V, MatchResult(3, 0))
         B.addMatch(W, MatchResult(3, 0))
         B.addMatch(X, MatchResult(3, 0))
-        groups = GroupeOfPlayersWithSameSieganzahl([[C], [B, U, V, W, X]])
+        B.addMatch(Y, MatchResult(3, 0))
+        groups = GroupeOfPlayersWithSameSieganzahl([[C], [B, U, V, W, X, Y]])
 
         self.assertNotEqual(None, A.findOponent(groups))
         self.assertNotEqual(C, A.findOponent(groups))
@@ -87,7 +101,8 @@ class TestBegegnungen(unittest.TestCase):
         self.createBegegnungen((Michi, Bastion, 3, 0), (Dann, Heinz, 0, 3), (Mourad, Utzi, 0, 3))
         groups = GroupeOfPlayersWithSameSieganzahl([[Dann, Bastion, Heinz, Utzi], [Mourad]])
 
-        self.assertEqual(Mourad, Michi.findOponent(groups))
+        # Utzi oder Dann
+        self.assertNotEqual(Mourad, Michi.findOponent(groups)) 
         self.assertEqual(0, Mourad.getNumberOfSiege())
 
     def setupRound1(self, allPlayers):

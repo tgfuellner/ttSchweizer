@@ -176,8 +176,9 @@ class Spieler:
             return None
 
         player = random.choice(groups[0])
+        self.printOponent(blanksForPrints, "Probiers mal mit: ", player)
 
-        while not player.theGroupsCanFindMatchesWithoutMe(groups, blanksForPrints):
+        while not player.theGroupsCanFindMatchesWithoutMe(groupsWithSameSiegzahl, blanksForPrints):
             groups.rm(player)
             self.printOponent(blanksForPrints, player, "kann nicht genommen werden. Suche in", groups)
             if not groups:
@@ -192,7 +193,7 @@ class Spieler:
     def printOponent(*args):
         return
         # noinspection PyUnreachableCode
-        message(" ".join([str(p) for p in args]))
+        print(" ".join([str(p) for p in args]))
 
     def theGroupsCanFindMatchesWithoutMe(self, groupsWithSameSiegzahl, blanksForPrints=""):
         groups = groupsWithSameSiegzahl.clone()
