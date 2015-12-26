@@ -364,5 +364,11 @@ class TestMatchResult(unittest.TestCase):
         self.assertTrue(res.turned().isWon())
 
 
+class TestMatchResultInRound(unittest.TestCase):
+    def test_gamesMatchResultIncludingPoints_doubleTurned_areEqual(self):
+        res = MatchResultInRound(6, 2, 3, ('10', 11, '-3', '-5', '-8'))
+        self.assertEqual(res, res.turned().turned())
+
+
 if __name__ == '__main__':
     unittest.main()

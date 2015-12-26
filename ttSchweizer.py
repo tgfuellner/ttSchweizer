@@ -417,6 +417,19 @@ class MatchResult:
         return self.gamesWonByPlayerA == self.gamesWonByPlayerB
 
 
+class MatchResultInRound(MatchResult):
+    def __init__(self, roundNr, a, b, gamePoints=()):
+        super(MatchResultInRound, self).__init__(a, b, gamePoints)
+        self.roundNr = roundNr
+
+    def turned(self):
+        mr = super(MatchResultInRound, self).turned()
+        return MatchResultInRound(self.roundNr, mr.gamesWonByPlayerA, mr.gamesWonByPlayerB, mr.gamePoints)
+
+    def __eq__(self, other):
+        return (super(MatchResultInRound, self).__eq__(other) and self.roundNr == other.roundNr)
+
+
 class Round:
     def __init__(self, num, allPlayers):
         self._isComplete = False
@@ -530,8 +543,7 @@ class Round:
         if self._collectionOfAllPlayers.allHavePlayed(self._numberOfRound):
             self.setComplete()
 
-    @staticmethod
-    def parseMatchResult(inString, fileName, line):
+    def parseMatchResult(self, inString, fileName, line):
         """ return a MatchResult instance
         :param line: whole pure row in file, only used for message
         :param fileName: Name of file, only used for message
@@ -554,7 +566,7 @@ class Round:
 
         if len(z) == 1:
             # Nur Satzverhaeltnis keine genaueren Ergebnisse
-            theMatchResult = MatchResult(saetzeSpielerA, saetzeSpielerB)
+            theMatchResult = MatchResultInRound(self._numberOfRound, saetzeSpielerA, saetzeSpielerB)
             if theMatchResult.isUndecided():
                 message("%s: Spiel ist nicht entschieden!: %s" % (fileName, line), 'error')
                 return None
@@ -571,7 +583,7 @@ class Round:
                     'error')
             return None
 
-        return MatchResult(saetzeSpielerA, saetzeSpielerB, satzErgebnisse)
+        return MatchResultInRound(self._numberOfRound, saetzeSpielerA, saetzeSpielerB, satzErgebnisse)
 
     def writeHeader(self, fd):
         fd.write('# Runde %d\n#\n' % self.getNumberOfNextRound())
