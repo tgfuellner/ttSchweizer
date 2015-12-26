@@ -23,7 +23,6 @@
           <ul class="nav navbar-nav">
             <li><a href="/">Home</a></li>
             {% if current_user.is_authenticated %}
-              <li><a href="/secret">Super Secret</a></li>
               <li><a href="/logout">Logout</a></li>
             {% else %}
               <li><a href="/login">Login</a></li>
@@ -33,6 +32,7 @@
         </div><!--/.nav-collapse -->
       </div>
     </nav>
+<h1 class="text-center">Turniere im "<a href="http://www.bttv.de/sport/commerzbank-sports-more-bavarian-tt-race/infos-spielsystem/">Schweizer System</a>" durchführen</h1>
     {% block content %}{% endblock %}
   </body>
 </html>
