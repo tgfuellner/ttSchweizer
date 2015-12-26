@@ -195,7 +195,7 @@ def new():
             flask.get_flashed_messages()
             session['turnierName'] = turnierName
             session['exportMode'] = False
-            flash('{} wurde gestartet'.format(turnierName))
+            flash('{} wurde gestartet'.format(turnierName), 'info')
             return flask.redirect(flask.url_for('main'))
 
     return render_template('new.html', error=error, existingTurniere=getExistingTurniere())
@@ -207,7 +207,7 @@ def edit(roundNumber):
     error = None
     definingFileForRound = getFileNameOfRound(roundNumber)
     if not os.path.exists(definingFileForRound):
-        flash("Die Runde {} kann nicht editiert werden!".format(roundNumber))
+        flash("Die Runde {} kann nicht editiert werden!".format(roundNumber), 'info')
         return flask.redirect(flask.url_for('main'))
 
     if request.method == 'POST':
@@ -234,9 +234,20 @@ def editSingle(roundNumber, a, b):
     result = result.strip(' :')
     definingFileForRound = getFileNameOfRound(roundNumber)
     wholeRoundDef = getDefiningTextFor(roundNumber)
-    wholeRoundDef = re.sub('{a}\s*<>\s*{b}\s*!.*'.format(a=a, b=b),
-                           '{} <> {} ! {}'.format(a, b, result),
+    # Vertausche Spieler
+    aMatchResult = ttSchweizer.parseMatchResult(result, '{} <> {}'.format(a,b), result, roundNumber)
+    if aMatchResult:
+        mt = aMatchResult.turned()
+        resultTurned = '{}:{} '.format(mt.gamesWonByPlayerA, mt.gamesWonByPlayerB)
+        resultTurned += ' '.join(mt.gamePoints)
+    else:
+        return flask.redirect(flask.url_for('main'))
+
+    for p1, p2, res in ((a,b,result),(b,a,resultTurned)):
+        wholeRoundDef = re.sub('{a}\s*<>\s*{b}\s*!.*'.format(a=p1, b=p2),
+                           '{} <> {} ! {}'.format(p1, p2, res),
                            wholeRoundDef)
+
     with open(definingFileForRound, "w", encoding='utf-8') as roundFile:
         roundFile.write(wholeRoundDef)
 

@@ -237,6 +237,7 @@ td.awaited {
 
 td.justPlayed {
   color: #FF0000;
+  font-weight: bold;
 }
 
 

@@ -84,6 +84,14 @@ class Spieler:
             return match.isWon()
         return False
 
+    def getRoundNrOfPlayedAgainst(self, other):
+        if self.hasPlayedAgainst(other):
+            match = self.ergebnisse[other]
+            return match.roundNr
+        else:
+            return None
+
+
     def willPlayAgainst(self, other):
         if currentRound:
             for a, b in currentRound.unfinishedBegegnungen:
@@ -106,7 +114,7 @@ class Spieler:
         if self.hasWonAgainst(other):
             return '+'
         if other.hasWonAgainst(self):
-            return '-'
+            return '&ndash;'
         if self.willPlayAgainst(other):
             return '?'
         return ''
@@ -116,12 +124,16 @@ class Spieler:
             return 'awaited'
         if self.playedAgainstInCurrentRound(other):
             return 'justPlayed'
+        if other.playedAgainstInCurrentRound(self):
+            return 'justPlayed'
         return ''
 
     def getMatrixElementTooltipNames(self, other):
         if self == other:
             return ''
-        if self.hasPlayedAgainst(other) or self.willPlayAgainst(other):
+        if self.hasPlayedAgainst(other):
+            return '{} - {} Runde {}'.format(self, other, self.getRoundNrOfPlayedAgainst(other))
+        if self.willPlayAgainst(other):
             return '{} - {}'.format(self, other)
         return ''
 
@@ -530,7 +542,7 @@ class Round:
                     spielerA.addFreilos(spielerB)
                     continue
 
-                theMatchResult = self.parseMatchResult(y[1], fileName, line)
+                theMatchResult = parseMatchResult(y[1], fileName, line, self._numberOfRound)
                 if not theMatchResult:
                     self.unfinishedBegegnungen.append((spielerA, spielerB))
                     continue
@@ -542,48 +554,6 @@ class Round:
 
         if self._collectionOfAllPlayers.allHavePlayed(self._numberOfRound):
             self.setComplete()
-
-    def parseMatchResult(self, inString, fileName, line):
-        """ return a MatchResult instance
-        :param line: whole pure row in file, only used for message
-        :param fileName: Name of file, only used for message
-        :param inString: this string is pared
-        """
-        z = inString.strip().split()
-        if not z:
-            message("%s: Noch kein Ergebnis für: %s" % (fileName, line))
-            return None
-
-        satzVerhaeltnis = z[0].strip(':').split(':')
-        if len(satzVerhaeltnis) != 2:
-            message("%s: Das Satzverhältnis ist nicht korrekt in Zeile: %s" % (fileName, line), 'error')
-            return None
-
-        saetzeSpielerA, saetzeSpielerB = [int(i) for i in satzVerhaeltnis]
-        if saetzeSpielerA > 6 or saetzeSpielerB > 6:
-            message("%s: Zu viele Sätze in Zeile: %s" % (fileName, line), 'error')
-            return None
-
-        if len(z) == 1:
-            # Nur Satzverhaeltnis keine genaueren Ergebnisse
-            theMatchResult = MatchResultInRound(self._numberOfRound, saetzeSpielerA, saetzeSpielerB)
-            if theMatchResult.isUndecided():
-                message("%s: Spiel ist nicht entschieden!: %s" % (fileName, line), 'error')
-                return None
-            # message("%s: Vorsicht, Satzergebnisse fehlen in Zeile: %s" % (fileName, line))
-            return theMatchResult
-
-        satzErgebnisse = z[1:]  # Vorsicht nicht nach int wandeln! -0 muss bleiben
-        if len(satzErgebnisse) != saetzeSpielerA + saetzeSpielerB:
-            message("%s: Sätze sind nicht komplett in Zeile: %s" % (fileName, line), 'error')
-            return None
-
-        if saetzeSpielerB != len([s for s in satzErgebnisse if '-' in s]):
-            message("%s: Satzverhältnis und Sätze passen nicht zusammen in Zeile: %s" % (fileName, line),
-                    'error')
-            return None
-
-        return MatchResultInRound(self._numberOfRound, saetzeSpielerA, saetzeSpielerB, satzErgebnisse)
 
     def writeHeader(self, fd):
         fd.write('# Runde %d\n#\n' % self.getNumberOfNextRound())
@@ -690,6 +660,48 @@ class RoundInit(Round):
             the_file.write('# Folgende Zeile ist ein Beispiel:\n')
             the_file.write('Heinz Musterspieler, 1454\n')
 
+
+def parseMatchResult(inString, fileName, line, roundNr):
+    """ return a MatchResult instance
+    :param line: whole pure row in file, only used for message
+    :param fileName: Name of file, only used for message
+    :param inString: this string is parsed
+    """
+    z = inString.strip().split()
+    if not z:
+        message("%s: Noch kein Ergebnis für: %s" % (fileName, line))
+        return None
+
+    satzVerhaeltnis = z[0].strip(':').split(':')
+    if len(satzVerhaeltnis) != 2:
+        message("%s: Das Satzverhältnis ist nicht korrekt in Zeile: %s" % (fileName, line), 'error')
+        return None
+
+    saetzeSpielerA, saetzeSpielerB = [int(i) for i in satzVerhaeltnis]
+    if saetzeSpielerA > 6 or saetzeSpielerB > 6:
+        message("%s: Zu viele Sätze in Zeile: %s" % (fileName, line), 'error')
+        return None
+
+    if len(z) == 1:
+        # Nur Satzverhaeltnis keine genaueren Ergebnisse
+        theMatchResult = MatchResultInRound(roundNr, saetzeSpielerA, saetzeSpielerB)
+        if theMatchResult.isUndecided():
+            message("%s: Spiel ist nicht entschieden!: %s" % (fileName, line), 'error')
+            return None
+        # message("%s: Vorsicht, Satzergebnisse fehlen in Zeile: %s" % (fileName, line))
+        return theMatchResult
+
+    satzErgebnisse = z[1:]  # Vorsicht nicht nach int wandeln! -0 muss bleiben
+    if len(satzErgebnisse) != saetzeSpielerA + saetzeSpielerB:
+        message("%s: Sätze sind nicht komplett in Zeile: %s" % (fileName, line), 'error')
+        return None
+
+    if saetzeSpielerB != len([s for s in satzErgebnisse if '-' in s]):
+        message("%s: Satzverhältnis und Sätze passen nicht zusammen in Zeile: %s" % (fileName, line),
+                'error')
+        return None
+
+    return MatchResultInRound(roundNr, saetzeSpielerA, saetzeSpielerB, satzErgebnisse)
 
 def resetNumberOfRounds():
     global number_OfRounds

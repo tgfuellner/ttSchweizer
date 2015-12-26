@@ -21,12 +21,14 @@ Runde {{ runde }} für Turnier {{ session['turnierName'] }}</h1>
  <td align="right">{{ platz }}</td>
  <td>{{ spieler }}</td>
 {%- for player in spielerList %}
- <td class="tooltips {{ spieler.getMatrixElementStyle(player) }}">{{ spieler.getMatrixElement(player) }}
+ <td class="tooltips {{ spieler.getMatrixElementStyle(player) }}">{{ spieler.getMatrixElement(player)|safe }}
  {%- if spieler.getMatrixElementTooltipNames(player) %}<span>{{
       spieler.getMatrixElementTooltipNames(player) }}<br/>{{
       spieler.getMatrixElementTooltipResult(player)
-      }}{%- if spieler.willPlayAgainst(player) or spieler.playedAgainstInCurrentRound(player) %}<br/>
-<form action="{{ url_for('editSingle', roundNumber=editRound, a=spieler, b=player) }}" method=post>
+      }} <br/>
+<form action="{{ url_for('editSingle',
+                     roundNumber=spieler.getRoundNrOfPlayedAgainst(player) or editRound,
+                     a=spieler, b=player) }}" method=post>
     <input type="number" name="setWon" min="0"/>:
     <input type="number" name="setLost" min="0"/>&nbsp;
     <input type="number" name="set1"/>
@@ -35,7 +37,7 @@ Runde {{ runde }} für Turnier {{ session['turnierName'] }}</h1>
     <input type="number" name="set4"/>
     <input type="number" name="set5"/>
     <input type="submit" value="Ok">
-</form> {%- endif %}</span>{%- endif %}</td>
+</form></span>{%- endif %}</td>
 {%- endfor %}
  <td align="right">{{ siege }}</td>
  <td align="right">{{ buchz }}</td>
