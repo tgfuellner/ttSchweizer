@@ -1,6 +1,8 @@
-<h2>Eingabe für Runde {{ editRound }}
-{%- if editRound > 0 %}
+<h2>{%- if editRound > 0 %}
+Eingabe für Runde {{ editRound }}
 (<a href="{{ url_for('edit',roundNumber=editRound-1) }}">{{ editRound-1 }}</a>)
+{%- else %}
+Eingabe der Spieler
 {%- endif %}
 </h2>
 {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
