@@ -132,7 +132,7 @@ class Spieler:
         if self == other:
             return ''
         if self.hasPlayedAgainst(other):
-            return '{} - {} Runde {}'.format(self, other, self.getRoundNrOfPlayedAgainst(other))
+            return 'Runde {r}: {a} - {b}'.format(a=self, b=other, r=self.getRoundNrOfPlayedAgainst(other))
         if self.willPlayAgainst(other):
             return '{} - {}'.format(self, other)
         return ''

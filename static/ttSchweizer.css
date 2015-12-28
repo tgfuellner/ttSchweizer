@@ -239,7 +239,9 @@ td.justPlayed {
   color: #FF0000;
   font-weight: bold;
 }
-
+span {
+  font-weight: normal;
+}
 
 td.tooltips:hover span {
   display: block;
