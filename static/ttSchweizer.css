@@ -246,7 +246,7 @@ span {
 td.tooltips:hover span {
   display: block;
   position: absolute;
-  top: 20px;
+  top: -60px;
   left: 0;
   width: 350px;
   z-index: 100;
