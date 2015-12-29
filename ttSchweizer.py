@@ -223,7 +223,8 @@ class FreiLos(Spieler):
     """ Freilos ist auch ein Spieler, der gelost wird """
 
     def __init__(self):
-        Spieler.__init__(self, "Freilos", 0)
+        # ttr sehr klein, Freilos soll immer hinten einsortiert werden
+        Spieler.__init__(self, "Freilos", -999999)
         self.minSiegeOfAllPlayers = 0
 
     def getDefaultResult(self):
