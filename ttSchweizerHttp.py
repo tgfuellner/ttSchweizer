@@ -142,6 +142,7 @@ def main():
 
     changeToTurnierDirectory(session['turnierName'])
 
+    refreshModel()
     spieler = Spieler_Collection()
     rounds = getRounds(spieler)
     ranking = spieler.getRanking()
