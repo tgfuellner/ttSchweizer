@@ -2,6 +2,8 @@
 
 F=runde-5.txt
 
+rm -f $F
+
 ../../ttSchweizer.py >/dev/null
 if [ ! -e "$F" ]
 then
@@ -13,7 +15,7 @@ then
     echo "Die Begegnung D <> A muss in $F vorhanden sein"
 fi
 
-if ! grep -q "B <> H" $F
+if ! grep -q '\(H <> B\)\|\(B <> H\)' $F
 then
     echo "Die Begegnung B <> H muss in $F vorhanden sein"
 fi

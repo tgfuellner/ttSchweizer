@@ -252,6 +252,19 @@ class GroupeOfPlayersWithSameSieganzahl(list):
     def getAllPlayers(self):
         return [player for group in self for player in group]
 
+    def choice(self):
+        """ returns and removes a random element in the first subgroup """
+        if len(self) == 0:
+            return None
+
+        r = random.choice(self[0])
+        self[0].remove(r)
+        if len(self[0]) == 0:
+            del (self[0])
+
+        return r
+
+
     def top(self):
         """ returns and removes first element """
         if len(self) == 0:
@@ -383,14 +396,14 @@ class Spieler_Collection(dict):
         :return:
         """
         begegnungen = []
-        playerA = groups.top()
+        playerA = groups.choice()
         while playerA:
             playerB = playerA.findOponent(groups)
             if playerB is None:
                 return None
             groups.rm(playerB)
             begegnungen.append((playerA, playerB))
-            playerA = groups.top()
+            playerA = groups.choice()
 
         return begegnungen
 

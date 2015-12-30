@@ -38,6 +38,7 @@ class TestSpieler(unittest.TestCase):
 
         self.assertEqual(None, A.findOponent(groups))
 
+
     def test_findOponentOnlyOneIsPossible(self):
         A = Spieler('A', 1)
         B = Spieler('B', 2)
@@ -120,6 +121,46 @@ class TestBegegnungen(unittest.TestCase):
         self.createBegegnungen((A, K, 3, 0), (B, G, 3, 1), (D, L, 3, 0), (F, C, 2, 3), (I, E, 3, 2))
 
         return allPlayersList
+
+
+    def test_findOponentFreilosGleichVerteiltFuerLetzteGruppe(self):
+        sieger1 = Spieler('Sieger1', 1000)
+        sieger2 = Spieler('Sieger2', 1001)
+        sieger3 = Spieler('Sieger3', 1002)
+        sieger4 = Spieler('Sieger4', 1003)
+
+        looser1 = Spieler('Looser1', 100)
+        looser2 = Spieler('Looser2', 101)
+        looser3 = Spieler('Looser3', 102)
+
+        freilos = FreiLos()
+
+        foundLooser1 = False
+        foundLooser2 = False
+        foundLooser3 = False
+
+        for _ in range(100):
+            groups = GroupeOfPlayersWithSameSieganzahl([
+                    [sieger4, sieger3, sieger2, sieger1],
+                    [looser3, looser2, looser1],
+                    [freilos]])
+            spielerMitFreilos = [a for a,b in Spieler_Collection.getBegegnungen(groups) if b == freilos][0]
+            if spielerMitFreilos == looser1:
+                foundLooser1 = True
+            if spielerMitFreilos == looser2:
+                foundLooser2 = True
+            if spielerMitFreilos == looser3:
+                foundLooser3 = True
+
+            if foundLooser1 and foundLooser2 and foundLooser3:
+                break
+                
+
+        self.assertTrue(foundLooser1)
+        self.assertTrue(foundLooser2)
+        self.assertTrue(foundLooser3)
+        
+
 
     def test_getRankingSameBuchholzzahl(self):
         allPlayers = Spieler_Collection()
