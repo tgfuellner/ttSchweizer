@@ -6,6 +6,7 @@ import glob
 import random
 import collections
 import xml.etree.ElementTree as Et
+import functools
 
 SPIELER_FileName = "spieler.txt"
 MIN_NumberOfPlayer = 3
@@ -15,6 +16,7 @@ number_OfRounds = INIT_NUMBER_OfRounds
 currentRound = None
 
 
+@functools.total_ordering
 class Spieler:
     """ Daten zu einem Spieler """
 
@@ -51,26 +53,8 @@ class Spieler:
             return False
         return False
 
-    def __le__(self, other):
-        if self.__eq__(other):
-            return True
-        return self.__lt__(other)
-
     def __eq__(self, other):
         return isinstance(other, self.__class__) and self.name == other.name
-
-    def __ge__(self, other):
-        if self.__eq__(other):
-            return True
-        return self.__gt__(other)
-
-    def __gt__(self, other):
-        if self.__eq__(other):
-            return False
-        return not self.__lt__(other)
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
 
     def __hash__(self):
         return hash(self.name)
