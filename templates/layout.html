@@ -61,7 +61,7 @@ $(document).ready(function(){
 <a href="{{ url_for('main') }}">Start</a>
 <a href="{{ url_for('new') }}">Turniere</a>
 {%- if begegnungen %}
-<a href="{{ url_for('spielerZettel', begegnungen=begegnungen) }}">Spielerzettel</a>
+<a href="{{ url_for('spielerZettel', begegnungen=begegnungen, runde=runde) }}">Spielerzettel</a>
 {%- endif %}
 {%- if session['expertMode'] %}
 <a href="{{ url_for('expertMode',mode=0) }}">Normalansicht</a>

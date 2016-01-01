@@ -3,6 +3,7 @@
 
 import os
 import re
+from datetime import datetime
 from urllib.parse import quote_plus
 
 import flask
@@ -166,15 +167,18 @@ def main():
                            begegnungen=begegnungen, text=textToEdit)
 
 
-@app.route("/spielerZettel/<begegnungen>")
+@app.route("/spielerZettel/<int:runde>/<begegnungen>")
 @login_required
-def spielerZettel(begegnungen):
-    r = ""
-    l = begegnungen.split('!')
-    for playerA, playerB in zip(l[0::2], l[1::2]):
-        r += "{a} <> {b}\n".format(a=playerA, b=playerB)
+def spielerZettel(runde, begegnungen):
+    from flask_weasyprint import HTML, render_pdf
 
-    return r
+    l = begegnungen.split('!')
+
+    now = datetime.now().strftime("%d.%m.%Y")
+    html = render_template('spieler_zettel.html', begegnungen=zip(l[0::2], l[1::2]),
+                           runde=runde+1, date=now)
+    return render_pdf(HTML(string=html), download_filename='begegnungen_runde{}.pdf'.format(runde))
+    #return html
 
 
 @app.route("/new", methods=['GET', 'POST'])
@@ -286,6 +290,7 @@ def setTurnier(turnier):
 
 
 @app.route('/expertMode/<int:mode>')
+@login_required
 def expertMode(mode):
     session['expertMode'] = (mode != 0)
     return flask.redirect(flask.url_for('main'))

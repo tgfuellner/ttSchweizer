@@ -1,0 +1,58 @@
+<!doctype html>
+<title>Spielerzettel</title>
+<link rel=stylesheet href="{{ url_for('static', filename='spieler_zettel.css') }}" />
+
+<body>
+<table class="frames">
+{%- for row in begegnungen|batch(4) %}
+  <tr>
+  {%- for spielerA, spielerB in row %}
+    <td>
+      <p/>
+      <center>Runde {{ runde }}&nbsp;&nbsp;<small>am {{ date }}</small></center>
+      <p/>
+      <center>{{ spielerA }}&nbsp;&nbsp;<small>gegen</small>&nbsp;&nbsp;{{ spielerB }}</center>
+      <center>
+        <table class="zettel">
+          <tr>
+            <th class="c1">Satz</th> <th class="c2">Ergebnis</th> <th class="c3">Sieger</th>
+          </tr>
+          <tr>
+            <td>1</td> <td></td> <td></td>
+          </tr>
+          <tr>
+            <td>2</td> <td></td> <td></td>
+          </tr>
+          <tr>
+            <td>3</td> <td></td> <td></td>
+          </tr>
+          <tr>
+            <td>4</td> <td></td> <td></td>
+          </tr>
+          <tr>
+            <td>5</td> <td></td> <td></td>
+          </tr>
+        </table>
+      </center>
+      <p/>
+      <table class="sum">
+        <tr>
+          <td class="sum1">Sieger:</td>
+          <td class="sum2" colspan="2">
+            <hr class="down" />
+          </td>
+        <tr>
+          <td class="sum1">mit</td>
+          <td class="sum2">
+            <hr class="down" />
+          </td><td class="sum1">Sätzen</td>
+        </tr>
+      </table>
+      <p/>
+    </td>
+  {%- endfor %}
+  </tr>
+  <tr height=0 class="page-break"> </tr>
+{%- endfor %}
+</table>
+</body>

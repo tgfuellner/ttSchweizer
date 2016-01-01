@@ -1,0 +1,88 @@
+body { font: 0.5em Fontin, serif }
+
+@page { size: landscape; margin: 0cm }
+@media print {
+  nav { display: none }
+  tr.page-break  { display: block; page-break-before: always; }
+  body { writing-mode: tb-rl; }
+}
+
+.frames {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  page-break-inside:auto;
+}
+
+
+tr {
+  page-break-inside: avoid;
+  page-break-after: avoid;
+  page-break-before: avoid;
+}
+
+table.sum {
+  border-spacing: 0;
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.zettel {
+  width: 95%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+td {
+  border: 1px solid black;
+}
+
+td.sum1 {
+  border: 0px;
+  width: 0px;
+  padding-bottom: 1em;
+}
+
+td.sum2 {
+  border: 0px solid black;
+}
+
+th {
+  font-size: 50%;
+  font-weight: normal;
+}
+
+th.c1 {
+  width: 1em;
+}
+
+th.c2 {
+  width: 8em;
+}
+
+th.c3 {
+  width: 20em;
+}
+
+hr {
+  border: none;
+  border-top: 2px dotted black;
+  color: transparent;
+  background-color: transparent;
+  height: 2px;
+  margin-top: 0px;
+  display: block;
+}
+
+hr.down {
+  margin-top: 1em;
+  margin-bottom: 0px;
+}
+
+small {
+  font-size: 50%;
+}
+
