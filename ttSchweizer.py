@@ -75,7 +75,6 @@ class Spieler:
         else:
             return None
 
-
     def willPlayAgainst(self, other):
         if currentRound:
             for a, b in currentRound.unfinishedBegegnungen:
@@ -247,7 +246,6 @@ class GroupeOfPlayersWithSameSieganzahl(list):
             del (self[0])
 
         return r
-
 
     def top(self):
         """ returns and removes first element """
@@ -437,7 +435,7 @@ class MatchResultInRound(MatchResult):
         return MatchResultInRound(self.roundNr, mr.gamesWonByPlayerA, mr.gamesWonByPlayerB, mr.gamePoints)
 
     def __eq__(self, other):
-        return (super(MatchResultInRound, self).__eq__(other) and self.roundNr == other.roundNr)
+        return super(MatchResultInRound, self).__eq__(other) and self.roundNr == other.roundNr
 
 
 class Round:
@@ -661,6 +659,7 @@ class RoundInit(Round):
 
 def parseMatchResult(inString, fileName, line, roundNr):
     """ return a MatchResult instance
+    :param roundNr: the Match is played in this round
     :param line: whole pure row in file, only used for message
     :param fileName: Name of file, only used for message
     :param inString: this string is parsed
@@ -701,6 +700,7 @@ def parseMatchResult(inString, fileName, line, roundNr):
 
     return MatchResultInRound(roundNr, saetzeSpielerA, saetzeSpielerB, satzErgebnisse)
 
+
 def resetNumberOfRounds():
     global number_OfRounds
     number_OfRounds = INIT_NUMBER_OfRounds
@@ -732,7 +732,10 @@ def getRounds(allPlayers):
 
 
 def message(s, category='info'):
-    print(s)
+    if category != 'info':
+        print('*', s)
+    else:
+        print(s)
 
 
 ############################################################
