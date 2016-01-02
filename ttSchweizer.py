@@ -459,6 +459,9 @@ class Round:
     def getNumberOfNextRound(self):
         return self._numberOfRound + 1
 
+    def getNumberOfRound(self):
+        return self._numberOfRound
+
     def setComplete(self):
         self._isComplete = True
 

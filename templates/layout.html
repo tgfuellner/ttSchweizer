@@ -58,7 +58,7 @@ $(document).ready(function(){
   {% endif %}
 {% endwith %}
 <div class="menu">
-<a href="{{ url_for('main') }}">Start</a>
+<a href="{{ url_for('main') }}">Home</a>
 <a href="{{ url_for('new') }}">Turniere</a>
 {%- if begegnungen %}
 <a href="{{ url_for('spielerZettel', begegnungen=begegnungen, runde=runde) }}">Spielerzettel</a>

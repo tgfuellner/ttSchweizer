@@ -150,7 +150,7 @@ def main():
     rankedSpieler = [sub[0] for sub in ranking]
     thereAreFreilose = (len([s for s in rankedSpieler if s.hatteFreilos]) > 0)
 
-    currentRound = len(rounds) - 2
+    currentRound = rounds[-1].getNumberOfRound() - 1
     if rounds[-1].isComplete():
         rounds[-1].createStartOfNextRound()
         currentRound += 1
