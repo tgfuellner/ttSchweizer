@@ -4,14 +4,17 @@
 
 <body>
 <table class="frames">
-{%- for row in begegnungen|batch(4) %}
+{%- for row in begegnungen|batch(3) %}
   <tr>
   {%- for spielerA, spielerB in row %}
     <td>
       <p/>
-      <center>Runde {{ runde }}&nbsp;&nbsp;<small>am {{ date }}</small></center>
+      <center><small>{{ session['turnierName'] }}</small>
+            Runde {{ runde }}
+            <small>am {{ date }}</small></center>
       <p/>
-      <center>{{ spielerA }}&nbsp;&nbsp;<small>gegen</small>&nbsp;&nbsp;{{ spielerB }}</center>
+      <center><strong>{{ spielerA }}</strong>&nbsp;
+               <small>gegen</small> &nbsp;<strong>{{ spielerB }}</strong></center>
       <center>
         <table class="zettel">
           <tr>
