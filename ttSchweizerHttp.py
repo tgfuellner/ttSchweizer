@@ -160,8 +160,18 @@ def main():
         textToEdit = False
 
     return render_template('ranking.html', ranking=ranking, runde=currentRoundNumber,
+                           auslosen=currentRound.isComplete(),
                            spielerList=rankedSpieler, thereAreFreilose=thereAreFreilose,
                            begegnungen=begegnungen, text=textToEdit)
+
+
+@app.route("/auslosen")
+@login_required
+def auslosen():
+    changeToTurnierDirectory(session['turnierName'])
+    turnier = Turnier()
+    turnier.auslosen()
+    return flask.redirect(flask.url_for('main'))
 
 
 @app.route("/spielerZettel/<int:runde>/<begegnungen>")

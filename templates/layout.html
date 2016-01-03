@@ -63,6 +63,9 @@ $(document).ready(function(){
 {%- if begegnungen %}
 <a href="{{ url_for('spielerZettel', begegnungen=begegnungen, runde=runde) }}">Spielerzettel</a>
 {%- endif %}
+{%- if auslosen %}
+<a href="{{ url_for('auslosen') }}">Auslosen</a>
+{%- endif %}
 {%- if session['expertMode'] %}
 <a href="{{ url_for('expertMode',mode=0) }}">Normalansicht</a>
 {%- else %}
