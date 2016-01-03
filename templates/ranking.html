@@ -31,7 +31,7 @@ Runde {%- if runde >= 0 %}
       spieler.getMatrixElementTooltipResult(player)
       }} <br/>
 <form action="{{ url_for('editSingle',
-                     roundNumber=spieler.getRoundNrOfPlayedAgainst(player) or editRound,
+                     roundNumber=spieler.getRoundNrOfPlayedAgainst(player) or runde,
                      a=spieler, b=player) }}" method=post>
     <input type="number" name="setWon" min="0"/>:
     <input type="number" name="setLost" min="0"/>&nbsp;

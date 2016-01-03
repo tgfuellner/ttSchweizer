@@ -16,6 +16,25 @@ number_OfRounds = INIT_NUMBER_OfRounds
 currentRound = None
 
 
+class Turnier:
+    def __init__(self):
+        self._spieler = Spieler_Collection()
+        self._rounds = getRounds(self._spieler)
+
+    def getLastRound(self):
+        return self._rounds[-1]
+
+    def auslosen(self):
+        lastRound = self.getLastRound()
+        if lastRound.isComplete():
+            lastRound.createStartOfNextRound()
+        else:
+            message("Kann nicht auslosen, weil die Runde {} noch nicht komplett ist".format(
+                        lastRound.getNumberOfRound()))
+
+    def getSpieler(self):
+        return self._spieler
+
 @functools.total_ordering
 class Spieler:
     """ Daten zu einem Spieler """

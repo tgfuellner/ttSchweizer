@@ -12,7 +12,7 @@ from flask.ext.login import LoginManager, UserMixin, login_user, logout_user, lo
 from flask.ext.sqlalchemy import SQLAlchemy
 
 import ttSchweizer
-from ttSchweizer import getRounds, Spieler_Collection, getFileNameOfRound, resetNumberOfRounds
+from ttSchweizer import Turnier, getRounds, Spieler_Collection, getFileNameOfRound, resetNumberOfRounds
 
 
 def message(s, category='none'):
@@ -143,26 +143,23 @@ def main():
 
     changeToTurnierDirectory(session['turnierName'])
 
-    refreshModel()
-    spieler = Spieler_Collection()
-    rounds = getRounds(spieler)
+    turnier = Turnier()
+    spieler = turnier.getSpieler()
     ranking = spieler.getRanking()
     rankedSpieler = [sub[0] for sub in ranking]
     thereAreFreilose = (len([s for s in rankedSpieler if s.hatteFreilos]) > 0)
 
-    currentRound = rounds[-1].getNumberOfRound() - 1
-    if rounds[-1].isComplete():
-        rounds[-1].createStartOfNextRound()
-        currentRound += 1
+    currentRound = turnier.getLastRound()
 
-    begegnungen = '!'.join(rounds[-1].getUnfinishedBegegnungenFlat())
+    begegnungen = '!'.join(currentRound.getUnfinishedBegegnungenFlat())
 
-    if 'expertMode' in session and session['expertMode'] or currentRound < 0:
-        textToEdit = getDefiningTextFor(currentRound + 1)
+    currentRoundNumber = currentRound.getNumberOfRound()
+    if 'expertMode' in session and session['expertMode'] or currentRoundNumber < 0:
+        textToEdit = getDefiningTextFor(currentRoundNumber)
     else:
         textToEdit = False
 
-    return render_template('ranking.html', ranking=ranking, runde=currentRound, editRound=currentRound + 1,
+    return render_template('ranking.html', ranking=ranking, runde=currentRoundNumber,
                            spielerList=rankedSpieler, thereAreFreilose=thereAreFreilose,
                            begegnungen=begegnungen, text=textToEdit)
 
@@ -176,7 +173,7 @@ def spielerZettel(runde, begegnungen):
 
     now = datetime.now().strftime("%d.%m.%Y")
     html = render_template('spieler_zettel.html', begegnungen=zip(l[0::2], l[1::2]),
-                           runde=runde+1, date=now)
+                           runde=runde, date=now)
     return render_pdf(HTML(string=html), download_filename='begegnungen_runde{}.pdf'.format(runde))
     #return html
 
@@ -209,6 +206,7 @@ def new():
 @app.route("/edit/<int:roundNumber>", methods=['GET', 'POST'])
 @login_required
 def edit(roundNumber):
+    changeToTurnierDirectory(session['turnierName'])
     error = None
     definingFileForRound = getFileNameOfRound(roundNumber)
     if not os.path.exists(definingFileForRound):
@@ -223,16 +221,16 @@ def edit(roundNumber):
             with open(definingFileForRound, "w", encoding='utf-8') as roundFile:
                 roundFile.write(textToWrite)
 
-        refreshModel()
         return flask.redirect(flask.url_for('main'))
 
-    return render_template('edit.html', error=error, editRound=roundNumber,
+    return render_template('edit.html', error=error, runde=roundNumber,
                            text=getDefiningTextFor(roundNumber))
 
 
 @app.route("/editSingle/<int:roundNumber>/<a>/<b>", methods=['POST'])
 @login_required
 def editSingle(roundNumber, a, b):
+    changeToTurnierDirectory(session['turnierName'])
     result = '{}:{}  {} {} {} {} {}'.format(request.form['setWon'], request.form['setLost'],
                                             request.form['set1'], request.form['set2'], request.form['set3'],
                                             request.form['set4'], request.form['set5'])
@@ -256,16 +254,7 @@ def editSingle(roundNumber, a, b):
     with open(definingFileForRound, "w", encoding='utf-8') as roundFile:
         roundFile.write(wholeRoundDef)
 
-    refreshModel()
     return flask.redirect(flask.url_for('main'))
-
-
-def refreshModel():
-    spieler = Spieler_Collection()
-    rounds = getRounds(spieler)
-    if rounds[-1].isComplete():
-        rounds[-1].createStartOfNextRound()
-    flask.get_flashed_messages()
 
 
 def getDefiningTextFor(roundNumber):
@@ -285,7 +274,6 @@ def setTurnier(turnier):
     session['exportMode'] = False
     resetNumberOfRounds()
     changeToTurnierDirectory(session['turnierName'])
-    refreshModel()
     return flask.redirect(flask.url_for('main'))
 
 
