@@ -147,21 +147,21 @@ def main():
     spieler = turnier.getSpieler()
     ranking = spieler.getRanking()
     rankedSpieler = [sub[0] for sub in ranking]
-    thereAreFreilose = (len([s for s in rankedSpieler if s.hatteFreilos]) > 0)
 
     currentRound = turnier.getLastRound()
 
     begegnungen = '!'.join(currentRound.getUnfinishedBegegnungenFlat())
 
     currentRoundNumber = currentRound.getNumberOfRound()
-    if 'expertMode' in session and session['expertMode'] or currentRoundNumber < 0:
+    if 'expertMode' in session and session['expertMode'] or currentRoundNumber <= 0:
         textToEdit = getDefiningTextFor(currentRoundNumber)
     else:
         textToEdit = False
 
     return render_template('ranking.html', ranking=ranking, runde=currentRoundNumber,
                            auslosen=currentRound.isComplete(),
-                           spielerList=rankedSpieler, thereAreFreilose=thereAreFreilose,
+                           thereAreFreilose=spieler.freiloseNeeded(),
+                           spielerList=rankedSpieler,
                            begegnungen=begegnungen, text=textToEdit)
 
 

@@ -47,7 +47,7 @@ Runde {%- if runde >= 0 %}
  <td align="right">{{ buchz }}</td>
  <td align="right">{{ spieler.ttr }}</td>
  {% if thereAreFreilose %}
- <td>{{ 'ja' if spieler.hatteFreilos }}</td>
+ <td class="{{ spieler.getFreilosStyle(runde) }}">{{ 'ja' if spieler.hatteFreilosInRound }}</td>
  {% endif %}
 </tr>
 {%- endfor %}

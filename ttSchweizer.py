@@ -41,7 +41,7 @@ class Spieler:
         self.name = name
         self.ttr = int(ttr)
         self.ergebnisse = collections.OrderedDict()
-        self.hatteFreilos = False
+        self.hatteFreilosInRound = 0
 
     def __str__(self):
         return self.name
@@ -128,6 +128,11 @@ class Spieler:
             return 'justPlayed'
         return ''
 
+    def getFreilosStyle(self, roundNumer):
+        if self.hatteFreilosInRound == roundNumer:
+            return 'justPlayed'
+        return ''
+
     def getMatrixElementTooltipNames(self, other):
         if self == other:
             return ''
@@ -147,10 +152,10 @@ class Spieler:
     def addMatch(self, otherSpieler, theMatchResult):
         self.ergebnisse[otherSpieler] = theMatchResult
 
-    def addFreilos(self, freilos):
+    def addFreilos(self, freilos, roundNumber):
         self.addMatch(freilos, MatchResult(3, 0))
         freilos.addMatch(self, MatchResult(0, 3))
-        self.hatteFreilos = True
+        self.hatteFreilosInRound = roundNumber
 
     def getNumberOfMatches(self):
         return len(self.ergebnisse)
@@ -363,6 +368,9 @@ class Spieler_Collection(dict):
             return len(self) - 1
         return len(self)
 
+    def freiloseNeeded(self):
+        return "Freilos" in self
+
     def getGroupBySiege(self):
         """ Gruppen von Spielern mit gleicher Sieganzahl """
         listOfSiegAnzahl = sorted(set([p.getNumberOfSiege() for p in self.valuesOhneFreilos()]), reverse=True)
@@ -549,7 +557,7 @@ class Round:
                     continue
 
                 if isinstance(spielerB, FreiLos):
-                    spielerA.addFreilos(spielerB)
+                    spielerA.addFreilos(spielerB, self._numberOfRound)
                     continue
 
                 theMatchResult = parseMatchResult(y[1], fileName, line, self._numberOfRound)
@@ -603,6 +611,9 @@ class RoundInit(Round):
 
     def __repr__(self):
         return 'Round num={}, complete={}'.format(0, self._isComplete)
+
+    def getNumberOfRound(self):
+        return 0
 
     @staticmethod
     def _getClickTTExportFileName():
