@@ -228,8 +228,9 @@ td.tooltips {
 }
 
 td.tooltips span {
-  display: none;
   text-decoration: none;
+  visibility: hidden;
+  position:absolute;
 }
 
 td.tooltips:hover {
@@ -249,7 +250,7 @@ span {
 }
 
 td.tooltips:hover span {
-  display: block;
+  visibility: visible;
   position: absolute;
   top: -60px;
   left: 0;
@@ -262,6 +263,8 @@ td.tooltips:hover span {
   border-radius: 4px;
   margin-left: -120px;
   padding: 5px;
+  transition-property: visibility;
+  transition-delay:0.5s;
   }
 
 td.tooltips span b {
