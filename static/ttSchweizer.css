@@ -17,12 +17,17 @@ a:focus {
 	opacity: 1;
 }
 
-.menu{
-    background-color: #A7C942;
+.menu {
     word-spacing: 20px;
     padding:7px; border:#4e95f4 1px solid;
     top: 0px;
     display: inline-block;
+}
+.menuFix {
+    background-color: #A7C942;
+}
+.menuDyn {
+    background-color: #b8d1f3;
 }
 
 .hoverTable{

@@ -57,28 +57,30 @@ $(document).ready(function(){
 </div>
   {% endif %}
 {% endwith %}
-<div class="menu">
+<div class="menu menuFix">
 <a href="{{ url_for('main') }}">Home</a>
 <a href="{{ url_for('new') }}">Turniere</a>
+<a href="{{ url_for('logout') }}">Logout</a>
+</div>
+<div class="menu menuDyn">
+{%- if session['expertMode'] %}
+<a href="{{ url_for('expertMode',mode=0) }}">Normalansicht</a>
+{%- else %}
+<a href="{{ url_for('expertMode',mode=1) }}">Expertenansicht</a>
+{%- endif %}
 {%- if begegnungen %}
 <a href="{{ url_for('spielerZettel', begegnungen=begegnungen, runde=runde) }}">Spielerzettel</a>
 {%- endif %}
 {%- if auslosen %}
 <a href="{{ url_for('auslosen') }}">Auslosen</a>
 {%- endif %}
-{%- if session['expertMode'] %}
-<a href="{{ url_for('expertMode',mode=0) }}">Normalansicht</a>
-{%- else %}
-<a href="{{ url_for('expertMode',mode=1) }}">Expertenansicht</a>
-{%- endif %}
-<a href="{{ url_for('logout') }}">Logout</a>
 </div>
 {% block body %}{% endblock %}
 {%- if existingTurniere is defined and existingTurniere %}
 <hr/>
 <h2>Vorhandene Turniere:</h2>
 <p>
-<div class="menu">
+<div class="menu menuDyn">
 {%- for turnier in existingTurniere %}
 	<a href="{{ url_for('setTurnier', turnier=turnier) }}">{{ turnier }} </a>
 {%- endfor %}
