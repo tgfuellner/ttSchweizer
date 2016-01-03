@@ -10,9 +10,7 @@ import functools
 
 SPIELER_FileName = "spieler.txt"
 MIN_NumberOfPlayer = 3
-INIT_NUMBER_OfRounds = 10
 
-number_OfRounds = INIT_NUMBER_OfRounds
 currentRound = None
 
 
@@ -488,10 +486,6 @@ class Round:
         return self._isComplete
 
     def createStartOfNextRound(self):
-        global number_OfRounds
-        if self._numberOfRound == number_OfRounds:
-            return
-
         message("Auslosung von Runde %d" % self.getNumberOfNextRound())
 
         begegnungen = []
@@ -511,9 +505,7 @@ class Round:
 
         if not begegnungen:
             message("Auslosung ist nicht mehr möglich")
-            number_OfRounds = self._numberOfRound
         else:
-            number_OfRounds = INIT_NUMBER_OfRounds
             with open(getFileNameOfRound(self.getNumberOfNextRound()), 'w', encoding='utf-8') as the_file:
                 self.writeHeader(the_file)
                 for spielerA, spielerB in begegnungen:
@@ -723,11 +715,6 @@ def parseMatchResult(inString, fileName, line, roundNr):
     return MatchResultInRound(roundNr, saetzeSpielerA, saetzeSpielerB, satzErgebnisse)
 
 
-def resetNumberOfRounds():
-    global number_OfRounds
-    number_OfRounds = INIT_NUMBER_OfRounds
-
-
 def getFileNameOfRound(numberOfRound):
     if numberOfRound < 1:
         return SPIELER_FileName
@@ -742,7 +729,7 @@ def getRounds(allPlayers):
     """
     global currentRound
     roundList = [RoundInit(allPlayers)]
-    for i in range(1, 1 + number_OfRounds):
+    for i in range(1, 100):
         if os.path.isfile(getFileNameOfRound(i)):
             currentRound = Round(i, allPlayers)
             # noinspection PyTypeChecker

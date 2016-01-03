@@ -12,7 +12,7 @@ from flask.ext.login import LoginManager, UserMixin, login_user, logout_user, lo
 from flask.ext.sqlalchemy import SQLAlchemy
 
 import ttSchweizer
-from ttSchweizer import Turnier, getRounds, Spieler_Collection, getFileNameOfRound, resetNumberOfRounds
+from ttSchweizer import Turnier, getRounds, Spieler_Collection, getFileNameOfRound
 
 
 def message(s, category='none'):
@@ -282,7 +282,6 @@ def getDefiningTextFor(roundNumber):
 def setTurnier(turnier):
     session['turnierName'] = turnier
     session['exportMode'] = False
-    resetNumberOfRounds()
     changeToTurnierDirectory(session['turnierName'])
     return flask.redirect(flask.url_for('main'))
 
