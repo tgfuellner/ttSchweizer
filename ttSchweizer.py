@@ -33,6 +33,17 @@ class Turnier:
     def getSpieler(self):
         return self._spieler
 
+    @staticmethod
+    def getDefiningTextFor(roundNumber):
+        definingFileForRound = getFileNameOfRound(roundNumber)
+        if not os.path.exists(definingFileForRound):
+            return ""
+        with open(definingFileForRound, "r", encoding='utf-8') as roundFile:
+            text = roundFile.read()
+
+        return text
+
+
 @functools.total_ordering
 class Spieler:
     """ Daten zu einem Spieler """

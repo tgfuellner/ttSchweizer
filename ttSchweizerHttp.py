@@ -154,7 +154,7 @@ def main():
 
     currentRoundNumber = currentRound.getNumberOfRound()
     if 'expertMode' in session and session['expertMode'] or currentRoundNumber <= 0:
-        textToEdit = getDefiningTextFor(currentRoundNumber)
+        textToEdit = Turnier.getDefiningTextFor(currentRoundNumber)
     else:
         textToEdit = False
 
@@ -232,7 +232,7 @@ def edit(roundNumber):
         return flask.redirect(flask.url_for('main'))
 
     return render_template('edit.html', error=error, runde=roundNumber,
-                           text=getDefiningTextFor(roundNumber))
+                           text=Turnier.getDefiningTextFor(roundNumber))
 
 
 @app.route("/editSingle/<int:roundNumber>/<a>/<b>", methods=['POST'])
@@ -244,7 +244,7 @@ def editSingle(roundNumber, a, b):
                                             request.form['set4'], request.form['set5'])
     result = result.strip(' :')
     definingFileForRound = getFileNameOfRound(roundNumber)
-    wholeRoundDef = getDefiningTextFor(roundNumber)
+    wholeRoundDef = Turnier.getDefiningTextFor(roundNumber)
     # Vertausche Spieler
     aMatchResult = ttSchweizer.parseMatchResult(result, '{} <> {}'.format(a,b), result, roundNumber)
     if aMatchResult:
@@ -264,15 +264,6 @@ def editSingle(roundNumber, a, b):
 
     return flask.redirect(flask.url_for('main'))
 
-
-def getDefiningTextFor(roundNumber):
-    definingFileForRound = getFileNameOfRound(roundNumber)
-    if not os.path.exists(definingFileForRound):
-        return ""
-    with open(definingFileForRound, "r", encoding='utf-8') as roundFile:
-        text = roundFile.read()
-
-    return text
 
 
 @app.route("/setTurnier/<turnier>")
