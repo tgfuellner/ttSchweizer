@@ -11,9 +11,6 @@ import functools
 SPIELER_FileName = "spieler.txt"
 MIN_NumberOfPlayer = 3
 
-currentRound = None
-
-
 class Turnier:
     def __init__(self):
         self._spieler = Spieler_Collection()
@@ -121,7 +118,7 @@ class Spieler:
         else:
             return None
 
-    def willPlayAgainst(self, other):
+    def willPlayAgainst(self, other, currentRound):
         if currentRound:
             for a, b in currentRound.unfinishedBegegnungen:
                 if self is a and other is b:
@@ -129,7 +126,7 @@ class Spieler:
 
         return False
 
-    def playedAgainstInCurrentRound(self, other):
+    def playedAgainstInCurrentRound(self, other, currentRound):
         if currentRound:
             for a, b in currentRound.finishedBegegnungen:
                 if self is a and other is b:
@@ -137,23 +134,23 @@ class Spieler:
 
         return False
 
-    def getMatrixElement(self, other):
+    def getMatrixElement(self, other, currentRound):
         if self == other:
             return 'X'
         if self.hasWonAgainst(other):
             return '+'
         if other.hasWonAgainst(self):
             return '&ndash;'
-        if self.willPlayAgainst(other):
+        if self.willPlayAgainst(other, currentRound):
             return '?'
         return ''
 
-    def getMatrixElementStyle(self, other):
-        if self.willPlayAgainst(other):
+    def getMatrixElementStyle(self, other, currentRound):
+        if self.willPlayAgainst(other, currentRound):
             return 'awaited'
-        if self.playedAgainstInCurrentRound(other):
+        if self.playedAgainstInCurrentRound(other, currentRound):
             return 'justPlayed'
-        if other.playedAgainstInCurrentRound(self):
+        if other.playedAgainstInCurrentRound(self, currentRound):
             return 'justPlayed'
         return ''
 
@@ -162,12 +159,12 @@ class Spieler:
             return 'justPlayed'
         return ''
 
-    def getMatrixElementTooltipNames(self, other):
+    def getMatrixElementTooltipNames(self, other, currentRound):
         if self == other:
             return ''
         if self.hasPlayedAgainst(other):
             return 'Runde {r}: {a} - {b}'.format(a=self, b=other, r=self.getRoundNrOfPlayedAgainst(other))
-        if self.willPlayAgainst(other):
+        if self.willPlayAgainst(other, currentRound):
             return '{} - {}'.format(self, other)
         return ''
 
@@ -622,6 +619,8 @@ class RoundInit(Round):
     def __init__(self, aCollectionOfAllPlayers):
         self._isComplete = False
         self._numberOfRound = 0
+        self.unfinishedBegegnungen = []
+        self.finishedBegegnungen = []
 
         if not os.path.isfile(SPIELER_FileName):
             self._tryToReadClickTTExport()
@@ -765,7 +764,6 @@ def getRounds(allPlayers):
         :param allPlayers: alle Spieler
         :return: Liste aller Runden
     """
-    global currentRound
     roundList = [RoundInit(allPlayers)]
     for i in range(1, 100):
         if os.path.isfile(getFileNameOfRound(i)):

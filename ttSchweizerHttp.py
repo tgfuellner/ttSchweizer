@@ -159,7 +159,7 @@ def main():
         textToEdit = False
 
     return render_template('ranking.html', ranking=ranking, runde=currentRoundNumber,
-                           auslosen=currentRound.isComplete(),
+                           currentRound=currentRound,
                            thereAreFreilose=spieler.freiloseNeeded(),
                            spielerList=rankedSpieler,
                            begegnungen=begegnungen, text=textToEdit)
