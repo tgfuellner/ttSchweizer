@@ -12,7 +12,7 @@ from flask.ext.login import LoginManager, UserMixin, login_user, logout_user, lo
 from flask.ext.sqlalchemy import SQLAlchemy
 
 import ttSchweizer
-from ttSchweizer import Turnier, Spieler_Collection, getFileNameOfRound
+from ttSchweizer import Turnier
 
 
 def message(s, category='none'):
@@ -216,18 +216,16 @@ def new():
 def edit(roundNumber):
     changeToTurnierDirectory(session['turnierName'])
     error = None
-    definingFileForRound = getFileNameOfRound(roundNumber)
-    if not os.path.exists(definingFileForRound):
+    if not Turnier.roundExists(roundNumber):
         flash("Die Runde {} kann nicht editiert werden!".format(roundNumber), 'info')
         return flask.redirect(flask.url_for('main'))
 
     if request.method == 'POST':
         if request.form['action'] == 'Löschen':
-            os.remove(definingFileForRound)
+            Turnier.remove(roundNumber)
         else:
             textToWrite = request.form['text']
-            with open(definingFileForRound, "w", encoding='utf-8') as roundFile:
-                roundFile.write(textToWrite)
+            Turnier.writeRound(roundNumber, textToWrite)
 
         return flask.redirect(flask.url_for('main'))
 
@@ -243,7 +241,6 @@ def editSingle(roundNumber, a, b):
                                             request.form['set1'], request.form['set2'], request.form['set3'],
                                             request.form['set4'], request.form['set5'])
     result = result.strip(' :')
-    definingFileForRound = getFileNameOfRound(roundNumber)
     wholeRoundDef = Turnier.getDefiningTextFor(roundNumber)
     # Vertausche Spieler
     aMatchResult = ttSchweizer.parseMatchResult(result, '{} <> {}'.format(a,b), result, roundNumber)
@@ -259,8 +256,7 @@ def editSingle(roundNumber, a, b):
                            '{} <> {} ! {}'.format(p1, p2, res),
                            wholeRoundDef)
 
-    with open(definingFileForRound, "w", encoding='utf-8') as roundFile:
-        roundFile.write(wholeRoundDef)
+    Turnier.writeRound(roundNumber, wholeRoundDef)
 
     return flask.redirect(flask.url_for('main'))
 

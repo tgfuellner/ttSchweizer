@@ -34,6 +34,24 @@ class Turnier:
         return self._spieler
 
     @staticmethod
+    def remove(roundNumber):
+        definingFileForRound = getFileNameOfRound(roundNumber)
+        os.remove(definingFileForRound)
+
+    @staticmethod
+    def roundExists(roundNumber):
+        definingFileForRound = getFileNameOfRound(roundNumber)
+        if os.path.exists(definingFileForRound):
+            return True
+        return False
+
+    @staticmethod
+    def writeRound(roundNumber, roundData):
+        definingFileForRound = getFileNameOfRound(roundNumber)
+        with open(definingFileForRound, "w", encoding='utf-8') as roundFile:
+            roundFile.write(roundData)
+
+    @staticmethod
     def getDefiningTextFor(roundNumber):
         definingFileForRound = getFileNameOfRound(roundNumber)
         if not os.path.exists(definingFileForRound):
