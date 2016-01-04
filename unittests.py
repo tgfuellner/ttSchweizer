@@ -117,7 +117,7 @@ class TestBegegnungen(unittest.TestCase):
 
         (A, B, C, D, E, F, G, H, I, K, L, Freilos) = allPlayersList
 
-        H.addFreilos(Freilos)
+        H.addFreilos(Freilos,1)
         self.createBegegnungen((A, K, 3, 0), (B, G, 3, 1), (D, L, 3, 0), (F, C, 2, 3), (I, E, 3, 2))
 
         return allPlayersList
@@ -293,11 +293,11 @@ class TestBegegnungen(unittest.TestCase):
 
         (A, B, C, D, E, F, G, H, I, Freilos) = allPlayersList
 
-        A.addFreilos(Freilos)
+        A.addFreilos(Freilos, 1)
         self.createBegegnungen((B, G, 3, 1), (D, H, 3, 0), (F, C, 2, 3), (I, E, 3, 2))
-        I.addFreilos(Freilos)
+        I.addFreilos(Freilos, 1)
         self.createBegegnungen((A, B, 3, 0), (C, D, 3, 0), (E, F, 3, 0), (G, H, 3, 0))
-        H.addFreilos(Freilos)
+        H.addFreilos(Freilos, 1)
         self.createBegegnungen((A, C, 3, 0), (B, D, 3, 0), (E, G, 3, 0), (F, I, 3, 0))
 
         # Spieler: A, B, C, D, E, F, G, H, I
