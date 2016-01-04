@@ -204,7 +204,7 @@ def new():
             os.chdir(turnierName)
             flask.get_flashed_messages()
             session['turnierName'] = turnierName
-            session['exportMode'] = False
+            session['expertMode'] = False
             flash('{} wurde gestartet'.format(turnierName), 'info')
             return flask.redirect(flask.url_for('main'))
 
@@ -266,7 +266,7 @@ def editSingle(roundNumber, a, b):
 @login_required
 def setTurnier(turnier):
     session['turnierName'] = turnier
-    session['exportMode'] = False
+    session['expertMode'] = False
     changeToTurnierDirectory(session['turnierName'])
     return flask.redirect(flask.url_for('main'))
 
