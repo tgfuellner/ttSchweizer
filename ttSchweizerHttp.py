@@ -12,7 +12,7 @@ from flask.ext.login import LoginManager, UserMixin, login_user, logout_user, lo
 from flask.ext.sqlalchemy import SQLAlchemy
 
 import ttSchweizer
-from ttSchweizer import Turnier, getRounds, Spieler_Collection, getFileNameOfRound
+from ttSchweizer import Turnier, Spieler_Collection, getFileNameOfRound
 
 
 def message(s, category='none'):
@@ -202,8 +202,6 @@ def new():
         else:
             os.mkdir(turnierName, 0o755)
             os.chdir(turnierName)
-            spieler = Spieler_Collection()
-            getRounds(spieler)
             flask.get_flashed_messages()
             session['turnierName'] = turnierName
             session['exportMode'] = False
