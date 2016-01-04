@@ -761,8 +761,8 @@ def message(s, category='info'):
 
 if __name__ == '__main__':
 
-    alleSpieler = Spieler_Collection()
-    rounds = getRounds(alleSpieler)
+    turnier = Turnier()
+    lastRound = turnier.getLastRound()
 
-    if rounds[-1].isComplete():
-        rounds[-1].createStartOfNextRound()
+    if lastRound.isComplete():
+        lastRound.createStartOfNextRound()
