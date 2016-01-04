@@ -592,6 +592,7 @@ class RoundInit(Round):
     # noinspection PyMissingConstructor
     def __init__(self, aCollectionOfAllPlayers):
         self._isComplete = False
+        self._numberOfRound = 0
 
         if not os.path.isfile(SPIELER_FileName):
             self._tryToReadClickTTExport()
@@ -611,9 +612,6 @@ class RoundInit(Round):
 
     def __repr__(self):
         return 'Round num={}, complete={}'.format(0, self._isComplete)
-
-    def getNumberOfRound(self):
-        return 0
 
     @staticmethod
     def _getClickTTExportFileName():
