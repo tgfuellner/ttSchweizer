@@ -136,16 +136,17 @@ def login():
         return flask.abort(405)
 
 
-@app.route("/")
+@app.route("/", defaults={'roundNr':0})
+@app.route("/<int:roundNr>")
 @login_required
-def main():
+def main(roundNr):
     changeToUserDirectory()
     if 'turnierName' not in session or not os.path.exists(session['turnierName']):
         return flask.redirect(flask.url_for('new'))
 
     changeToTurnierDirectory(session['turnierName'])
 
-    turnier = Turnier()
+    turnier = Turnier(roundNr)
     spieler = turnier.getSpieler()
     ranking = spieler.getRanking()
     rankedSpieler = [sub[0] for sub in ranking]

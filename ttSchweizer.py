@@ -12,9 +12,9 @@ SPIELER_FileName = "spieler.txt"
 MIN_NumberOfPlayer = 3
 
 class Turnier:
-    def __init__(self):
+    def __init__(self, roundNr=0):
         self._spieler = Spieler_Collection()
-        self._rounds = getRounds(self._spieler)
+        self._rounds = getRounds(self._spieler, roundNr)
 
     def getLastRound(self):
         return self._rounds[-1]
@@ -758,12 +758,14 @@ def getFileNameOfRound(numberOfRound):
     return "runde-%d.txt" % numberOfRound
 
 
-def getRounds(allPlayers):
+def getRounds(allPlayers, readToRound):
     """ Schaut nach welche Files vorhanden sind.
         Erzeugt entsprechende Round Instanzen
         :param allPlayers: alle Spieler
+        :param readToRound: 0 read all round otherwise read until this round
         :return: Liste aller Runden
     """
+    print(readToRound)
     roundList = [RoundInit(allPlayers)]
     for i in range(1, 100):
         if os.path.isfile(getFileNameOfRound(i)):
@@ -772,7 +774,11 @@ def getRounds(allPlayers):
             roundList.append(currentRound)
         else:
             break
+        if readToRound and i >= readToRound:
+            print('break')
+            break
 
+    print(len(roundList))
     return roundList
 
 
