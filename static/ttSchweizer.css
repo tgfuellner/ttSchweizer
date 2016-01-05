@@ -7,9 +7,10 @@ body
          margin-top: 0px;
 }
 
-a {
+.menu a, h1 a, h2 a {
     text-decoration: none;
 	opacity: 0.8;
+    color: #00E;
 }
 
 a:hover,

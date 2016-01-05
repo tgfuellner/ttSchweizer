@@ -1,12 +1,24 @@
 {% extends "layout.html" %}
+{% block style %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css">
+{% endblock %}
+
 {% block body %}
   <h2>Starte ein neues Turnier</h2>
   {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
-  <form action="{{ url_for('new') }}" method=post>
-    <dl>
-      <dt>Turniername:
-      <dd><input type=text name=turniername>
-      <dd><input type=submit value=Erzeugen>
-    </dl>
-  </form>
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <form action="{{ url_for('new') }}" method=post>
+        <div class="form-group">
+          <label for="turniername">Turniername</label>
+          <input type="text" class="form-control" id="turniername" name="turniername"/>
+        </div>
+        <div class="form-group">
+          <label for="txtPassword">Password</label>
+          <input type="password" class="form-control" id="txtPassword" name="txtPassword"/>
+        </div>
+        <button type="submit" class="btn btn-primary">Erzeugen</button>
+      </form>
+    </div>
+  </div>
 {% endblock %}
