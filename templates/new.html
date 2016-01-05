@@ -7,15 +7,15 @@
   <h2>Starte ein neues Turnier</h2>
   {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
   <div class="row">
-    <div class="col-md-8 col-md-offset-2">
-      <form action="{{ url_for('new') }}" method=post>
+    <div class="col-md-4 col-md-offset-1">
+      <form action="{{ url_for('new') }}" method=post enctype=multipart/form-data>
         <div class="form-group">
           <label for="turniername">Turniername</label>
           <input type="text" class="form-control" id="turniername" name="turniername"/>
         </div>
         <div class="form-group">
-          <label for="txtPassword">Password</label>
-          <input type="password" class="form-control" id="txtPassword" name="txtPassword"/>
+          <label for="clickTT">Optional: ClickTT Spieler Export</label>
+          <input type="file" accept=".xml" class="form-control" id="clickTT" name="clickTT"/>
         </div>
         <button type="submit" class="btn btn-primary">Erzeugen</button>
       </form>

@@ -11,6 +11,8 @@ from flask import Flask, request, session, render_template, flash
 from flask.ext.login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask.ext.sqlalchemy import SQLAlchemy
 
+from werkzeug import secure_filename
+
 import ttSchweizer
 from ttSchweizer import Turnier
 
@@ -202,10 +204,13 @@ def new():
         else:
             os.mkdir(turnierName, 0o755)
             os.chdir(turnierName)
-            flask.get_flashed_messages()
             session['turnierName'] = turnierName
             session['expertMode'] = False
             flash('{} wurde gestartet'.format(turnierName), 'info')
+            clickTT = request.files['clickTT']
+            if clickTT:
+                filename = secure_filename(clickTT.filename)
+                clickTT.save(filename)
             return flask.redirect(flask.url_for('main'))
 
     return render_template('new.html', error=error, existingTurniere=getExistingTurniere())
