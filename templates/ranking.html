@@ -54,7 +54,8 @@ Runde {%- if runde >= 0 %}
 {%- endfor %}
 </table>
 <div class="menu menuDyn">
-	<a href="{{ url_for('main', roundNr=runde-1) }}">&lArr; </a><a href="{{ url_for('main', roundNr=runde+1) }}">&rArr;</a>
+	<a href="{{ url_for('main', roundNr=runde-1) }}">&lArr; </a>{%- if not isLastRound 
+    %}<a href="{{ url_for('main', roundNr=runde+1) }}">&rArr;</a>{%- endif %}
 </div>
 
 {%- if text %}

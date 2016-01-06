@@ -14,7 +14,10 @@ MIN_NumberOfPlayer = 3
 class Turnier:
     def __init__(self, roundNr=0):
         self._spieler = Spieler_Collection()
-        self._rounds = getRounds(self._spieler, roundNr)
+        self._rounds, self._lastExistingRoundNr = getRounds(self._spieler, roundNr)
+
+    def allRoundsWhereReadIn(self):
+        return self._lastExistingRoundNr == self.getLastRound().getNumberOfRound()
 
     def getLastRound(self):
         return self._rounds[-1]
@@ -762,24 +765,22 @@ def getRounds(allPlayers, readToRound):
     """ Schaut nach welche Files vorhanden sind.
         Erzeugt entsprechende Round Instanzen
         :param allPlayers: alle Spieler
-        :param readToRound: 0 read all round otherwise read until this round
-        :return: Liste aller Runden
+        :param readToRound: 0: read all rounds otherwise read until this round
+        :return: Liste aller Runden und Nr der letzten existierenden Runde
     """
-    print(readToRound)
+    lastExistingRoundNr = 0
     roundList = [RoundInit(allPlayers)]
     for i in range(1, 100):
         if os.path.isfile(getFileNameOfRound(i)):
-            currentRound = Round(i, allPlayers)
-            # noinspection PyTypeChecker
-            roundList.append(currentRound)
+            if readToRound == 0 or i <= readToRound:
+                currentRound = Round(i, allPlayers)
+                # noinspection PyTypeChecker
+                roundList.append(currentRound)
         else:
-            break
-        if readToRound and i >= readToRound:
-            print('break')
+            lastExistingRoundNr = i - 1
             break
 
-    print(len(roundList))
-    return roundList
+    return (roundList, lastExistingRoundNr)
 
 
 def message(s, category='info'):

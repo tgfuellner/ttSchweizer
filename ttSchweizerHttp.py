@@ -162,7 +162,7 @@ def main(roundNr):
         textToEdit = False
 
     return render_template('ranking.html', ranking=ranking, runde=currentRoundNumber,
-                           currentRound=currentRound,
+                           currentRound=currentRound, isLastRound=turnier.allRoundsWhereReadIn(),
                            thereAreFreilose=spieler.freiloseNeeded(),
                            spielerList=rankedSpieler,
                            begegnungen=begegnungen, text=textToEdit)

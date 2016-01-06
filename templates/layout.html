@@ -72,7 +72,7 @@ $(document).ready(function(){
 {%- if begegnungen %}
 <a href="{{ url_for('spielerZettel', begegnungen=begegnungen, runde=runde) }}">Spielerzettel</a>
 {%- endif %}
-{%- if currentRound is defined and currentRound.isComplete() %}
+{%- if currentRound is defined and currentRound.isComplete() and isLastRound %}
 <a href="{{ url_for('auslosen') }}">Auslosen</a>
 {%- endif %}
 </div>
