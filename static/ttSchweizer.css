@@ -7,7 +7,7 @@ body
          margin-top: 0px;
 }
 
-.menu a, h1 a, h2 a {
+.menuArrow a, .menu a, h1 a, h2 a {
     text-decoration: none;
 	opacity: 0.8;
     color: #00E;
@@ -23,6 +23,13 @@ a:focus {
     padding:7px; border:#4e95f4 1px solid;
     top: 0px;
     display: inline-block;
+}
+.menuArrow {
+    word-spacing: 30px;
+    padding:7px; border:#4e95f4 0px solid;
+    top: 1px;
+    display: inline-block;
+    font-size: 2em;
 }
 .menuFix {
     background-color: #A7C942;
