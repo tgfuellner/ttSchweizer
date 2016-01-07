@@ -194,35 +194,36 @@ def spielerZettel(runde, begegnungen):
 @app.route("/new", methods=['GET', 'POST'])
 @login_required
 def new():
-    error = None
-
     changeToUserDirectory()
 
     if request.method == 'POST':
         turnierName = quote_plus(request.form['turniername'])
+        if not turnierName:
+            flash("Bitte einen Turniernamen angeben", 'info')
+            return render_template('new.html', existingTurniere=getExistingTurniere())
         if os.path.exists(turnierName):
-            error = "Ein Turnier mit dem Namen {} existiert schon".format(turnierName)
-        else:
-            os.mkdir(turnierName, 0o755)
-            os.chdir(turnierName)
-            session['turnierName'] = turnierName
-            session['expertMode'] = False
-            flash('{} wurde gestartet'.format(turnierName), 'info')
-            clickTT = request.files['clickTT']
-            if clickTT:
-                filename = secure_filename(clickTT.filename)
-                if filename:
-                    clickTT.save(filename)
-            return flask.redirect(flask.url_for('main'))
+            flash("Ein Turnier mit dem Namen {} existiert schon".format(turnierName), 'info')
+            return render_template('new.html', existingTurniere=getExistingTurniere())
 
-    return render_template('new.html', error=error, existingTurniere=getExistingTurniere())
+        os.mkdir(turnierName, 0o755)
+        os.chdir(turnierName)
+        session['turnierName'] = turnierName
+        session['expertMode'] = False
+        flash('{} wurde gestartet'.format(turnierName), 'info')
+        clickTT = request.files['clickTT']
+        if clickTT:
+            filename = secure_filename(clickTT.filename)
+            if filename:
+                clickTT.save(filename)
+        return flask.redirect(flask.url_for('main'))
+
+    return render_template('new.html', existingTurniere=getExistingTurniere())
 
 
 @app.route("/edit/<int:roundNumber>", methods=['GET', 'POST'])
 @login_required
 def edit(roundNumber):
     changeToTurnierDirectory(session['turnierName'])
-    error = None
     if not Turnier.roundExists(roundNumber):
         flash("Die Runde {} kann nicht editiert werden!".format(roundNumber), 'info')
         return flask.redirect(flask.url_for('main'))
@@ -236,7 +237,7 @@ def edit(roundNumber):
 
         return flask.redirect(flask.url_for('main'))
 
-    return render_template('edit.html', error=error, runde=roundNumber,
+    return render_template('edit.html', runde=roundNumber,
                            text=Turnier.getDefiningTextFor(roundNumber))
 
 

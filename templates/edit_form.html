@@ -5,7 +5,6 @@ Eingabe für Runde {{ runde }}
 Eingabe der Spieler
 {%- endif %}
 </h2>
-{% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
 <form action="{{ url_for('edit', roundNumber=runde) }}" method=post>
  <table>
  <tr>
