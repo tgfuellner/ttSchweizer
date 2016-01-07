@@ -166,9 +166,10 @@ class Spieler:
         if self == other:
             return ''
         if self.hasPlayedAgainst(other):
-            return 'Runde {r}: {a} - {b}'.format(a=self, b=other, r=self.getRoundNrOfPlayedAgainst(other))
+            return 'Runde {r}: <strong>{a} - {b}</strong>'.format(a=self, b=other,
+                r=self.getRoundNrOfPlayedAgainst(other))
         if self.willPlayAgainst(other, currentRound):
-            return '{} - {}'.format(self, other)
+            return '<strong>{} - {}</strong>'.format(self, other)
         return ''
 
     def getMatrixElementTooltipResult(self, other, currentRound):

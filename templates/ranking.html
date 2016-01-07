@@ -27,8 +27,8 @@ Runde {%- if runde >= 0 %}
 {%- for player in spielerList %}
  <td class="tooltips {{ spieler.getMatrixElementStyle(player,currentRound) }}">{{
      spieler.getMatrixElement(player,currentRound)|safe }}
- {%- if spieler.getMatrixElementTooltipNames(player,currentRound) %}<span><strong>{{
-      spieler.getMatrixElementTooltipNames(player,currentRound) }}</strong><br/>{{
+ {%- if spieler.getMatrixElementTooltipNames(player,currentRound) %}<span>{{
+      spieler.getMatrixElementTooltipNames(player,currentRound)|safe }}<br/>{{
       spieler.getMatrixElementTooltipResult(player,currentRound)
       }} <br/>
 <form action="{{ url_for('editSingle',
