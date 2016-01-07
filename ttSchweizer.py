@@ -173,7 +173,6 @@ class Spieler:
         return ''
 
     def getMatrixElementTooltipResult(self, other, currentRound):
-        print(currentRound)
         if self == other:
             return ''
         if self.hasPlayedAgainst(other):
