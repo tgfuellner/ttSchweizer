@@ -211,7 +211,8 @@ def new():
             clickTT = request.files['clickTT']
             if clickTT:
                 filename = secure_filename(clickTT.filename)
-                clickTT.save(filename)
+                if filename:
+                    clickTT.save(filename)
             return flask.redirect(flask.url_for('main'))
 
     return render_template('new.html', error=error, existingTurniere=getExistingTurniere())
