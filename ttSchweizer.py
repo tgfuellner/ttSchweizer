@@ -171,11 +171,14 @@ class Spieler:
             return '{} - {}'.format(self, other)
         return ''
 
-    def getMatrixElementTooltipResult(self, other):
+    def getMatrixElementTooltipResult(self, other, currentRound):
+        print(currentRound)
         if self == other:
             return ''
         if self.hasPlayedAgainst(other):
             return str(self.ergebnisse[other])
+        if currentRound.getNumberOfRound() == 1:
+            return 'Beispiel: 3:1 8 13 -9 5'
         return ''
 
     def addMatch(self, otherSpieler, theMatchResult):
