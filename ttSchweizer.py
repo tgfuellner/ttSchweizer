@@ -664,7 +664,13 @@ class RoundInit(Round):
         xmlFileName = self._getClickTTExportFileName()
         if not xmlFileName:
             return
-        tree = Et.parse(xmlFileName)
+        try:
+            tree = Et.parse(xmlFileName)
+        except Et.ParseError as err:
+            message("Die clickTT Spieler Export xml Datei '{}' ist fehlerhaft".format(xmlFileName))
+            message("  {}".format(err))
+            return
+
         root = tree.getroot()
 
         with open(SPIELER_FileName, 'w', encoding='utf-8') as fd:
