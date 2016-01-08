@@ -40,6 +40,21 @@ class Turnier:
             return True
         return False
 
+    def getSpielerXmlFileName(self):
+        return self._rounds[0].xmlDefinitionFileName
+
+    def getClicktTTResultFileName(self):
+        round = self.getLastRound()
+        nr = round.getNumberOfRound()
+        xmlDefName = self.getSpielerXmlFileName()
+        return "{}{}-{}".format(START_OF_RESULT_XML_FILENAME, nr, xmlDefName)
+
+    def writeClickTTResult(self):
+        tree = Et.parse(self.getSpielerXmlFileName())
+        with open(self.getClicktTTResultFileName(), "wb") as fd:
+            fd.write(b'<?xml version="1.0" encoding="utf-8"?>\n')
+            fd.write(b'<!DOCTYPE tournament SYSTEM "http://liga.nu/dtd/TournamentPortal.dtd">\n')
+            tree.write(fd, 'utf-8')
 
     @staticmethod
     def remove(roundNumber):
@@ -822,5 +837,5 @@ if __name__ == '__main__':
 
     if lastRound.isComplete():
         if turnier.xmlResultCanBeCreated():
-            print('XML Export needed')
+            turnier.writeClickTTResult()
         lastRound.createStartOfNextRound()
