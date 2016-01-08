@@ -653,6 +653,7 @@ class RoundInit(Round):
         if len(xmls) == 0:
             message("Keine clickTT Spieler Export xml Datei gefunden")
             return ''
+        xmls = [xml for xml in xmls if not xml.startswith('resultRunde')]
         if len(xmls) > 1:
             message("Mehr als eine clickTT Spieler Export xml Datei gefunden")
             return ''

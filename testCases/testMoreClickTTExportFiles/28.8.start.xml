@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE tournament SYSTEM "http://liga.nu/dtd/TournamentPortal.dtd">
+<tournament name="Commerzbank Sports &amp; More Bavarian TT-Race" start-date="2015-08-28" end-date="2015-08-28" tournament-id="%2Botpw7t6imD4nHy3DwX9tmQEk8MrTId3">
+  <competition age-group="Damen/Herren" type="Einzel" start-date="2015-08-28 20:00">
+    <players>
+      <player type="single" id="PLAYER1">
+        <person lastname="Broll" firstname="Joachim" birthyear="1954" licence-nr="103028148" club-name="SV Weichs" ttr="1156" sex="1" internal-nr="NU1005321"/>
+      </player>
+      <player type="single" id="PLAYER2">
+        <person lastname="Djelassi" firstname="Mourad" birthyear="1973" licence-nr="113017128" club-name="TSV 66 Polling" ttr="1491" sex="1" internal-nr="NU1003762"/>
+      </player>
+      <player type="single" id="PLAYER3">
+        <person lastname="Gabler" firstname="Jochen" birthyear="1982" licence-nr="102013235" club-name="MTV 1862 Pfaffenhofen/Ilm" ttr="1580" sex="1" internal-nr="NU1009295"/>
+      </player>
+      <player type="single" id="PLAYER4">
+        <person lastname="Gonnsen" firstname="Christian" birthyear="1964" licence-nr="112024074" club-name="VfR Haag/Amper" ttr="1302" sex="1" internal-nr="NU1337039"/>
+      </player>
+      <player type="single" id="PLAYER5">
+        <person lastname="Grichtmaier" firstname="Harald" birthyear="1972" licence-nr="202018205" club-name="TSV Kronwinkl" ttr="1249" sex="1" internal-nr="NU1336467"/>
+      </player>
+      <player type="single" id="PLAYER6">
+        <person lastname="Hambach" firstname="Wolfgang" birthyear="1961" licence-nr="112011158" club-name="SG Moosburg" ttr="1365" sex="1" internal-nr="NU1019633"/>
+      </player>
+      <player type="single" id="PLAYER7">
+        <person lastname="Hammer" firstname="Sebastian" birthyear="1986" licence-nr="113009233" club-name="TSV Neumarkt/St. Veit" ttr="1576" sex="1" internal-nr="NU1177338"/>
+      </player>
+      <player type="single" id="PLAYER8">
+        <person lastname="Hoffmann" firstname="Rainer" birthyear="1971" licence-nr="102013024" club-name="MTV 1862 Pfaffenhofen/Ilm" ttr="1502" sex="1" internal-nr="NU1022805"/>
+      </player>
+      <player type="single" id="PLAYER9">
+        <person lastname="Höcht" firstname="Sebastian" birthyear="1986" licence-nr="112011271" club-name="SG Moosburg" ttr="1281" sex="1" internal-nr="NU1255950"/>
+      </player>
+      <player type="single" id="PLAYER10">
+        <person lastname="Kummerow" firstname="Torge" birthyear="1982" licence-nr="112008175" club-name="TSV Ismaning" ttr="1233" sex="1" internal-nr="NU1129329"/>
+      </player>
+      <player type="single" id="PLAYER11">
+        <person lastname="König" firstname="Norbert" birthyear="1968" licence-nr="114007142" club-name="SV Haiming" ttr="1332" sex="1" internal-nr="NU1029697"/>
+      </player>
+      <player type="single" id="PLAYER12">
+        <person lastname="Ly" firstname="David" birthyear="1992" licence-nr="202004161" club-name="TV Dingolfing" ttr="1319" sex="1" internal-nr="NU1136164"/>
+      </player>
+      <player type="single" id="PLAYER13">
+        <person lastname="Masera" firstname="Arno" birthyear="1969" licence-nr="110007257" club-name="SV-DJK Taufkirchen" ttr="1121" sex="1" internal-nr="NU1194048"/>
+      </player>
+      <player type="single" id="PLAYER14">
+        <person lastname="Popp" firstname="Silvio" birthyear="1984" licence-nr="109012165" club-name="TV Miesbach" ttr="1485" sex="1" internal-nr="NU1043423"/>
+      </player>
+      <player type="single" id="PLAYER15">
+        <person lastname="Roppelt" firstname="Michael" birthyear="1951" licence-nr="112004059" club-name="TSV Erding 1862" ttr="1553" sex="1" internal-nr="NU1047745"/>
+      </player>
+      <player type="single" id="PLAYER16">
+        <person lastname="Strobelt" firstname="Günter" birthyear="1961" licence-nr="106017121" club-name="SC Wörthsee" ttr="1301" sex="1" internal-nr="NU1056499"/>
+      </player>
+    </players>
+  </competition>
+</tournament>
