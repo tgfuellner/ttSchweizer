@@ -11,6 +11,7 @@ import functools
 SPIELER_FileName = "spieler.txt"
 MIN_NumberOfPlayer = 3
 START_OF_RESULT_XML_FILENAME = "resultRunde"
+XML_DEFINITION_ATTRIBUTE_NAME = "xml-definition"
 
 class Turnier:
     def __init__(self, roundNr=0):
@@ -33,6 +34,12 @@ class Turnier:
 
     def getSpieler(self):
         return self._spieler
+
+    def xmlResultCanBeCreated(self):
+        if self._rounds[0].xmlDefinitionFileName and self._lastExistingRoundNr > 0:
+            return True
+        return False
+
 
     @staticmethod
     def remove(roundNumber):
@@ -628,6 +635,7 @@ class RoundInit(Round):
         self._numberOfRound = 0
         self.unfinishedBegegnungen = []
         self.finishedBegegnungen = []
+        self.xmlDefinitionFileName = None
 
         if not os.path.isfile(SPIELER_FileName):
             self._tryToReadClickTTExport()
@@ -676,7 +684,7 @@ class RoundInit(Round):
         root = tree.getroot()
 
         with open(SPIELER_FileName, 'w', encoding='utf-8') as fd:
-            fd.write('# Erzeugt aus %s\n' % xmlFileName)
+            fd.write('{}={}\n\n'.format(XML_DEFINITION_ATTRIBUTE_NAME, xmlFileName))
             for player in root[0][0]:
                 # message(player.attrib['id'])
                 person = player[0].attrib
@@ -687,6 +695,9 @@ class RoundInit(Round):
         with open(fileName, "r", encoding='utf-8') as spielerFile:
             for line in spielerFile:
                 if self.isComment(line):
+                    continue
+                if line.startswith(XML_DEFINITION_ATTRIBUTE_NAME):
+                    self.xmlDefinitionFileName = line.split('=')[1].strip()
                     continue
                 name, ttr = line.split(',')
                 allPlayers.spieler(name.strip(), ttr.strip())
@@ -810,4 +821,6 @@ if __name__ == '__main__':
     lastRound = turnier.getLastRound()
 
     if lastRound.isComplete():
+        if turnier.xmlResultCanBeCreated():
+            print('XML Export needed')
         lastRound.createStartOfNextRound()
