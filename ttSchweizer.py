@@ -10,6 +10,7 @@ import functools
 
 SPIELER_FileName = "spieler.txt"
 MIN_NumberOfPlayer = 3
+START_OF_RESULT_XML_FILENAME = "resultRunde"
 
 class Turnier:
     def __init__(self, roundNr=0):
@@ -653,7 +654,7 @@ class RoundInit(Round):
         if len(xmls) == 0:
             message("Keine clickTT Spieler Export xml Datei gefunden")
             return ''
-        xmls = [xml for xml in xmls if not xml.startswith('resultRunde')]
+        xmls = [xml for xml in xmls if not xml.startswith(START_OF_RESULT_XML_FILENAME)]
         if len(xmls) > 1:
             message("Mehr als eine clickTT Spieler Export xml Datei gefunden")
             return ''
