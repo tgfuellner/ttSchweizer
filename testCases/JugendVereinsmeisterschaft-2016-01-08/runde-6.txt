@@ -1,0 +1,9 @@
+# Runde 6
+#
+# Ergebnisse bitte wie folgt eingeben (Spiel  Satz1, Satz2, Satz3 ...):
+# Heinz Musterspieler <> Klara Platzhalter ! 3:1 8 -4 12 3
+Matthias <> Niki ! 3:1
+Julian <> Andreas ! 3:0
+Marko <> Elias ! 3:0
+Alex <> Jakob ! 3:0
+Lukas <> Kilian ! 1:3

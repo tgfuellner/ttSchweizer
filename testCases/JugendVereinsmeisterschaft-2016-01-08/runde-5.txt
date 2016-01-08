@@ -1,0 +1,9 @@
+# Runde 5
+#
+# Ergebnisse bitte wie folgt eingeben (Spiel  Satz1, Satz2, Satz3 ...):
+# Heinz Musterspieler <> Klara Platzhalter ! 3:1 8 -4 12 3
+Matthias <> Andreas ! 3:1
+Julian <> Alex ! 3:0
+Niki <> Kilian ! 3:0
+Marko <> Jakob ! 3:1
+Elias <> Lukas ! 1:3

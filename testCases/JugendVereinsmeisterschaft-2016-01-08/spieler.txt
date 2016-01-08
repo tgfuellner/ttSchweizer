@@ -1,0 +1,10 @@
+Elias,700
+Andreas,896
+Alex,911
+Niki,800
+Jakob,765
+Marko,885
+Julian,1007
+Matthias,1005
+Kilian,811
+Lukas,800

@@ -1,0 +1,9 @@
+# Runde 1
+#
+# Ergebnisse bitte wie folgt eingeben (Spiel  Satz1, Satz2, Satz3 ...):
+# Heinz Musterspieler <> Klara Platzhalter ! 3:1 8 -4 12 3
+Julian <> Niki ! 3:0
+Matthias <> Elias ! 3:0
+Alex <> Kilian ! 3:0
+Andreas <> Jakob ! 3:0
+Marko <> Lukas ! 3:0
