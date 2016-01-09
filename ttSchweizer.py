@@ -89,9 +89,10 @@ class Turnier:
 class Spieler:
     """ Daten zu einem Spieler """
 
-    def __init__(self, name, ttr):
+    def __init__(self, name, ttr, idClickTT=None):
         self.name = name
         self.ttr = int(ttr)
+        self.idClickTT = idClickTT
         self.ergebnisse = collections.OrderedDict()
         self.hatteFreilosInRound = 0
 
@@ -705,9 +706,9 @@ class RoundInit(Round):
         with open(SPIELER_FileName, 'w', encoding='utf-8') as fd:
             fd.write('{}={}\n\n'.format(XML_DEFINITION_ATTRIBUTE_NAME, xmlFileName))
             for player in root[0][0]:
-                # message(player.attrib['id'])
                 person = player[0].attrib
-                line = '%s %s, %s\n' % (person['firstname'], person['lastname'], person['ttr'])
+                line = '%s %s, %s, %s\n' % (person['firstname'], person['lastname'],
+                                            person['ttr'], player.attrib['id'])
                 fd.write(line)
 
     def _calcRankOfPlayers(self, fileName, allPlayers):
@@ -718,8 +719,21 @@ class RoundInit(Round):
                 if line.startswith(XML_DEFINITION_ATTRIBUTE_NAME):
                     self.xmlDefinitionFileName = line.split('=')[1].strip()
                     continue
-                name, ttr = line.split(',')
-                allPlayers.spieler(name.strip(), ttr.strip())
+                items = line.split(',')
+                if len(items) <= 1:
+                    message('{}: Die Zeile "{}" ist nicht komplett'.format(fileName, line))
+                    continue
+                if len(items) == 2:
+                    name, ttr = items
+                    idClickTT = None
+                elif len(items) == 3:
+                    name, ttr, idClickTT = items
+                    idClickTT = idClickTT.strip()
+                else:
+                    message('{}: Die Zeile "{}" hat zuviele Kommas'.format(fileName, line))
+                    continue
+
+                allPlayers.spieler(name.strip(), ttr.strip(), idClickTT)
 
         if len(allPlayers) & 0x1:
             # odd
