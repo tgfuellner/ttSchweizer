@@ -5,7 +5,8 @@ import os.path
 import glob
 import random
 import collections
-import xml.etree.ElementTree as Et
+#import xml.etree.ElementTree as Et
+from lxml import etree as Et
 import functools
 
 SPIELER_FileName = "spieler.txt"
@@ -50,11 +51,37 @@ class Turnier:
         return "{}{}-{}".format(START_OF_RESULT_XML_FILENAME, nr, xmlDefName)
 
     def writeClickTTResult(self):
-        tree = Et.parse(self.getSpielerXmlFileName())
-        with open(self.getClicktTTResultFileName(), "wb") as fd:
-            fd.write(b'<?xml version="1.0" encoding="utf-8"?>\n')
-            fd.write(b'<!DOCTYPE tournament SYSTEM "http://liga.nu/dtd/TournamentPortal.dtd">\n')
-            tree.write(fd, 'utf-8')
+        # parser, weil sonst pretty_print nicht funktioniert
+        parser = Et.XMLParser(remove_blank_text=True)
+        tree = Et.parse(self.getSpielerXmlFileName(), parser)
+
+        matches = Et.Element('matches')
+        #<match group="Schweizer System (Runde 1)" nr="1" player-a="PLAYER3" player-b="PLAYER9" matches-a="1" matches-b="0" sets-a="3" sets-b="0" set-a-1="11" set-b-1="6" set-a-2="11" set-b-2="4" set-a-3="11" set-b-3="1" set-a-4="0" set-b-4="0" set-a-5="0" set-b-5="0" set-a-6="0" set-b-6="0" set-a-7="0" set-b-7="0" games-a="33" games-b="11"/>
+
+        for round in self._rounds[1:]:
+            nr = 1
+            for spielerA, spielerB in round.finishedBegegnungen:
+                match = spielerA.getMatch(spielerB)
+
+                match = Et.Element('match',
+                        {'group':"Schweizer System (Runde {})".format(str(round.getNumberOfRound())),
+                         'nr':str(nr),
+                         'player-a':spielerA.idClickTT, 'player-b':spielerB.idClickTT,
+                         'matches-a':"1" if match.isWon() else "0",
+                         'matches-b':"0" if match.isWon() else "1",
+                         'sets-a':str(match.gamesWonByPlayerA), 
+                         'sets-b':str(match.gamesWonByPlayerB), 
+                        })
+                matches.append(match)
+                nr += 1
+
+        print(Et.tostring(matches, pretty_print=True, encoding='unicode'))
+
+        competition = tree.find('competition')
+        competition.append(matches)
+
+        tree.write(self.getClicktTTResultFileName(),
+                   pretty_print=True, xml_declaration=True, encoding="utf-8")
 
     @staticmethod
     def remove(roundNumber):
@@ -211,6 +238,9 @@ class Spieler:
 
     def addMatch(self, otherSpieler, theMatchResult):
         self.ergebnisse[otherSpieler] = theMatchResult
+
+    def getMatch(self, other):
+        return self.ergebnisse[other]
 
     def addFreilos(self, freilos, roundNumber):
         self.addMatch(freilos, MatchResult(3, 0))

@@ -1,5 +1,5 @@
 Nutze clickTT Spieler Export Datei: müll.xml
 Die clickTT Spieler Export xml Datei 'müll.xml' ist fehlerhaft
-  syntax error: line 1, column 0
+  Start tag expected, '<' not found, line 1, column 1
 Die Datei 'spieler.txt' fehlt.
 Erzeuge eine Beispieldatei.
