@@ -169,6 +169,8 @@ class Spieler:
             return '&ndash;'
         if self.willPlayAgainst(other, currentRound):
             return '?'
+        if other.willPlayAgainst(self, currentRound):
+            return '?'
         return ''
 
     def getMatrixElementStyle(self, other, currentRound):
@@ -192,6 +194,8 @@ class Spieler:
             return 'Runde {r}: <strong>{a} - {b}</strong>'.format(a=self, b=other,
                 r=self.getRoundNrOfPlayedAgainst(other))
         if self.willPlayAgainst(other, currentRound):
+            return '<strong>{} - {}</strong>'.format(self, other)
+        if other.willPlayAgainst(self, currentRound):
             return '<strong>{} - {}</strong>'.format(self, other)
         return ''
 
