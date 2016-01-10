@@ -163,6 +163,7 @@ def main(roundNr):
 
     return render_template('ranking.html', ranking=ranking, runde=currentRoundNumber,
                            currentRound=currentRound, isLastRound=turnier.allRoundsWhereReadIn(),
+                           canExport=turnier.xmlResultCanBeCreated() and currentRound.isComplete(),
                            thereAreFreilose=spieler.freiloseNeeded(),
                            spielerList=rankedSpieler,
                            begegnungen=begegnungen, text=textToEdit)
@@ -190,6 +191,19 @@ def spielerZettel(runde, begegnungen):
     return render_pdf(HTML(string=html), download_filename='begegnungen_runde{}.pdf'.format(runde))
     #return html
 
+@app.route("/exportClickTTResult")
+@login_required
+def exportClickTTResult():
+    changeToTurnierDirectory(session['turnierName'])
+    turnier = Turnier()
+    if turnier.xmlResultCanBeCreated():
+        fileName = os.path.join(getUserDirector(), session['turnierName'], turnier.writeClickTTResult())
+        return flask.send_file(fileName, mimetype='text/xml', as_attachment=True)
+    else:
+        flash("Die Spieler wurden nicht aus ClickTT xml Datei importiert")
+        flash("  Kann deshalb ClickTT Ergebnis Datei nicht erzeugen")
+
+    return flask.redirect(flask.url_for('main'))
 
 @app.route("/new", methods=['GET', 'POST'])
 @login_required

@@ -56,7 +56,6 @@ class Turnier:
         tree = Et.parse(self.getSpielerXmlFileName(), parser)
 
         matches = Et.Element('matches')
-        #<match group="Schweizer System (Runde 1)" nr="1" player-a="PLAYER3" player-b="PLAYER9" matches-a="1" matches-b="0" sets-a="3" sets-b="0" set-a-1="11" set-b-1="6" set-a-2="11" set-b-2="4" set-a-3="11" set-b-3="1" set-a-4="0" set-b-4="0" set-a-5="0" set-b-5="0" set-a-6="0" set-b-6="0" set-a-7="0" set-b-7="0" games-a="33" games-b="11"/>
 
         for round in self._rounds[1:]:
             nr = 1
@@ -84,13 +83,13 @@ class Turnier:
                 matches.append(Et.Element('match', attr))
                 nr += 1
 
-        print(Et.tostring(matches, pretty_print=True, encoding='unicode'))
-
         competition = tree.find('competition')
         competition.append(matches)
 
         tree.write(self.getClicktTTResultFileName(),
                    pretty_print=True, xml_declaration=True, encoding="utf-8")
+
+        return self.getClicktTTResultFileName()
 
     @staticmethod
     def remove(roundNumber):

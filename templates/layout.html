@@ -75,6 +75,9 @@ $(document).ready(function(){
 {%- if currentRound is defined and currentRound.isComplete() and isLastRound %}
 <a href="{{ url_for('auslosen') }}">Auslosen</a>
 {%- endif %}
+{%- if canExport %}
+<a href="{{ url_for('exportClickTTResult') }}">Download-ClickTT-Ergebnis</a>
+{%- endif %}
 </div>
 {% block body %}{% endblock %}
 {%- if existingTurniere is defined and existingTurniere %}
