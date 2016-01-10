@@ -523,6 +523,11 @@ class MatchResult:
         return "%d:%d %s" % (self.gamesWonByPlayerA, self.gamesWonByPlayerB,
                              ', '.join(self.gamePoints))
 
+    @staticmethod
+    def _verbosPoint(p):
+        a = max(11, p + 2)
+        return (a, p)
+
     def turned(self):
         turnedGamePoints = []
         for p in self.gamePoints:
@@ -538,6 +543,27 @@ class MatchResult:
 
     def isUndecided(self):
         return self.gamesWonByPlayerA == self.gamesWonByPlayerB
+
+    def getVerbosePoints(self):
+        result = []
+        for p in self.gamePoints:
+            if p[0]=='-':
+                b,a = self._verbosPoint(int(p[1:]))
+            else:
+                a,b = self._verbosPoint(int(p))
+            result.append((a,b))
+
+        return result
+
+    def getVerbosePointsFilledToSevenSets(self):
+        points = self.getVerbosePoints()
+        return points + [(0,0),]*(7-len(points))
+
+    def getTotalPoints(self):
+        points = self.getVerbosePoints()
+        a = sum(tuple[0] for tuple in points)
+        b = sum(tuple[1] for tuple in points)
+        return (a,b)
 
 
 class MatchResultInRound(MatchResult):

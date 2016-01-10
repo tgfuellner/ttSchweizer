@@ -404,6 +404,24 @@ class TestMatchResult(unittest.TestCase):
         self.assertFalse(res.isWon())
         self.assertTrue(res.turned().isWon())
 
+    def test_getVerbosePoints(self):
+        res = MatchResult(3, 2, (10, 11, -3, '-0', 8))
+        self.assertEqual([(12,10),(13,11),(3,11),(0,11),(11,8)], res.getVerbosePoints())
+        res = MatchResult(1, 2, (0, -11, 3))
+        self.assertEqual([(11,0),(11,13),(11,3)], res.getVerbosePoints())
+
+    def test_getVerbosePointsFilledToSevenSets(self):
+        res = MatchResult(3, 2, (10, 11, -3, '-0', 8))
+        self.assertEqual([(12,10),(13,11),(3,11),(0,11),(11,8),(0,0),(0,0)],
+                         res.getVerbosePointsFilledToSevenSets())
+        res = MatchResult(1, 2, (0, -11, 3))
+        self.assertEqual([(11,0),(11,13),(11,3),(0,0),(0,0),(0,0),(0,0)],
+                          res.getVerbosePointsFilledToSevenSets())
+
+    def test_getTotalPoints(self):
+        res = MatchResult(3, 2, (10, 11, -3, '-0', 8))
+        self.assertEqual((39,51), res.getTotalPoints())
+
 
 class TestMatchResultInRound(unittest.TestCase):
     def test_gamesMatchResultIncludingPoints_doubleTurned_areEqual(self):
