@@ -9,4 +9,4 @@ Sebastian Hammer <> Mourad Djelassi !3:1 10 9 -3 10
 Wolfgang Hambach <> Arno Masera ! 3:1 -7 8 7 5
 Günter Strobelt <> Sebastian Höcht ! 2:3 5 4 -8 -10 -7
 Torge Kummerow <> Rainer Hoffmann ! 0:3 -12 -5 -8
-Harald Grichtmaier <> Silvio Popp ! 1:3 -5 11 -9 -3
+Harald Grichtmaier <> Silvio Popp ! 1:3 -5 9 -9 -3

@@ -62,17 +62,26 @@ class Turnier:
             nr = 1
             for spielerA, spielerB in round.finishedBegegnungen:
                 match = spielerA.getMatch(spielerB)
+                gamesA, gamesB = match.getTotalPoints()
 
-                match = Et.Element('match',
-                        {'group':"Schweizer System (Runde {})".format(str(round.getNumberOfRound())),
+                attr =  {'group':"Schweizer System (Runde {})".format(str(round.getNumberOfRound())),
                          'nr':str(nr),
                          'player-a':spielerA.idClickTT, 'player-b':spielerB.idClickTT,
                          'matches-a':"1" if match.isWon() else "0",
                          'matches-b':"0" if match.isWon() else "1",
                          'sets-a':str(match.gamesWonByPlayerA), 
                          'sets-b':str(match.gamesWonByPlayerB), 
-                        })
-                matches.append(match)
+                         'games-a':str(gamesA),
+                         'games-b':str(gamesB),
+                        }
+
+                setNr = 1
+                for a,b in match.getVerbosePointsFilledToSevenSets():
+                    attr['set-a-{}'.format(setNr)] = str(a)
+                    attr['set-b-{}'.format(setNr)] = str(b)
+                    setNr += 1
+
+                matches.append(Et.Element('match', attr))
                 nr += 1
 
         print(Et.tostring(matches, pretty_print=True, encoding='unicode'))
