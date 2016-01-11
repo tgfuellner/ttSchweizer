@@ -417,6 +417,9 @@ class TestMatchResult(unittest.TestCase):
         res = MatchResult(1, 2, (0, -11, 3))
         self.assertEqual([(11,0),(11,13),(11,3),(0,0),(0,0),(0,0),(0,0)],
                           res.getVerbosePointsFilledToSevenSets())
+        res = MatchResult(3, 4, (0, -11, 3, 8, -2, -8, 20))
+        self.assertEqual([(11,0),(11,13),(11,3),(11,8),(2,11),(8,11),(22,20)],
+                          res.getVerbosePointsFilledToSevenSets())
 
     def test_getTotalPoints(self):
         res = MatchResult(3, 2, (10, 11, -3, '-0', 8))
