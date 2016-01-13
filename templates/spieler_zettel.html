@@ -4,13 +4,14 @@
 
 <body>
 <table class="frames">
-{%- for row in begegnungen|batch(2) %}
+{%- for page in begegnungen|batch(6,('','')) %}
+{%- for row in page|batch(2) %}
   <tr>
   {%- for spielerA, spielerB in row %}
     <td style="width:33.3%">
       <p/>
       <center><small>{{ session['turnierName'] }}</small>
-            Runde {{ runde }}
+            Runde {{ runde if spielerA else '...' }}
             <small>am {{ date }}</small></center>
       <p/>
       <center><strong>{{ spielerA }}</strong>&nbsp;
@@ -56,6 +57,7 @@
   {%- endfor %}
   </tr>
   <tr height=0 class="page-break"> </tr>
+{%- endfor %}
 {%- endfor %}
 </table>
 </body>
