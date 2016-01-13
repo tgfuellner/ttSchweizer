@@ -1,6 +1,7 @@
 body { font: 0.8em Fontin, serif }
 
-@page { size: landscape; margin: 0.5cm }
+/* @page { size: landscape; margin: 0.5cm } */
+@page { size: A4 portrait; margin: 0.5cm }
 @media print {
   nav { display: none }
   tr.page-break  { display: block; page-break-before: always; }
