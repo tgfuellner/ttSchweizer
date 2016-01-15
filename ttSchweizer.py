@@ -137,6 +137,11 @@ class Spieler:
     def __repr__(self):
         return self.name
 
+    def getName(self,runde):
+        if runde == 0:
+            return '<input type="checkbox"/> ' + self.name
+        return self.name
+
     def __lt__(self, other):
         if self.getNumberOfSiege() > other.getNumberOfSiege():
             return True

@@ -23,7 +23,7 @@ Runde {%- if runde >= 0 %}
 {%- for (spieler, siege, buchz, platz) in ranking %}
 <tr class="{{ loop.cycle('odd', 'even') }}">
  <td align="right">{{ platz }}</td>
- <td>{{ spieler }}</td>
+ <td>{{ spieler.getName(runde)|safe }}</td>
 {%- for player in spielerList %}
  <td class="tooltips {{ spieler.getMatrixElementStyle(player,currentRound) }}">{{
      spieler.getMatrixElement(player,currentRound)|safe }}
