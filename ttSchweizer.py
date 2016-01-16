@@ -818,14 +818,28 @@ class RoundInit(Round):
 
     def createStartOfNextRound(self):
         numberOfGesetzte = int(round(len(self._rankedPlayerList) / 2.0))
+
+        # Laut BTTV Präsentation sind die besseren gesetzt
+        # Daraus folgt, dass ein Besserer das Freilos erhält!
         gesetzt = self._rankedPlayerList[:numberOfGesetzte]
         zuLosen = self._rankedPlayerList[numberOfGesetzte:]
         geLost = random.sample(zuLosen, len(zuLosen))
+        paarungen = zip(gesetzt, geLost)
+
+        # So wird ein schlechterer das Freilos erhalten
+        if False and self._rankedPlayerList[-1].name == 'Freilos':
+            numberOfGesetzte -= 1
+            gesetzt = self._rankedPlayerList[:numberOfGesetzte]
+            zuLosen = self._rankedPlayerList[numberOfGesetzte:-1]
+            geLost = random.sample(zuLosen, len(zuLosen))
+            paarungen = list(zip(gesetzt, geLost[:-1]))
+            paarungen.append([geLost[-1], self._rankedPlayerList[-1]])
+
 
         with open(getFileNameOfRound(self.getNumberOfNextRound()), 'w', encoding='utf-8') as the_file:
             self.writeHeader(the_file)
 
-            for gesetztSpieler, geLostSpieler in zip(gesetzt, geLost):
+            for gesetztSpieler, geLostSpieler in paarungen:
                 self.writeBegegnung(the_file, gesetztSpieler, geLostSpieler)
 
     @staticmethod
