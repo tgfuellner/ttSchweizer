@@ -821,13 +821,13 @@ class RoundInit(Round):
 
         # Laut BTTV Präsentation sind die besseren gesetzt
         # Daraus folgt, dass ein Besserer das Freilos erhält!
-        gesetzt = self._rankedPlayerList[:numberOfGesetzte]
-        zuLosen = self._rankedPlayerList[numberOfGesetzte:]
-        geLost = random.sample(zuLosen, len(zuLosen))
-        paarungen = zip(gesetzt, geLost)
+        #gesetzt = self._rankedPlayerList[:numberOfGesetzte]
+        #zuLosen = self._rankedPlayerList[numberOfGesetzte:]
+        #geLost = random.sample(zuLosen, len(zuLosen))
+        #paarungen = zip(gesetzt, geLost)
 
         # So wird ein schlechterer das Freilos erhalten
-        if False and self._rankedPlayerList[-1].name == 'Freilos':
+        if self._rankedPlayerList[-1].name == 'Freilos':
             numberOfGesetzte -= 1
             gesetzt = self._rankedPlayerList[:numberOfGesetzte]
             zuLosen = self._rankedPlayerList[numberOfGesetzte:-1]
