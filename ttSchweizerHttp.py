@@ -42,6 +42,20 @@ login_manager.login_message_category = 'info'
 login_manager.needs_refresh_message_category = 'info'
 
 
+if __name__ == "ttSchweizerHttp":
+    # logger
+    os.chdir('ttSchweizerData')
+    STARTcURRENTwORKINGdIR = os.getcwd()
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////var/www/ttSchweizer/sql.db'
+
+if __name__ == "flask_app":
+    # pythonanywhere
+    os.chdir('ttSchweizerData')
+    STARTcURRENTwORKINGdIR = os.getcwd()
+
+
+db = SQLAlchemy(app)
+
 def getUserDirector():
     return os.path.join(STARTcURRENTwORKINGdIR, current_user.username)
 
@@ -52,10 +66,13 @@ def changeToTurnierDirectory(directory):
     changeToUserDirectory()
     os.chdir(directory)
 
-
 def getExistingTurniere():
     return sorted([entry for entry in os.listdir(getUserDirector()) if os.path.isdir(entry)])
 
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String)
+    password = db.Column(db.String)
 
 
 @login_manager.user_loader
@@ -298,27 +315,7 @@ def favicon():
                                      'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
-if __name__ == "ttSchweizerHttp":
-    # logger
-    os.chdir('ttSchweizerData')
-    STARTcURRENTwORKINGdIR = os.getcwd()
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////var/www/ttSchweizer/sql.db'
-
-if __name__ == "flask_app":
-    # pythonanywhere
-    os.chdir('ttSchweizerData')
-    STARTcURRENTwORKINGdIR = os.getcwd()
-
 if __name__ == "__main__":
     app.debug = True
     STARTcURRENTwORKINGdIR = os.getcwd()
     app.run()
-
-
-db = SQLAlchemy(app)
-
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String)
-    password = db.Column(db.String)
-
