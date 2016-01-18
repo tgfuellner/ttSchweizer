@@ -827,7 +827,7 @@ class RoundInit(Round):
         paarungen = zip(gesetzt, geLost)
 
         # So wird ein schlechterer das Freilos erhalten
-        if self._rankedPlayerList[-1].name == 'Freilos':
+        if False and self._rankedPlayerList[-1].name == 'Freilos':
             numberOfGesetzte -= 1
             gesetzt = self._rankedPlayerList[:numberOfGesetzte]
             zuLosen = self._rankedPlayerList[numberOfGesetzte:-1]
