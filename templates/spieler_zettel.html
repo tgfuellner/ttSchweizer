@@ -12,7 +12,7 @@
       <p/>
       <center><small>{{ session['turnierName'] }}</small>
             Runde {{ runde if spielerA else '...' }}
-            <small>am {{ date }}</small></center>
+            <small>am {{ date }}</small> Tisch {{ tables.next() if spielerA }}</center>
       <p/>
       <center><strong>{{ spielerA }}</strong>&nbsp;
                <small>gegen</small> &nbsp;<strong>{{ spielerB }}</strong></center>

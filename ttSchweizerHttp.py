@@ -69,6 +69,19 @@ def changeToTurnierDirectory(directory):
 def getExistingTurniere():
     return sorted([entry for entry in os.listdir(getUserDirector()) if os.path.isdir(entry)])
 
+class _Counter(object):
+  def __init__(self, start_value=1):
+    self.value=start_value
+
+  def current(self):
+    return self.value
+
+  def next(self):
+    v=self.value
+    self.value+=1
+    return v
+
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String)
@@ -196,7 +209,7 @@ def spielerZettel(runde, begegnungen):
 
     now = datetime.now().strftime("%d.%m.%Y")
     html = render_template('spieler_zettel.html', begegnungen=zip(l[0::2], l[1::2]),
-                           runde=runde, date=now)
+                           runde=runde, date=now, tables=_Counter())
     return render_pdf(HTML(string=html), download_filename='begegnungen_runde{}.pdf'.format(runde))
     #return html
 
