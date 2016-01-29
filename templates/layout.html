@@ -2,10 +2,12 @@
 <html>
 <head>
 {% block style %}{% endblock %}
+<link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min.css" />
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='ttSchweizer.css') }}" />
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />
 <title>ttSchweizer Ergebnisse</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="http://cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min.js"></script>
 
 <script>
 var myMessages = ['message', 'info','warning','error','success']; // define the messages types
@@ -42,8 +44,29 @@ $(document).ready(function(){
  // When message is clicked, hide it
  $('.messageTop').click(function(){
   $(this).animate({top: -$(this).outerHeight()}, 500);
-  });
-  $('.info').animate({top:"0"}, 500);
+ });
+ $('.info').animate({top:"0"}, 500);
+
+ $('div.tooltips').each(function() {
+   $(this).qtip({
+     content: {
+       text: $(this).next('span')
+     },
+     show: 'click',
+     hide: 'unfocus',
+     position: {
+        my: 'bottom center',
+        at: 'top center'
+    },
+    adjust: {
+        method: 'shift flip'
+    },
+    style: {
+        classes: 'qtip-shadow tspan',
+        tip: { width: 20, height: 10 }
+    }
+   });
+ });
  
 });       
 </script>

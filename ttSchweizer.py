@@ -202,16 +202,17 @@ class Spieler:
         return False
 
     def getMatrixElement(self, other, currentRound):
+        div = '<div class="tooltips">{}</div>'
         if self == other:
-            return 'X'
+            return '<div class="X">X</div>'
         if self.hasWonAgainst(other):
-            return '+'
+            return div.format('+')
         if other.hasWonAgainst(self):
-            return '&ndash;'
+            return div.format('&ndash;')
         if self.willPlayAgainst(other, currentRound):
-            return '?'
+            return div.format('?')
         if other.willPlayAgainst(self, currentRound):
-            return '?'
+            return div.format('?')
         return ''
 
     def getMatrixElementStyle(self, other, currentRound):
@@ -229,11 +230,14 @@ class Spieler:
         return ''
 
     def getMatrixElementTooltipNames(self, other, currentRound):
+        start = '<div style="white-space: nowrap;">'
+        stop = '</div>'
+
         if self == other:
             return ''
         if self.hasPlayedAgainst(other):
-            return 'Runde {r}: <strong>{a} - {b}</strong>'.format(a=self, b=other,
-                r=self.getRoundNrOfPlayedAgainst(other))
+            return '{start}Runde {r}: <strong>{a} - {b}</strong>{stop}'.format(a=self, b=other,
+                r=self.getRoundNrOfPlayedAgainst(other), start=start, stop=stop)
         if self.willPlayAgainst(other, currentRound):
             return '<strong>{} - {}</strong>'.format(self, other)
         if other.willPlayAgainst(self, currentRound):

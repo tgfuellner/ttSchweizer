@@ -1,5 +1,6 @@
 /* Style for ttSchweizer Site */
 
+
 body
 {
 		 font: 14px Arial, Helvetica, sans-serif;
@@ -99,6 +100,7 @@ a:focus {
 .satz {
  width:2em;
  font-size: 1.3em;
+ margin-top: 10px;
 }
 
 /* Notification */
@@ -236,14 +238,28 @@ a:focus {
 
 /*--------------------------------------*/
 
+div.tooltips {
+    padding: 7px;
+}
 td.tooltips {
+  padding:  0px;
   position: relative;
 }
 
-td.tooltips span {
-  text-decoration: none;
-  visibility: hidden;
-  position:absolute;
+.X {
+    padding: 7px;
+    background-color: gray:
+}
+
+span {
+  display: none;
+  text-align: center;
+  padding: 5px;
+  font-size: 14px;
+}
+
+.tspan {
+  max-width: 485px;
 }
 
 td.tooltips:hover {
@@ -262,6 +278,7 @@ span {
   font-weight: normal;
 }
 
+/*
 td.tooltips:hover span {
   visibility: visible;
   position: absolute;
@@ -279,6 +296,7 @@ td.tooltips:hover span {
   transition-property: visibility;
   transition-delay:0.5s;
   }
+*/
 
 td.tooltips span b {
   display: block;

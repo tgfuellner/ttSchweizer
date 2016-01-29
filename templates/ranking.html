@@ -37,11 +37,13 @@ Runde {%- if runde >= 0 %}
     <input class="satz" type="number" name="setWon" min="0" tabindex=1 /><strong class="satz">:</strong>
     <input class="satz" type="number" name="setLost" min="0" tabindex=2 />&nbsp;
     <input type="submit" value="Ok" tabindex=8 /><br/>
+    <div style="white-space: nowrap;">
     <input class="punkte" type="number" name="set1" tabindex=3 />
     <input class="punkte" type="number" name="set2" tabindex=4 />
     <input class="punkte" type="number" name="set3" tabindex=5 />
     <input class="punkte" type="number" name="set4" tabindex=6 />
     <input class="punkte" type="number" name="set5" tabindex=7 />
+    </div>
 </form></span>{%- endif %}</td>
 {%- endfor %}
  <td align="right">{{ siege }}</td>
