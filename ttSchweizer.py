@@ -204,7 +204,7 @@ class Spieler:
     def getMatrixElement(self, other, currentRound):
         div = '<div class="tooltips">{}</div>'
         if self == other:
-            return '<div class="X">X</div>'
+            return '<div class="X">&nbsp;</div>'
         if self.hasWonAgainst(other):
             return div.format('+')
         if other.hasWonAgainst(self):
