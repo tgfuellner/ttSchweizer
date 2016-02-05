@@ -14,8 +14,8 @@
             Runde {{ runde if spielerA else '...' }}
             <small>am {{ date }}</small> Tisch {{ tables.next() if spielerA }}</center>
       <p/>
-      <center><strong>{{ spielerA }}</strong>&nbsp;
-               <small>gegen</small> &nbsp;<strong>{{ spielerB }}</strong></center>
+      <center><strong>{{ spielerA|truncate(22,True,'..') }}</strong>&nbsp;
+       <small>gegen</small> &nbsp;<strong>{{ spielerB|truncate(22,True,'....') }}</strong></center>
       <center>
         <table class="zettel">
           <tr>

@@ -11,7 +11,7 @@ Runde {%- if runde >= 0 %}
  <th><div class="verticalText">Platz</div></th>
  <th><div class="verticalText">Spieler</div></th>
 {%- for spieler in spielerList %}
- <th><div class="verticalText th-spieler">{{ spieler }}</div></th>
+ <th><div class="verticalText th-spieler">{{ spieler.name|truncate(22,True,'') }}</div></th>
 {%- endfor %}
  <th><div class="verticalText">Siege</div></th>
  <th><div class="verticalText">Buchholzzahl</div></th>
