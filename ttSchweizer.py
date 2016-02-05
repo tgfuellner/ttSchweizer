@@ -780,8 +780,12 @@ class RoundInit(Round):
             fd.write('{}={}\n\n'.format(XML_DEFINITION_ATTRIBUTE_NAME, xmlFileName))
             for player in root[0][0]:
                 person = player[0].attrib
-                line = '%s %s, %s, %s\n' % (person['firstname'], person['lastname'],
-                                            person['ttr'], player.attrib['id'])
+                firstname = person['firstname'] if 'firstname' in person else ''
+                lastname = person['lastname'] if 'lastname' in person else ''
+                ttr = person['ttr'] if 'ttr' in person else 800
+                if firstname == '' and lastname == '':
+                    lastname = player.attrib['id']
+                line = '%s %s, %s, %s\n' % (firstname, lastname, ttr, player.attrib['id'])
                 fd.write(line)
 
     def _calcRankOfPlayers(self, fileName, allPlayers):
