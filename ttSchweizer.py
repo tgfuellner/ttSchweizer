@@ -782,9 +782,17 @@ class RoundInit(Round):
                 person = player[0].attrib
                 firstname = person['firstname'] if 'firstname' in person else ''
                 lastname = person['lastname'] if 'lastname' in person else ''
-                ttr = person['ttr'] if 'ttr' in person else 800
+
                 if firstname == '' and lastname == '':
                     lastname = player.attrib['id']
+
+                if 'ttr' in person:
+                    ttr = person['ttr']
+                else:
+                    ttr = 800
+                    message("""Der Spieler {} {} hat keinen TTR Wert!
+                        Setze willkürlich {}, bitte anpassen""".format(firstname, lastname, ttr))
+
                 line = '%s %s, %s, %s\n' % (firstname, lastname, ttr, player.attrib['id'])
                 fd.write(line)
 
