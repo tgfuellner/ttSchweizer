@@ -3,6 +3,7 @@
 
 import os
 import re
+import glob
 from datetime import datetime
 from urllib.parse import quote_plus
 
@@ -238,14 +239,21 @@ def new():
             flash("Bitte einen Turniernamen angeben", 'info')
             return render_template('new.html', existingTurniere=getExistingTurniere())
         if os.path.exists(turnierName):
-            flash("Ein Turnier mit dem Namen {} existiert schon".format(turnierName), 'info')
-            return render_template('new.html', existingTurniere=getExistingTurniere())
+            os.chdir(turnierName)
+            if os.path.exists('runde-1.txt'):
+                flash("Ein Turnier mit dem Namen {} existiert schon".format(turnierName), 'info')
+                return render_template('new.html', existingTurniere=getExistingTurniere())
+            else:
+                os.remove('spieler.txt')
+                clickTTExportFiles = glob.glob('*.xml')
+                for xml in clickTTExportFiles:
+                    os.remove(xml)
+        else:
+            os.mkdir(turnierName, 0o755)
+            os.chdir(turnierName)
 
-        os.mkdir(turnierName, 0o755)
-        os.chdir(turnierName)
         session['turnierName'] = turnierName
         session['expertMode'] = False
-        flash('{} wurde gestartet'.format(turnierName), 'info')
         clickTT = request.files['clickTT']
         if clickTT:
             filename = secure_filename(clickTT.filename)
