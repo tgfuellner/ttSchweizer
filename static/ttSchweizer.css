@@ -22,6 +22,8 @@ a:focus {
 dl {
     padding: 0.5em;
     width: max-content;
+    width: intrinsic;
+    width: -moz-max-content;
 }
 dt {
 /*
