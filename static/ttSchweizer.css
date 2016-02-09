@@ -19,6 +19,27 @@ a:focus {
 	opacity: 1;
 }
 
+dl {
+    padding: 0.5em;
+    width: max-content;
+}
+dt {
+/*
+    float: left;
+    clear: left;
+    width: 100px;
+*/
+    padding: 1em 0 0 0.5em;
+    font-weight: bold;
+}
+  dt:after {
+    content: ":";
+  }
+  dd {
+    margin: -0.5em 0 0 0;
+    padding: 0 1em 1em 2em;
+  }
+
 .menu {
     word-spacing: 20px;
     padding:7px; border:#4e95f4 1px solid;
@@ -60,10 +81,10 @@ a:focus {
     color: #000000;
  }
 {# Define the default color for all the table rows #}
-.hoverTable tr{
+.hoverTable tr, dd, dt {
     background: #b8d1f3;
 }
-.hoverTable tr.odd{
+.hoverTable tr.odd, dt.odd, dt.odd + dd {
     background: #EAF2D3;
 }
 {# Define the hover highlight color for the table row #}

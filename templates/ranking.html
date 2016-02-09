@@ -64,13 +64,12 @@ Runde {%- if runde >= 0 %}
 </div>
 {%- endif %}
 
+<dl>
 {%- for spieler,player in currentRound.unfinishedBegegnungen %}
-<p/>
 <form action="{{ url_for('editSingle',
                      roundNumber=spieler.getRoundNrOfPlayedAgainst(player) or runde,
                      a=spieler, b=player) }}" method=post>
- <dl>
-    <dt>{{ spieler }} &lt;&gt; {{ player }}</dt>
+    <dt class="{{ loop.cycle('odd', 'even') }}">{{ spieler }} &lt;&gt; {{ player }}</dt>
 
     <dd>
     Sätze:
@@ -84,9 +83,9 @@ Runde {%- if runde >= 0 %}
     <input class="punkte" type="number" name="set5" />
     <input type="submit" value="Ok" />
     </dd>
- </dl>
 </form>
 {%- endfor %}
+</dl>
 {%- if text %}
 <p/>
 <hr/>
