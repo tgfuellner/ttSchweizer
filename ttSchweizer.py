@@ -865,6 +865,13 @@ class RoundInit(Round):
             the_file.write('Heinz Musterspieler, 1454\n')
 
 
+def isValidSatzDef(p):
+    if p[0] == '-':
+        return p[1:].isdigit()
+    else:
+        return p.isdigit()
+
+
 def parseMatchResult(inString, fileName, line, roundNr):
     """ return a MatchResult instance
     :param roundNr: the Match is played in this round
@@ -905,6 +912,12 @@ def parseMatchResult(inString, fileName, line, roundNr):
         message("%s: Satzverhältnis und Sätze passen nicht zusammen in Zeile: %s" % (fileName, line),
                 'error')
         return None
+
+    for p in satzErgebnisse:
+        if not isValidSatzDef(p):
+            message("%s: Satzergebnis (%s) in Zeile: %s ist ungültig" % (fileName, p, line), 'error')
+            return None
+
 
     return MatchResultInRound(roundNr, saetzeSpielerA, saetzeSpielerB, satzErgebnisse)
 
