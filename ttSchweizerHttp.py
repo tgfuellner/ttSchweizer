@@ -9,8 +9,8 @@ from urllib.parse import quote_plus
 
 import flask
 from flask import Flask, request, session, render_template, flash
-from flask.ext.login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from flask_sqlalchemy import SQLAlchemy
 
 from werkzeug import secure_filename
 
