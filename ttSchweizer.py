@@ -778,7 +778,7 @@ class RoundInit(Round):
 
         with open(SPIELER_FileName, 'w', encoding='utf-8') as fd:
             fd.write('{}={}\n\n'.format(XML_DEFINITION_ATTRIBUTE_NAME, xmlFileName))
-            for player in root[0][0]:
+            for player in root.iter('player'):
                 person = player[0].attrib
                 firstname = person['firstname'] if 'firstname' in person else ''
                 lastname = person['lastname'] if 'lastname' in person else ''

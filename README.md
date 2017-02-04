@@ -26,7 +26,7 @@ Durch die feste Rundenanzahl ist der Zeitrahmen eines Turniers sehr gut planbar.
 * sudo pip3 install flask
 * sudo pip3 install flask-login
 * sudo pip3 install Flask-SQLAlchemy
-* sudo aptitude install python3-lxml
+* sudo aptitude install python3-lxml libxml2-utils
 
 Für Begleitzettel
 * sudo aptitude install libffi-dev
