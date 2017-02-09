@@ -30,9 +30,16 @@ Durch die feste Rundenanzahl ist der Zeitrahmen eines Turniers sehr gut planbar.
 
 Für Begleitzettel
 * sudo aptitude install libffi-dev
-* sudo aptitude install libxml2-dev libxslt-dev
+* sudo aptitude install libxml2-dev libxslt-dev libpango1.0-0 libcairo2
 * sudo pip3 install WeasyPrint
 * sudo pip3 install Flask-WeasyPrint
+
+## Docker
+
+* docker build -t tt-schweizer:latest .
+* docker run -l -d -p 5000:5000 tt-schweizer
+* To persist: docker run -l -d -v Daten:/app/Daten -p 5000:5000 tt-schweizer
+  
 
 ## Hints
 
