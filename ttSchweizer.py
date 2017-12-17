@@ -131,6 +131,11 @@ class Spieler:
         self.ergebnisse = collections.OrderedDict()
         self.hatteFreilosInRound = 0
 
+    def hadFreilos(self):
+        if self.hatteFreilosInRound == 0:
+            return False
+        return True
+
     def __str__(self):
         return self.name
 
@@ -270,6 +275,17 @@ class Spieler:
     def getNumberOfSiege(self):
         return len([v for v in self.ergebnisse.values() if v.isWon()])
 
+    def isFreilos(self):
+        return False
+
+    def getNumberOfWonGames(self):
+        games = 0
+        for spieler, result in self.ergebnisse.items():
+            if not spieler.isFreilos():
+                games = games + result.gamesWonByPlayerA
+
+        return games
+
     def getOponents(self):
         return self.ergebnisse.keys()
 
@@ -347,6 +363,9 @@ class FreiLos(Spieler):
 
     def setBuchHolzZahl(self, bhz):
         self.minSiegeOfAllPlayers = bhz
+
+    def isFreilos(self):
+        return True
 
 
 class GroupeOfPlayersWithSameSieganzahl(list):

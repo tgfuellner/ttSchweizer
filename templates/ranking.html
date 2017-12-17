@@ -16,6 +16,7 @@ Runde {%- if runde >= 0 %}
  <th><div class="verticalText">Siege</div></th>
  <th><div class="verticalText">Buchholzzahl</div></th>
  <th><div class="verticalText">Q-TTR</div></th>
+ <th><div class="verticalText">Sätze</div></th>
  {% if thereAreFreilose %}
  <th><div class="verticalText">Freilos</div></th>
  {% endif %}
@@ -49,6 +50,7 @@ Runde {%- if runde >= 0 %}
  <td align="right">{{ siege }}</td>
  <td align="right">{{ buchz }}</td>
  <td align="right">{{ spieler.ttr }}</td>
+ <td align="right">{{ spieler.getNumberOfWonGames() }}</td>
  {% if thereAreFreilose %}
  <td class="{{ spieler.getFreilosStyle(runde) }}">{{ 'ja' if spieler.hatteFreilosInRound }}</td>
  {% endif %}
