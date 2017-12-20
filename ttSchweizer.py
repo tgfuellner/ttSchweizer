@@ -278,13 +278,14 @@ class Spieler:
     def isFreilos(self):
         return False
 
-    def getNumberOfWonGames(self):
-        games = 0
+    def getAllGames(self):
+        gamesLost = gamesWon = 0
         for spieler, result in self.ergebnisse.items():
             if not spieler.isFreilos():
-                games = games + result.gamesWonByPlayerA
+                gamesWon = gamesWon + result.gamesWonByPlayerA
+                gamesLost = gamesLost + result.gamesWonByPlayerB
 
-        return games
+        return "{}:{}".format(gamesWon, gamesLost)
 
     def getOponents(self):
         return self.ergebnisse.keys()

@@ -18,7 +18,7 @@ class TestSpieler(unittest.TestCase):
 
         self.assertEqual(1, siege)
 
-    def test_numberOfWonGames(self):
+    def test_numberOfAllGames(self):
         A = Spieler('A', 1)
         B = Spieler('B', 2)
         C = Spieler('C', 3)
@@ -26,8 +26,8 @@ class TestSpieler(unittest.TestCase):
         A.addMatch(B, MatchResult(3, 2))
         A.addMatch(C, MatchResult(1, 3))
 
-        games = A.getNumberOfWonGames()
-        self.assertEqual(4, games)
+        games = A.getAllGames()
+        self.assertEqual("4:5", games)
 
     def test_getOponents(self):
         A = Spieler('A', 1)

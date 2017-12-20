@@ -50,7 +50,7 @@ Runde {%- if runde >= 0 %}
  <td align="right">{{ siege }}</td>
  <td align="right">{{ buchz }}</td>
  <td align="right">{{ spieler.ttr }}</td>
- <td align="right">{{ spieler.getNumberOfWonGames() }}</td>
+ <td align="right">{{ spieler.getAllGames() }}</td>
  {% if thereAreFreilose %}
  <td class="{{ spieler.getFreilosStyle(runde) }}">{{ 'ja' if spieler.hatteFreilosInRound }}</td>
  {% endif %}
