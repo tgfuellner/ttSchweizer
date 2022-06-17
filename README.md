@@ -5,7 +5,7 @@ Tischtennis Turnier Software im Schweizer System
 
 Das "Schweizer System" ähnelt dem System "jeder gegen jeden", wobei einerseits nicht alle Runden ausgetragen werden und andererseits im Turnierverlauf vor allem Spielerinnen/Spieler ähnlicher Spielstärke gegeneinander spielen.
 Durch die feste Rundenanzahl ist der Zeitrahmen eines Turniers sehr gut planbar.
-... siehe http://www.bttv.de/sport/commerzbank-sports-more-bavarian-tt-race/infos-spielsystem/
+... siehe https://www.bttv.de/sport/bavarian-tt-race/infos-spielsystem/
 
 ## User Interface von **ttSchweizer**
 
@@ -14,13 +14,25 @@ Durch die feste Rundenanzahl ist der Zeitrahmen eines Turniers sehr gut planbar.
 * Eingaben werden mit einfachem Texteditor gemacht
 * **ttSchweizer** wird in Verzeichnis mit verschiedenen Textfiles aufgerufen
 * **ttSchweizer** kann zu jedem Zeitpunkt ausgeführt werden
-* Für jede Runde gibt es ein Textfile: *runde1.tts*, *runde2.tts*, ...
-* Ist *rundeN.tts* vollständig erfasst, wird *rundeN+1.tts* erzeugt
-* *spieler.tts* enthält Spieler mit ihren TTR Werten
-* Fehlt *spieler.tts* und befindet sich im Verzeichnis ein Spieler Export aus click-tt, wird daraus *spieler.tts* erzeugt.
-* *runde1.tts* wird durch Losen aus *spieler.tts* erzeugt
+* Für jede Runde gibt es ein Textfile: *runde-1.txt*, *runde-2.txt, ...
+* Ist *runde-N.txt* vollständig erfasst, wird *runde-N+1.txt* erzeugt
+* *spieler.txt* enthält Spieler mit ihren TTR Werten
+* Fehlt *spieler.txt* und befindet sich im Verzeichnis ein Spieler Export aus click-tt, wird daraus *spieler.txt* erzeugt.
+* *runde-1.txt* wird durch Losen aus *spieler.txt* erzeugt
 * *ergebnis.html* wird nach jedem Aufruf aktualisiert
 
+```mermaid
+graph LR;
+    subgraph optional
+        clickt-tt --> spieler.txt;
+    end
+```
+```mermaid
+graph LR;
+    subgraph auslosen
+        spieler.txt-->runde-1.txt-->runde-2.txt-->runde-3.txt-->runde-4.txt-->runde-5.txt-->runde-6.txt;
+    end
+```
 ## Packet Abhängigkeitet
 
 * sudo pip3 install flask
