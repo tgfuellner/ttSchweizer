@@ -22,15 +22,15 @@ Durch die feste Rundenanzahl ist der Zeitrahmen eines Turniers sehr gut planbar.
 * *ergebnis.html* wird nach jedem Aufruf aktualisiert
 
 ```mermaid
-graph LR;
+graph LR
     subgraph optional
-        clickt-tt --> spieler.txt;
+        clickt-tt --> spieler.txt
     end
 ```
 ```mermaid
-graph LR;
+graph LR
     subgraph auslosen
-        spieler.txt-->runde-1.txt-->runde-2.txt-->runde-3.txt-->runde-4.txt-->runde-5.txt-->runde-6.txt;
+        spieler.txt --> runde-1.txt --> runde-2.txt --> runde-3.txt --> runde-4.txt --> runde-5.txt --> runde-6.txt
     end
 ```
 ## Packet Abhängigkeitet
@@ -46,10 +46,10 @@ Für Begleitzettel
 * sudo pip3 install WeasyPrint
 * sudo pip3 install Flask-WeasyPrint
 
-## Docker
+## Docker oder Podman
 
 * docker build -t tt-schweizer:latest .
-* # Mac needs --network bridge 
+* Mac needs --network bridge 
 * docker run -l -d --network bridge -p 6000:5000 tt-schweizer
 * To persist: docker run -l -d -v Data:/app/Data -u root -p 5000:5000 tt-schweizer
 * Mac:
