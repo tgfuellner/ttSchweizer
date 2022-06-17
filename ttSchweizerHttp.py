@@ -12,7 +12,7 @@ from flask import Flask, request, session, render_template, flash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_sqlalchemy import SQLAlchemy
 
-from werkzeug import secure_filename
+from werkzeug.utils import secure_filename
 
 import ttSchweizer
 from ttSchweizer import Turnier
