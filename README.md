@@ -37,8 +37,12 @@ Für Begleitzettel
 ## Docker
 
 * docker build -t tt-schweizer:latest .
-* docker run -l -d -p 5000:5000 tt-schweizer
-* To persist: docker run -l -d -v Daten:/app/Daten -p 5000:5000 tt-schweizer
+* # Mac needs --network bridge 
+* docker run -l -d --network bridge -p 6000:5000 tt-schweizer
+* To persist: docker run -l -d -v Data:/app/Data -u root -p 5000:5000 tt-schweizer
+* Mac:
+* sudo podman run --name=tt -l -d -v /Users/thomas/Git/ttSchweizer/Data:/app/Data -u root --network bridge -p 6000:5000 tt-schweizer
+* podman stop tt; podman rm tt
   
 
 ## Hints
