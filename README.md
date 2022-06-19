@@ -55,8 +55,15 @@ Für Begleitzettel
 * Mac:
 * sudo podman run --name=tt -l -d -v /Users/thomas/Git/ttSchweizer/Data:/app/Data -u root --network bridge -p 6000:5000 tt-schweizer
 * podman stop tt; podman rm tt
-  
+
+## Cloud
+
+* podman login -u tomgfuellner -p '....'  docker.io/tomgfuellner/tt-schweizer
+* podman build -t tt-schweizer:1.0 .
+* podman images
+* podman push c4d875bdf4a0 docker://docker.io/tomgfuellner/tt-schweizer:1.0
+
 
 ## Hints
 
-* spieler.tts nach TTR sortieren: `sort -nr --field-separator=, --key=2 spieler.tts`
+* spieler.txt nach TTR sortieren: `sort -nr --field-separator=, --key=2 spieler.txt`
