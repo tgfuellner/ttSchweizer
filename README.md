@@ -71,6 +71,9 @@ Für Begleitzettel
 * docker tag 0d1879570d7d eu.gcr.io/psychic-iridium-353811/tt-schweizer:1.1
 * docker push eu.gcr.io/psychic-iridium-353811/tt-schweizer:1.1
 
+### Google Compute Engine
+
+* gcloud compute ssh --zone "us-west1-b" tt --project "psychic-iridium-353811"
 
 ## Hints
 
