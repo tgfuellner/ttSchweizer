@@ -63,6 +63,14 @@ Für Begleitzettel
 * podman images
 * podman push c4d875bdf4a0 docker://docker.io/tomgfuellner/tt-schweizer:1.0
 
+## Google Cloud Run
+
+* gcloud auth login
+* gcloud config set project psychic-iridium-353811
+* gcloud auth configure-docker
+* docker tag 0d1879570d7d eu.gcr.io/psychic-iridium-353811/tt-schweizer:1.1
+* docker push eu.gcr.io/psychic-iridium-353811/tt-schweizer:1.1
+
 
 ## Hints
 
