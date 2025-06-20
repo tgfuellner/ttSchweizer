@@ -1,3 +1,5 @@
+# Moved to https://codeberg.org/tgfuellner/ttSchweizer-python
+
 # ttSchweizer
 Tischtennis Turnier Software im Schweizer System
 
